@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
+import { supabase } from '../lib/supabase';
 
 const AuthContext = createContext();
 
@@ -10,9 +11,12 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
-  const isAuthenticated = !!user;
+  // Supabase auth state
+  const [supabaseUser, setSupabaseUser] = useState(null);
 
-  // Restore session on mount
+  const isAuthenticated = !!user || !!supabaseUser;
+
+  // Restore backend session on mount
   useEffect(() => {
     const restoreSession = async () => {
       const storedToken = localStorage.getItem('token');
@@ -38,6 +42,28 @@ export function AuthProvider({ children }) {
     restoreSession();
   }, []);
 
+  // Check Supabase session on mount + listen for auth state changes
+  useEffect(() => {
+    // Check if a Supabase user is already logged in
+    const checkSupabaseUser = async () => {
+      const { data: { user: currentUser } } = await supabase.auth.getUser();
+      setSupabaseUser(currentUser ?? null);
+    };
+    checkSupabaseUser();
+
+    // Listen for auth state changes (sign in, sign out, token refresh)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSupabaseUser(session?.user ?? null);
+      }
+    );
+
+    // Clean up the listener on unmount
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
   const login = async (email, password) => {
     const res = await axios.post(`${API_URL}/login`, { email, password });
     const { token: newToken, ...userData } = res.data;
@@ -56,19 +82,26 @@ export function AuthProvider({ children }) {
     return userData;
   };
 
-  const logout = () => {
+  const logout = async () => {
+    // Clear backend session
     localStorage.removeItem('token');
     setToken(null);
     setUser(null);
+    // Clear Supabase session
+    await supabase.auth.signOut();
+    setSupabaseUser(null);
   };
 
-  const googleLogin = () => {
-    // Redirect to backend Google OAuth endpoint
-    window.location.href = `${API_URL}/google`;
+  const googleLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin },
+    });
+    if (error) console.error('Google login error:', error.message);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, isAuthenticated, loading, login, register, logout, googleLogin }}>
+    <AuthContext.Provider value={{ user, supabaseUser, token, isAuthenticated, loading, login, register, logout, googleLogin }}>
       {children}
     </AuthContext.Provider>
   );
@@ -81,3 +114,4 @@ export function useAuth() {
   }
   return context;
 }
+

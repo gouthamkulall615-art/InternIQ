@@ -13,9 +13,15 @@ import { useAuth } from './contexts/AuthContext';
 function Navbar() {
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, supabaseUser, isAuthenticated, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+  // Derive display values from whichever auth method is active
+  const activeUser = user || supabaseUser;
+  const displayName = user?.name || supabaseUser?.user_metadata?.full_name || 'User';
+  const displayEmail = user?.email || supabaseUser?.email || '';
+  const displayAvatar = user?.avatar || supabaseUser?.user_metadata?.avatar_url || null;
 
   const navigation = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
@@ -81,20 +87,20 @@ function Navbar() {
             </button>
 
             {/* User menu (desktop) */}
-            {isAuthenticated && user ? (
+            {isAuthenticated && activeUser ? (
               <div className="relative hidden md:block">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
                   className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
                 >
                   <div className="w-7 h-7 rounded-full bg-[#0A66C2] flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
-                    {user.avatar ? (
-                      <img src={user.avatar} alt="" className="w-full h-full rounded-full object-cover" />
+                    {displayAvatar ? (
+                      <img src={displayAvatar} alt="" className="w-full h-full rounded-full object-cover" />
                     ) : (
-                      user.name?.charAt(0).toUpperCase()
+                      displayName?.charAt(0).toUpperCase()
                     )}
                   </div>
-                  <span className="max-w-[120px] truncate">{user.name}</span>
+                  <span className="max-w-[120px] truncate">{displayName}</span>
                   <ChevronDown className="h-4 w-4 text-gray-400" />
                 </button>
 
@@ -103,8 +109,8 @@ function Navbar() {
                     <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
                     <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg z-50 py-1">
                       <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-800">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{user.name}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{displayName}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{displayEmail}</p>
                       </div>
                       <button
                         onClick={() => { logout(); setUserMenuOpen(false); }}
@@ -175,19 +181,19 @@ function Navbar() {
 
           {/* Mobile user section */}
           <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-800">
-            {isAuthenticated && user ? (
+            {isAuthenticated && activeUser ? (
               <div className="space-y-2">
                 <div className="flex items-center gap-3 px-3 py-2">
                   <div className="w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center text-white text-sm font-semibold">
-                    {user.avatar ? (
-                      <img src={user.avatar} alt="" className="w-full h-full rounded-full object-cover" />
+                    {displayAvatar ? (
+                      <img src={displayAvatar} alt="" className="w-full h-full rounded-full object-cover" />
                     ) : (
-                      user.name?.charAt(0).toUpperCase()
+                      displayName?.charAt(0).toUpperCase()
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{user.name}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user.email}</p>
+                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{displayName}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{displayEmail}</p>
                   </div>
                 </div>
                 <button
