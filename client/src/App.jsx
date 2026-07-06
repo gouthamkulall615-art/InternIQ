@@ -27,7 +27,7 @@ function Navbar() {
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
     { name: 'Resume Analyzer', href: '/resume-analyzer', icon: FileSearch },
     { name: 'Cover Letters', href: '#', icon: FileSignature, disabled: true },
-    { name: 'Roadmap Generator', href: 'https://path-forge-amber.vercel.app/', icon: Map, external: true },
+    { name: 'Roadmap Provider', href: 'https://path-forge-amber.vercel.app/', icon: Map, external: true },
     { name: 'App Tracker', href: '#', icon: Target, disabled: true },
   ];
 

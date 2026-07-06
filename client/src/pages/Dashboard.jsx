@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FileSearch, FileSignature, Mic, Target, BrainCircuit, ArrowRight } from 'lucide-react';
+import { FileSearch, FileSignature, Map, Target, BrainCircuit, ArrowRight } from 'lucide-react';
 import { FaLinkedin } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -22,11 +22,12 @@ export default function Dashboard() {
       active: false,
     },
     {
-      name: 'Mock Interview Simulator',
-      description: 'Practice answering technical and behavioral questions with our AI interviewer.',
-      icon: Mic,
-      href: '#',
-      active: false,
+      name: 'Roadmap Provider',
+      description: 'Explore structured, ready-made roadmaps across multiple career fields to guide your learning path.',
+      icon: Map,
+      href: 'https://path-forge-amber.vercel.app/',
+      active: true,
+      external: true,
     },
     {
       name: 'Application Tracker',
@@ -103,13 +104,25 @@ export default function Dashboard() {
                 </p>
 
                 {tool.active ? (
-                  <Link
-                    to={tool.href}
-                    className="inline-flex items-center justify-center w-full px-4 py-2.5 text-sm font-semibold text-white bg-[#0A66C2] rounded-lg hover:bg-[#004182] transition-colors min-h-[44px] gap-2"
-                  >
-                    Open Tool
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-                  </Link>
+                  tool.external ? (
+                    <a
+                      href={tool.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center w-full px-4 py-2.5 text-sm font-semibold text-white bg-[#0A66C2] rounded-lg hover:bg-[#004182] transition-colors min-h-[44px] gap-2"
+                    >
+                      Open Tool
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                    </a>
+                  ) : (
+                    <Link
+                      to={tool.href}
+                      className="inline-flex items-center justify-center w-full px-4 py-2.5 text-sm font-semibold text-white bg-[#0A66C2] rounded-lg hover:bg-[#004182] transition-colors min-h-[44px] gap-2"
+                    >
+                      Open Tool
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                    </Link>
+                  )
                 ) : (
                   <button
                     disabled
