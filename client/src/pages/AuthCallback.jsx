@@ -1,26 +1,32 @@
 import { useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 /**
- * This page handles the redirect back from Google OAuth.
- * The backend redirects here with ?token=... in the URL.
- * We extract the token, store it, and redirect to the dashboard.
+ * This page handles the redirect back from Google OAuth via Supabase.
+ * Supabase automatically parses the session from the URL — we just
+ * need to wait for it, then redirect to the dashboard.
  */
 export default function AuthCallback() {
-  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = searchParams.get('token');
-    if (token) {
-      localStorage.setItem('token', token);
-      // Force a full reload so AuthContext picks up the new token
-      window.location.href = '/';
-    } else {
-      navigate('/login');
-    }
-  }, [searchParams, navigate]);
+    const checkSession = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Auth callback error:', error.message);
+        navigate('/login');
+        return;
+      }
+      if (data.session) {
+        navigate('/');
+      } else {
+        navigate('/login');
+      }
+    };
+    checkSession();
+  }, [navigate]);
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-50 dark:bg-gray-950">
