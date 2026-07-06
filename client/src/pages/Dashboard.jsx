@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { FileText, FileSignature, Mic, Target, BrainCircuit, ArrowRight } from 'lucide-react';
+import { FileSearch, FileSignature, Mic, Target, BrainCircuit, ArrowRight } from 'lucide-react';
 import { FaLinkedin } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -8,10 +8,10 @@ export default function Dashboard() {
 
   const tools = [
     {
-      name: 'Resume Builder',
-      description: 'Build ATS-friendly resumes and get instant AI feedback to improve your chances.',
-      icon: FileText,
-      href: '/resume',
+      name: 'Resume Analyzer',
+      description: 'Upload your resume and get an instant ATS score with actionable improvement suggestions.',
+      icon: FileSearch,
+      href: '/resume-analyzer',
       active: true,
     },
     {

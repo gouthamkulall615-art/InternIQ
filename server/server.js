@@ -1,5 +1,6 @@
 import authRoutes from './routes/authRoutes.js';
 import resumeRoutes from './routes/resumeRoutes.js';
+import analyzerRoutes from './routes/analyzerRoutes.js';
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
@@ -25,6 +26,7 @@ app.use(passport.initialize());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/resumes', resumeRoutes);
+app.use('/api/analyzer', analyzerRoutes);
 
 app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", message: "InternIQ API is running" });

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
-import { LayoutDashboard, FileText, FileSignature, Mic, Target, Sun, Moon, Menu, X, LogOut, ChevronDown } from 'lucide-react';
+import { LayoutDashboard, FileSearch, FileSignature, Map, Target, Sun, Moon, Menu, X, LogOut, ChevronDown } from 'lucide-react';
 import Dashboard from './pages/Dashboard';
-import ResumeBuilder from './modules/resume-builder/ResumeBuilder';
+import ResumeAnalyzer from './modules/resume-analyzer/ResumeAnalyzer';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AuthCallback from './pages/AuthCallback';
@@ -25,9 +25,9 @@ function Navbar() {
 
   const navigation = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
-    { name: 'Resume Builder', href: '/resume', icon: FileText },
+    { name: 'Resume Analyzer', href: '/resume-analyzer', icon: FileSearch },
     { name: 'Cover Letters', href: '#', icon: FileSignature, disabled: true },
-    { name: 'Mock Interviews', href: '#', icon: Mic, disabled: true },
+    { name: 'Roadmap Generator', href: 'https://path-forge-amber.vercel.app/', icon: Map, external: true },
     { name: 'App Tracker', href: '#', icon: Target, disabled: true },
   ];
 
@@ -50,19 +50,35 @@ function Navbar() {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1">
             {navigation.map((item) => {
-              const isActive = location.pathname === item.href;
+              const isActive = !item.external && location.pathname === item.href;
+              const classes = `px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                isActive
+                  ? 'text-[#0A66C2] bg-blue-50 dark:bg-[#0A66C2]/10'
+                  : item.disabled
+                    ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+              }`;
+
+              if (item.external) {
+                return (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={classes}
+                  >
+                    {item.name}
+                  </a>
+                );
+              }
+
               return (
                 <Link
                   key={item.name}
                   to={item.disabled ? '#' : item.href}
                   onClick={(e) => item.disabled && e.preventDefault()}
-                  className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                    isActive
-                      ? 'text-[#0A66C2] bg-blue-50 dark:bg-[#0A66C2]/10'
-                      : item.disabled
-                        ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
-                        : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
-                  }`}
+                  className={classes}
                 >
                   {item.name}
                   {item.disabled && (
@@ -151,8 +167,32 @@ function Navbar() {
         <div className="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
           <nav className="px-4 py-3 space-y-1">
             {navigation.map((item) => {
-              const isActive = location.pathname === item.href;
+              const isActive = !item.external && location.pathname === item.href;
               const Icon = item.icon;
+              const classes = `flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg transition-colors min-h-[44px] ${
+                isActive
+                  ? 'text-[#0A66C2] bg-blue-50 dark:bg-[#0A66C2]/10'
+                  : item.disabled
+                    ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+              }`;
+
+              if (item.external) {
+                return (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={classes}
+                  >
+                    <Icon className="h-5 w-5" />
+                    {item.name}
+                  </a>
+                );
+              }
+
               return (
                 <Link
                   key={item.name}
@@ -161,13 +201,7 @@ function Navbar() {
                     if (item.disabled) e.preventDefault();
                     else setMobileMenuOpen(false);
                   }}
-                  className={`flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg transition-colors min-h-[44px] ${
-                    isActive
-                      ? 'text-[#0A66C2] bg-blue-50 dark:bg-[#0A66C2]/10'
-                      : item.disabled
-                        ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
-                        : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
-                  }`}
+                  className={classes}
                 >
                   <Icon className="h-5 w-5" />
                   {item.name}
@@ -241,7 +275,7 @@ function App() {
 
         {/* Protected routes */}
         <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-        <Route path="/resume" element={<ProtectedRoute><ResumeBuilder /></ProtectedRoute>} />
+        <Route path="/resume-analyzer" element={<ProtectedRoute><ResumeAnalyzer /></ProtectedRoute>} />
 
         {/* Catch all */}
         <Route path="*" element={<Navigate to="/" replace />} />
