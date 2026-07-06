@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { LayoutDashboard, FileSearch, FileSignature, Map, Target, Sun, Moon, Menu, X, LogOut, ChevronDown } from 'lucide-react';
 import Dashboard from './pages/Dashboard';
@@ -16,6 +16,16 @@ function Navbar() {
   const { user, supabaseUser, isAuthenticated, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+
+  // Lock body scroll when mobile drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.classList.add('overflow-hidden');
+    } else {
+      document.body.classList.remove('overflow-hidden');
+    }
+    return () => document.body.classList.remove('overflow-hidden');
+  }, [mobileMenuOpen]);
 
   // Derive display values from whichever auth method is active
   const activeUser = user || supabaseUser;
@@ -40,12 +50,24 @@ function Navbar() {
     <header className="sticky top-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="flex-shrink-0">
-            <h1 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
-              Intern<span className="text-[#0A66C2]">IQ</span>
-            </h1>
-          </Link>
+          {/* Left side: hamburger + logo */}
+          <div className="flex items-center gap-2">
+            {/* Mobile menu button (left side for natural left-drawer UX) */}
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="md:hidden p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              aria-label="Open menu"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+
+            {/* Logo */}
+            <Link to="/" className="flex-shrink-0">
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+                Intern<span className="text-[#0A66C2]">IQ</span>
+              </h1>
+            </Link>
+          </div>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1">
@@ -149,32 +171,53 @@ function Navbar() {
                 </Link>
               </div>
             )}
-
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900">
-          <nav className="px-4 py-3 space-y-1">
+      {/* Mobile drawer — glassmorphism slide-in from left */}
+      <div
+        className={`fixed inset-0 z-50 md:hidden transition-opacity duration-300 ${
+          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        {/* Backdrop overlay */}
+        <div
+          className="absolute inset-0 bg-black/40"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+
+        {/* Drawer panel */}
+        <div
+          className={`absolute top-0 left-0 h-full w-4/5 max-w-sm bg-white/75 dark:bg-gray-900/75 backdrop-blur-xl border-r border-white/20 dark:border-gray-700/50 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
+            mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}
+        >
+          {/* Drawer header */}
+          <div className="flex items-center justify-between px-5 h-16 border-b border-gray-200/50 dark:border-gray-800/50">
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white tracking-tight">
+              Intern<span className="text-[#0A66C2]">IQ</span>
+            </h2>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100/60 dark:hover:bg-gray-800/60 rounded-lg transition-colors"
+              aria-label="Close menu"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          {/* Nav items */}
+          <nav className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
             {navigation.map((item) => {
               const isActive = !item.external && location.pathname === item.href;
               const Icon = item.icon;
               const classes = `flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg transition-colors min-h-[44px] ${
                 isActive
-                  ? 'text-[#0A66C2] bg-blue-50 dark:bg-[#0A66C2]/10'
+                  ? 'text-[#0A66C2] bg-[#0A66C2]/10'
                   : item.disabled
                     ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800'
+                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/60 dark:hover:bg-gray-800/60'
               }`;
 
               if (item.external) {
@@ -206,19 +249,19 @@ function Navbar() {
                   <Icon className="h-5 w-5" />
                   {item.name}
                   {item.disabled && (
-                    <span className="text-[9px] uppercase font-bold bg-gray-100 dark:bg-gray-800 text-gray-400 py-0.5 px-1.5 rounded-full">Soon</span>
+                    <span className="text-[9px] uppercase font-bold bg-gray-100/80 dark:bg-gray-800/80 text-gray-400 py-0.5 px-1.5 rounded-full">Soon</span>
                   )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Mobile user section */}
-          <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-800">
+          {/* User section (bottom) */}
+          <div className="px-4 py-4 border-t border-gray-200/50 dark:border-gray-800/50">
             {isAuthenticated && activeUser ? (
               <div className="space-y-2">
                 <div className="flex items-center gap-3 px-3 py-2">
-                  <div className="w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center text-white text-sm font-semibold">
+                  <div className="w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
                     {displayAvatar ? (
                       <img src={displayAvatar} alt="" className="w-full h-full rounded-full object-cover" />
                     ) : (
@@ -232,7 +275,7 @@ function Navbar() {
                 </div>
                 <button
                   onClick={() => { logout(); setMobileMenuOpen(false); }}
-                  className="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors min-h-[44px]"
+                  className="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50/60 dark:hover:bg-red-900/20 rounded-lg transition-colors min-h-[44px]"
                 >
                   <LogOut className="h-5 w-5" />
                   Sign out
@@ -243,7 +286,7 @@ function Navbar() {
                 <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block w-full text-center px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors min-h-[44px]"
+                  className="block w-full text-center px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-300/60 dark:border-gray-700/60 rounded-lg hover:bg-gray-50/60 dark:hover:bg-gray-800/60 transition-colors min-h-[44px]"
                 >
                   Sign in
                 </Link>
@@ -258,7 +301,7 @@ function Navbar() {
             )}
           </div>
         </div>
-      )}
+      </div>
     </header>
   );
 }
