@@ -145,7 +145,6 @@ function ImprovementCard({ item, index }) {
 // ─── Main page component ────────────────────────────────────────────
 export default function ResumeAnalyzer() {
   const { user } = useAuth();
-  const token = localStorage.getItem('token');
 
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState('idle'); // idle | extracting | analyzing | done | error
@@ -177,14 +176,14 @@ export default function ResumeAnalyzer() {
       }
 
       setStatus('analyzing');
-      const analysis = await analyzeResume(text, token);
+      const analysis = await analyzeResume(text);
       setResult(analysis);
       setStatus('done');
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.');
       setStatus('error');
     }
-  }, [token]);
+  }, []);
 
   const handleDrop = useCallback((e) => {
     e.preventDefault();
@@ -303,7 +302,7 @@ export default function ResumeAnalyzer() {
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 {status === 'extracting'
                   ? 'Reading your resume file'
-                  : 'Claude is evaluating ATS compatibility'}
+                  : 'Gemini is evaluating ATS compatibility'}
               </p>
             </div>
 

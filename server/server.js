@@ -1,14 +1,16 @@
+
+import 'dotenv/config';
 import authRoutes from './routes/authRoutes.js';
 import resumeRoutes from './routes/resumeRoutes.js';
 import analyzerRoutes from './routes/analyzerRoutes.js';
-import dotenv from "dotenv";
+
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import passport from "passport";
 import configurePassport from "./config/passport.js";
 
-dotenv.config();
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;

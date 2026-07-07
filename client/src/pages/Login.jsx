@@ -4,20 +4,28 @@ import { useAuth } from '../contexts/AuthContext';
 import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
 import { supabase } from '../lib/supabase';
-
+import { useEffect } from 'react';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+
+  const { login, isAuthenticated } = useAuth()
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
+
   const handleGoogleLogin = async () => {
+    console.log('Redirecting to:', `${window.location.origin}/auth/callback`);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: window.location.origin },
+      options: { redirectTo: `${window.location.origin}/auth/callback` },
     });
     if (error) console.error('Google login error:', error.message);
   };

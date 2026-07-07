@@ -1,41 +1,61 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import dotenv from "dotenv";
-
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import dotenv from 'dotenv';
 dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
-export const analyzeResumeText = async (resumeText) => {
-  if (!resumeText || resumeText.trim() === "") {
-    throw new Error("Resume text content is empty or missing.");
+const PROMPT_PREFIX = `You are an expert ATS (Applicant Tracking System) resume analyst and career coach.
+You will receive the plain text content of a resume. Analyze it thoroughly for ATS compatibility, content quality, formatting cues, keyword optimization, and overall effectiveness.
+
+Return ONLY valid JSON. Do not include markdown code fences, do not include any explanation text before or after the JSON.
+
+Use this exact schema:
+{
+  "ats_score": <number from 1 to 10>,
+  "score_reasoning": "<1-2 sentence explanation of why you gave this score>",
+  "improvements": [
+    {
+      "area": "<category, e.g. Keywords, Formatting, Structure, Clarity, Impact Metrics, Contact Info, Skills Section, Experience Descriptions>",
+      "issue": "<specific problem found>",
+      "suggestion": "<actionable fix>"
+    }
+  ]
+}
+
+Scoring guidelines:
+- 1-3: Major issues — missing sections, no keywords, poor structure
+- 4-5: Below average — some content but significant gaps
+- 6-7: Decent — solid foundation but clear room for improvement
+- 8-9: Strong — well-optimized with minor tweaks needed
+- 10: Exceptional — near-perfect ATS optimization
+
+Always return at least 3 improvements, even for strong resumes. Be specific and actionable.`;
+
+export const analyzeResumeWithGemini = async (resumeText) => {
+  if (!resumeText || resumeText.trim() === '') {
+    throw new Error('Resume text content is empty or missing.');
   }
 
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const prompt = `${PROMPT_PREFIX}\n\nAnalyze this resume:\n\n${resumeText}`;
 
-    const prompt = `Analyze the following resume and return a JSON object only, no markdown, no explanation. 
-    Return exactly this structure:
-    {
-      "score": (number out of 10),
-      "strengths": [array of strings],
-      "weaknesses": [array of strings],
-      "missingSkills": [array of strings],
-      "suggestions": [array of strings]
-    }
-    
-    Resume:
-    ${resumeText}`;
+    console.log('[Gemini] Request received — sending prompt to model...');
 
     const result = await model.generateContent(prompt);
-    const text = result.response.text();
+    const responseText = result.response.text();
 
-    // Strip markdown code blocks if Gemini wraps it
-    const clean = text.replace(/```json|```/g, "").trim();
-    return JSON.parse(clean);
+    console.log('[Gemini] Raw response:', responseText);
+
+    // Defensively strip markdown fences in case the model wraps the JSON
+    const cleaned = responseText.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(cleaned);
+
+    console.log('[Gemini] Parsed successfully:', JSON.stringify(parsed, null, 2));
+
+    return parsed;
   } catch (error) {
-    console.error("Gemini Service Error:", error);
-    throw new Error(
-      `Failed to analyze resume via Gemini API: ${error.message}`,
-    );
+    console.error('[Gemini] Service Error:', error);
+    throw new Error(`Failed to analyze resume via Gemini API: ${error.message}`);
   }
 };
