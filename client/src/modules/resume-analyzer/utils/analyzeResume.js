@@ -1,7 +1,5 @@
-import axios from 'axios';
+import api from '../../../lib/axios';
 import { supabase } from '../../../lib/supabase';
-
-const API_URL = 'http://localhost:5000/api/analyzer';
 
 /**
  * Get the best available auth token.
@@ -24,8 +22,8 @@ export async function analyzeResume(resumeText) {
   try {
     const token = await getAuthToken();
 
-    const response = await axios.post(
-      `${API_URL}/analyze`,
+    const response = await api.post(
+      '/api/analyzer/analyze',
       { resumeText },
       {
         headers: {

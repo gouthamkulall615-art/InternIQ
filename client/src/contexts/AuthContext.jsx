@@ -1,10 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../lib/axios';
 import { supabase } from '../lib/supabase';
 
 const AuthContext = createContext();
-
-const API_URL = 'http://localhost:5000/api/auth';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -25,7 +23,7 @@ export function AuthProvider({ children }) {
         return;
       }
       try {
-        const res = await axios.get(`${API_URL}/me`, {
+        const res = await api.get('/api/auth/me', {
           headers: { Authorization: `Bearer ${storedToken}` },
         });
         setUser(res.data);
@@ -65,7 +63,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = async (email, password) => {
-    const res = await axios.post(`${API_URL}/login`, { email, password });
+    const res = await api.post('/api/auth/login', { email, password });
     const { token: newToken, ...userData } = res.data;
     localStorage.setItem('token', newToken);
     setToken(newToken);
@@ -74,7 +72,7 @@ export function AuthProvider({ children }) {
   };
 
   const register = async (name, email, password) => {
-    const res = await axios.post(`${API_URL}/register`, { name, email, password });
+    const res = await api.post('/api/auth/register', { name, email, password });
     const { token: newToken, ...userData } = res.data;
     localStorage.setItem('token', newToken);
     setToken(newToken);
