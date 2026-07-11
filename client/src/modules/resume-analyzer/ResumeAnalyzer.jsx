@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import {
   Upload,
   FileSearch,
@@ -151,8 +151,16 @@ export default function ResumeAnalyzer() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const [dragActive, setDragActive] = useState(false);
+  const [cooldown, setCooldown] = useState(0); // seconds remaining
 
   const inputRef = useRef(null);
+
+  // ─── Cooldown countdown after a failed attempt ──────────────────
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setTimeout(() => setCooldown((c) => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [cooldown]);
 
   // ─── File selection ──────────────────────────────────────────────
   const handleFile = useCallback(async (selectedFile) => {
@@ -182,6 +190,7 @@ export default function ResumeAnalyzer() {
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.');
       setStatus('error');
+      setCooldown(5); // 5-second cooldown before allowing another attempt
     }
   }, []);
 
@@ -201,8 +210,9 @@ export default function ResumeAnalyzer() {
     if (inputRef.current) inputRef.current.value = '';
   };
 
-  // ─── Loading state ───────────────────────────────────────────────
+  // ─── Loading / disabled state ───────────────────────────────────
   const isLoading = status === 'extracting' || status === 'analyzing';
+  const isDisabled = isLoading || cooldown > 0;
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 max-w-4xl mx-auto">
@@ -238,13 +248,15 @@ export default function ResumeAnalyzer() {
       {/* ── Upload area (idle / error) ────────────────────────────── */}
       {(status === 'idle' || status === 'error') && (
         <div
-          onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
+          onDragOver={(e) => { e.preventDefault(); if (!isDisabled) setDragActive(true); }}
           onDragLeave={() => setDragActive(false)}
-          onDrop={handleDrop}
+          onDrop={(e) => { if (!isDisabled) handleDrop(e); else e.preventDefault(); }}
           className={`relative bg-white dark:bg-gray-900 border-2 border-dashed rounded-2xl p-10 sm:p-14 text-center transition-all duration-200 ${
-            dragActive
-              ? 'border-[#0A66C2] bg-blue-50/50 dark:bg-[#0A66C2]/5'
-              : 'border-gray-300 dark:border-gray-700 hover:border-[#0A66C2]/50 dark:hover:border-[#0A66C2]/50'
+            isDisabled
+              ? 'border-gray-200 dark:border-gray-800 opacity-60 cursor-not-allowed'
+              : dragActive
+                ? 'border-[#0A66C2] bg-blue-50/50 dark:bg-[#0A66C2]/5'
+                : 'border-gray-300 dark:border-gray-700 hover:border-[#0A66C2]/50 dark:hover:border-[#0A66C2]/50'
           }`}
         >
           <input
@@ -252,6 +264,7 @@ export default function ResumeAnalyzer() {
             type="file"
             accept=".pdf,.docx"
             className="hidden"
+            disabled={isDisabled}
             onChange={(e) => e.target.files?.[0] && handleFile(e.target.files[0])}
           />
 
@@ -273,10 +286,15 @@ export default function ResumeAnalyzer() {
 
           <button
             onClick={() => inputRef.current?.click()}
-            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white bg-[#0A66C2] rounded-xl hover:bg-[#004182] transition-colors min-h-[44px]"
+            disabled={isDisabled}
+            className={`inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl min-h-[44px] transition-colors ${
+              isDisabled
+                ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                : 'text-white bg-[#0A66C2] hover:bg-[#004182]'
+            }`}
           >
             <Upload className="h-4 w-4" />
-            Choose File
+            {cooldown > 0 ? `Please wait ${cooldown}s…` : 'Choose File'}
           </button>
         </div>
       )}

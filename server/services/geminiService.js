@@ -32,30 +32,48 @@ Scoring guidelines:
 
 Always return at least 3 improvements, even for strong resumes. Be specific and actionable.`;
 
+// ─── Retry helper with exponential backoff ────────────────────────
+async function callGeminiWithRetry(geminiModel, prompt, maxRetries = 3) {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const result = await geminiModel.generateContent(prompt);
+      return result.response.text();
+    } catch (err) {
+      const status = err?.status || err?.response?.status;
+      const isRetryable = status === 503 || status === 429;
+      const isLastAttempt = attempt === maxRetries;
+
+      if (isRetryable && !isLastAttempt) {
+        const delay = Math.min(1000 * Math.pow(2, attempt), 8000); // 1s, 2s, 4s, capped at 8s
+        console.log(
+          `[Gemini] Call failed (${status}), retrying in ${delay}ms… (attempt ${attempt + 1}/${maxRetries})`
+        );
+        await new Promise((res) => setTimeout(res, delay));
+        continue;
+      }
+      throw err; // not retryable, or out of retries — bubble up
+    }
+  }
+}
+
 export const analyzeResumeWithGemini = async (resumeText) => {
   if (!resumeText || resumeText.trim() === '') {
     throw new Error('Resume text content is empty or missing.');
   }
 
-  try {
-    const prompt = `${PROMPT_PREFIX}\n\nAnalyze this resume:\n\n${resumeText}`;
+  const prompt = `${PROMPT_PREFIX}\n\nAnalyze this resume:\n\n${resumeText}`;
+  console.log('[Gemini] Request received — sending prompt to model...');
 
-    console.log('[Gemini] Request received — sending prompt to model...');
+  // Use the retry-aware wrapper instead of calling model.generateContent directly
+  const responseText = await callGeminiWithRetry(model, prompt);
 
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text();
+  console.log('[Gemini] Raw response:', responseText);
 
-    console.log('[Gemini] Raw response:', responseText);
+  // Defensively strip markdown fences in case the model wraps the JSON
+  const cleaned = responseText.replace(/```json|```/g, '').trim();
+  const parsed = JSON.parse(cleaned);
 
-    // Defensively strip markdown fences in case the model wraps the JSON
-    const cleaned = responseText.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(cleaned);
+  console.log('[Gemini] Parsed successfully:', JSON.stringify(parsed, null, 2));
 
-    console.log('[Gemini] Parsed successfully:', JSON.stringify(parsed, null, 2));
-
-    return parsed;
-  } catch (error) {
-    console.error('[Gemini] Service Error:', error);
-    throw new Error(`Failed to analyze resume via Gemini API: ${error.message}`);
-  }
+  return parsed;
 };

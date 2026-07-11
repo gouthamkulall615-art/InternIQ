@@ -35,6 +35,7 @@ export async function analyzeResume(resumeText) {
     return response.data;
   } catch (error) {
     const message =
+      error.response?.data?.error ||
       error.response?.data?.message ||
       error.message ||
       'Analysis failed. Please try again.';
