@@ -20,8 +20,11 @@ Use this exact schema:
       "issue": "<specific problem found>",
       "suggestion": "<actionable fix>"
     }
-  ]
+  ],
+  "extracted_skills": ["<skill1>", "<skill2>", "..."]
 }
+
+The "extracted_skills" array should list every concrete skill, technology, tool, framework, language, and methodology mentioned anywhere in the resume — as short, recognizable labels (e.g. "React", "Python", "Docker", "REST APIs", "Git", "A/B Testing"). Include both hard and soft skills. De-duplicate and keep names concise.
 
 Scoring guidelines:
 - 1-3: Major issues — missing sections, no keywords, poor structure

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
-import { LayoutDashboard, FileSearch, FileSignature, Map, Target, Sun, Moon, Menu, X, LogOut, ChevronDown } from 'lucide-react';
+import { LayoutDashboard, FileSearch, FileSignature, Map, Target, BrainCircuit, Sun, Moon, Menu, X, LogOut, ChevronDown } from 'lucide-react';
 import Dashboard from './pages/Dashboard';
 import ResumeAnalyzer from './modules/resume-analyzer/ResumeAnalyzer';
+import SkillGapAnalyzer from './modules/skill-gap-analyzer/SkillGapAnalyzer';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AuthCallback from './pages/AuthCallback';
@@ -36,6 +37,7 @@ function Navbar() {
   const navigation = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
     { name: 'Resume Analyzer', href: '/resume-analyzer', icon: FileSearch },
+    { name: 'Skill Gap', href: '/skill-gap', icon: BrainCircuit },
     { name: 'Cover Letters', href: '#', icon: FileSignature, disabled: true },
     { name: 'Roadmap Provider', href: 'https://path-forge-amber.vercel.app/', icon: Map, external: true },
     { name: 'App Tracker', href: '#', icon: Target, disabled: true },
@@ -319,6 +321,7 @@ function App() {
         {/* Protected routes */}
         <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/resume-analyzer" element={<ProtectedRoute><ResumeAnalyzer /></ProtectedRoute>} />
+        <Route path="/skill-gap" element={<ProtectedRoute><SkillGapAnalyzer /></ProtectedRoute>} />
 
         {/* Catch all */}
         <Route path="*" element={<Navigate to="/" replace />} />

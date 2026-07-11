@@ -18,13 +18,13 @@ async function getAuthToken() {
  * Send extracted resume text to the server for Gemini AI analysis.
  * Automatically resolves the correct auth token (custom JWT or Supabase).
  */
-export async function analyzeResume(resumeText) {
+export async function analyzeResume(resumeText, fileName) {
   try {
     const token = await getAuthToken();
 
     const response = await api.post(
       '/api/analyzer/analyze',
-      { resumeText },
+      { resumeText, fileName },
       {
         headers: {
           Authorization: `Bearer ${token}`,

@@ -40,8 +40,8 @@ export default function Dashboard() {
       name: 'Skill Gap Analyzer',
       description: 'Compare your profile against job requirements to see what you need to learn.',
       icon: BrainCircuit,
-      href: '#',
-      active: false,
+      href: '/skill-gap',
+      active: true,
     },
     {
       name: 'LinkedIn Optimizer',

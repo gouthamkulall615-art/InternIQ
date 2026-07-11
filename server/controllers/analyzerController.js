@@ -1,7 +1,8 @@
 import { analyzeResumeWithGemini } from '../services/geminiService.js';
+import ResumeAnalysis from '../models/ResumeAnalysis.js';
 
 export const analyzeResume = async (req, res) => {
-  const { resumeText } = req.body;
+  const { resumeText, fileName } = req.body;
 
   console.log('[Analyzer] POST /api/analyzer/analyze — request received');
 
@@ -11,6 +12,29 @@ export const analyzeResume = async (req, res) => {
 
   try {
     const result = await analyzeResumeWithGemini(resumeText);
+
+    // Persist to MongoDB — upsert so each user has exactly one analysis doc
+    try {
+      await ResumeAnalysis.findOneAndUpdate(
+        { userId: req.user.id },
+        {
+          userId: req.user.id,
+          fileName: fileName || 'resume',
+          extractedText: resumeText,
+          atsScore: result.ats_score,
+          scoreReasoning: result.score_reasoning,
+          improvements: result.improvements,
+          extractedSkills: result.extracted_skills || [],
+          analyzedAt: new Date(),
+        },
+        { upsert: true, new: true }
+      );
+      console.log('[Analyzer] Analysis saved to MongoDB for user:', req.user.id);
+    } catch (dbError) {
+      // Log but don't fail the request — the user still gets their analysis
+      console.error('[Analyzer] MongoDB save error (non-fatal):', dbError.message);
+    }
+
     res.json(result);
   } catch (error) {
     console.error('[Analyzer] Controller Error:', error.message);
@@ -35,5 +59,25 @@ export const analyzeResume = async (req, res) => {
       error:
         'Something went wrong analyzing your resume. Please try again.',
     });
+  }
+};
+
+export const getLatestAnalysis = async (req, res) => {
+  try {
+    const analysis = await ResumeAnalysis.findOne({ userId: req.user.id })
+      .sort({ analyzedAt: -1 })
+      .lean();
+
+    if (!analysis) {
+      return res.status(404).json({ message: 'No resume analyzed yet' });
+    }
+
+    res.json({
+      extractedSkills: analysis.extractedSkills,
+      analyzedAt: analysis.analyzedAt,
+    });
+  } catch (error) {
+    console.error('[Analyzer] getLatestAnalysis error:', error.message);
+    res.status(500).json({ error: 'Failed to fetch analysis data.' });
   }
 };

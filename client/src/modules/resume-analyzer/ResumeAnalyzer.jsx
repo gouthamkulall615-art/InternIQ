@@ -14,6 +14,7 @@ import {
   ArrowRight,
   X,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { extractResumeText } from './utils/parseResume';
 import { analyzeResume } from './utils/analyzeResume';
 import { useAuth } from '../../contexts/AuthContext';
@@ -145,6 +146,7 @@ function ImprovementCard({ item, index }) {
 // ─── Main page component ────────────────────────────────────────────
 export default function ResumeAnalyzer() {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState('idle'); // idle | extracting | analyzing | done | error
@@ -184,7 +186,7 @@ export default function ResumeAnalyzer() {
       }
 
       setStatus('analyzing');
-      const analysis = await analyzeResume(text);
+      const analysis = await analyzeResume(text, selectedFile.name);
       setResult(analysis);
       setStatus('done');
     } catch (err) {
@@ -393,11 +395,18 @@ export default function ResumeAnalyzer() {
             ))}
           </div>
 
-          {/* Analyze another */}
-          <div className="flex justify-center pt-2">
+          {/* Action buttons */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+            <button
+              onClick={() => navigate('/skill-gap')}
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 text-sm font-semibold text-white bg-[#0A66C2] rounded-xl hover:bg-[#004182] transition-colors"
+            >
+              Check Skill Gaps
+              <ArrowRight className="h-4 w-4" />
+            </button>
             <button
               onClick={reset}
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-[#0A66C2] border border-[#0A66C2]/30 rounded-xl hover:bg-[#0A66C2]/5 dark:hover:bg-[#0A66C2]/10 transition-colors"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 text-sm font-semibold text-[#0A66C2] border border-[#0A66C2]/30 rounded-xl hover:bg-[#0A66C2]/5 dark:hover:bg-[#0A66C2]/10 transition-colors"
             >
               <RotateCcw className="h-4 w-4" />
               Analyze Another Resume
