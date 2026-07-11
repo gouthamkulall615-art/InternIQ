@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import api from '../../lib/axios';
 import { supabase } from '../../lib/supabase';
-import roleSkills from '../../data/roleSkills';
+import roleSkills, { roleGroups } from '../../data/roleSkills';
 
 // ─── Auth token helper (mirrors the one in resume-analyzer) ─────────
 async function getAuthToken() {
@@ -82,7 +82,6 @@ export default function SkillGapAnalyzer() {
 
   const [selectedRole, setSelectedRole] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const roles = Object.keys(roleSkills);
 
   // ─── Fetch latest analysis on mount ─────────────────────────────
   useEffect(() => {
@@ -250,21 +249,31 @@ export default function SkillGapAnalyzer() {
                     onClick={() => setDropdownOpen(false)}
                   />
                   <div className="absolute z-40 mt-2 w-full bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg py-1 max-h-60 overflow-y-auto">
-                    {roles.map((role) => (
-                      <button
-                        key={role}
-                        onClick={() => {
-                          setSelectedRole(role);
-                          setDropdownOpen(false);
-                        }}
-                        className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
-                          selectedRole === role
-                            ? 'text-[#0A66C2] bg-blue-50 dark:bg-[#0A66C2]/10 font-medium'
-                            : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
-                        }`}
-                      >
-                        {role}
-                      </button>
+                    {roleGroups.map((group, gi) => (
+                      <div key={group.label}>
+                        {gi > 0 && (
+                          <div className="border-t border-gray-100 dark:border-gray-800 my-1" />
+                        )}
+                        <div className="px-4 py-2 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-gray-500 select-none">
+                          {group.label}
+                        </div>
+                        {group.roles.map((role) => (
+                          <button
+                            key={role}
+                            onClick={() => {
+                              setSelectedRole(role);
+                              setDropdownOpen(false);
+                            }}
+                            className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                              selectedRole === role
+                                ? 'text-[#0A66C2] bg-blue-50 dark:bg-[#0A66C2]/10 font-medium'
+                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+                            }`}
+                          >
+                            {role}
+                          </button>
+                        ))}
+                      </div>
                     ))}
                   </div>
                 </>

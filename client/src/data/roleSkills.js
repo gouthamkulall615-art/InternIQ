@@ -1,4 +1,5 @@
-const roleSkills = {
+// ─── Technical Roles ────────────────────────────────────────────────
+const technicalRoles = {
   "Frontend Developer": [
     "HTML", "CSS", "JavaScript", "React", "TypeScript", "Responsive Design",
     "Git", "REST APIs", "Tailwind CSS", "Webpack/Vite", "Browser DevTools", "Accessibility (a11y)"
@@ -24,5 +25,30 @@ const roleSkills = {
     "State Management", "App Store Deployment", "Push Notifications", "Local Storage/SQLite"
   ],
 };
+
+// ─── Non-Technical Roles ────────────────────────────────────────────
+const nonTechnicalRoles = {
+  "Product Manager": [
+    "Market Research", "Product Roadmapping", "Stakeholder Communication",
+    "Agile/Scrum", "User Story Writing", "Prioritization Frameworks (RICE/MoSCoW)",
+    "Data-Informed Decision Making", "Wireframing (Figma)", "Competitive Analysis",
+    "Cross-functional Collaboration", "Basic SQL", "Product Metrics/KPIs"
+  ],
+  "Business Analyst": [
+    "Requirements Gathering", "Process Mapping", "Stakeholder Communication",
+    "Excel", "SQL", "Data Visualization", "Business Process Modeling (BPMN)",
+    "Gap Analysis", "Documentation", "Agile/Scrum", "Problem Solving",
+    "Presentation Skills"
+  ],
+};
+
+// Combined flat map for skill lookups
+const roleSkills = { ...technicalRoles, ...nonTechnicalRoles };
+
+// Grouped structure for UI dropdowns
+export const roleGroups = [
+  { label: 'Technical Roles', roles: Object.keys(technicalRoles) },
+  { label: 'Non-Technical Roles', roles: Object.keys(nonTechnicalRoles) },
+];
 
 export default roleSkills;
