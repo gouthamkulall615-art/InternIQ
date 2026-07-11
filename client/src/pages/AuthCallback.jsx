@@ -3,29 +3,30 @@ import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
-/**
- * This page handles the redirect back from Google OAuth via Supabase.
- * Supabase automatically parses the session from the URL — we just
- * need to wait for it, then redirect to the dashboard.
- */
 export default function AuthCallback() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkSession = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      if (error) {
-        console.error('Auth callback error:', error.message);
-        navigate('/login');
-        return;
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        navigate('/');
       }
+    });
+
+    // Fallback: if nothing fires within 3 seconds, check once directly
+    const timeout = setTimeout(async () => {
+      const { data } = await supabase.auth.getSession();
       if (data.session) {
         navigate('/');
       } else {
         navigate('/login');
       }
+    }, 3000);
+
+    return () => {
+      subscription.unsubscribe();
+      clearTimeout(timeout);
     };
-    checkSession();
   }, [navigate]);
 
   return (
