@@ -13,11 +13,13 @@ import {
   Sparkles,
   ArrowRight,
   X,
+  Download,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { extractResumeText } from './utils/parseResume';
 import { analyzeResume } from './utils/analyzeResume';
 import { useAuth } from '../../contexts/AuthContext';
+import { generateReportPDF } from '../../utils/generateReportPDF';
 
 // ─── Score ring colors ──────────────────────────────────────────────
 function scoreColor(score) {
@@ -403,6 +405,21 @@ export default function ResumeAnalyzer() {
             >
               Check Skill Gaps
               <ArrowRight className="h-4 w-4" />
+            </button>
+            <button
+              onClick={() =>
+                generateReportPDF({
+                  fileName: file?.name || 'resume',
+                  atsScore: result.ats_score,
+                  scoreReasoning: result.score_reasoning,
+                  improvements: result.improvements,
+                  analyzedAt: new Date(),
+                })
+              }
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-5 py-2.5 text-sm font-semibold text-[#0A66C2] border border-[#0A66C2]/30 rounded-xl hover:bg-[#0A66C2]/5 dark:hover:bg-[#0A66C2]/10 transition-colors"
+            >
+              <Download className="h-4 w-4" />
+              Download Report
             </button>
             <button
               onClick={reset}
