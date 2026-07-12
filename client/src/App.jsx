@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { LayoutDashboard, FileSearch, FileSignature, Map, Target, BrainCircuit, Sun, Moon, Menu, X, LogOut, ChevronDown } from 'lucide-react';
+import InstallPrompt from './components/InstallPrompt';
 import Dashboard from './pages/Dashboard';
 import ResumeAnalyzer from './modules/resume-analyzer/ResumeAnalyzer';
 import SkillGapAnalyzer from './modules/skill-gap-analyzer/SkillGapAnalyzer';
@@ -117,6 +118,9 @@ function Navbar() {
 
           {/* Right side */}
           <div className="flex items-center gap-2">
+            {/* Install App (PWA) */}
+            <InstallPrompt />
+
             {/* Theme toggle */}
             <button
               onClick={toggleTheme}
