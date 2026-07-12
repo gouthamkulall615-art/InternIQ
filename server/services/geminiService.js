@@ -3,43 +3,70 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
-const PROMPT_PREFIX = `You are an expert ATS (Applicant Tracking System) resume analyst and career coach.
-You will receive the plain text content of a resume. Analyze it thoroughly for ATS compatibility, content quality, formatting cues, keyword optimization, and overall effectiveness.
+// ─── Model with structured output + low temperature ─────────────────
+const model = genAI.getGenerativeModel({
+  model: 'gemini-2.5-flash',
+  generationConfig: {
+    temperature: 0.2,
+    topP: 0.8,
+    responseMimeType: 'application/json',
+    responseSchema: {
+      type: 'object',
+      properties: {
+        ats_score: { type: 'number' },
+        score_reasoning: { type: 'string' },
+        extracted_skills: { type: 'array', items: { type: 'string' } },
+        improvements: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              area: { type: 'string' },
+              issue: { type: 'string' },
+              suggestion: { type: 'string' },
+            },
+            required: ['area', 'issue', 'suggestion'],
+          },
+        },
+      },
+      required: ['ats_score', 'score_reasoning', 'extracted_skills', 'improvements'],
+    },
+  },
+});
 
-Return ONLY valid JSON. Do not include markdown code fences, do not include any explanation text before or after the JSON.
+// ─── Explicit scoring rubric prompt ─────────────────────────────────
+function buildPrompt(resumeText) {
+  return `You are an expert ATS (Applicant Tracking System) resume reviewer.
+Score the following resume using this EXACT rubric, out of 10 total points:
 
-Use this exact schema:
-{
-  "ats_score": <number from 1 to 10>,
-  "score_reasoning": "<1-2 sentence explanation of why you gave this score>",
-  "improvements": [
-    {
-      "area": "<category, e.g. Keywords, Formatting, Structure, Clarity, Impact Metrics, Contact Info, Skills Section, Experience Descriptions>",
-      "issue": "<specific problem found>",
-      "suggestion": "<actionable fix>"
-    }
-  ],
-  "extracted_skills": ["<skill1>", "<skill2>", "..."]
-}
+- Formatting & ATS-readability (0-2 points): single-column layout, standard section headers, no tables/graphics/columns that break ATS parsing
+- Keyword relevance (0-2 points): presence of relevant technical/role-specific keywords
+- Experience quality (0-2 points): action verbs, quantifiable achievements/metrics
+- Structure & completeness (0-2 points): presence of standard sections (Summary, Experience, Education, Skills), logical order
+- Clarity & professionalism (0-2 points): concise language, no vague filler, professional tone, correct dates/no future dates for completed work
+
+Sum these five sub-scores for the final ats_score out of 10. Be consistent: apply the SAME standard every time regardless of the resume's field or seniority level.
 
 The "extracted_skills" array should list every concrete skill, technology, tool, framework, language, and methodology mentioned anywhere in the resume — as short, recognizable labels (e.g. "React", "Python", "Docker", "REST APIs", "Git", "A/B Testing"). Include both hard and soft skills. De-duplicate and keep names concise.
 
-Scoring guidelines:
-- 1-3: Major issues — missing sections, no keywords, poor structure
-- 4-5: Below average — some content but significant gaps
-- 6-7: Decent — solid foundation but clear room for improvement
-- 8-9: Strong — well-optimized with minor tweaks needed
-- 10: Exceptional — near-perfect ATS optimization
+Always return at least 3 improvements, even for strong resumes. Be specific and actionable.
 
-Always return at least 3 improvements, even for strong resumes. Be specific and actionable.`;
+Resume text:
+"""
+${resumeText}
+"""
+
+Return your analysis in the required JSON structure.`;
+}
 
 // ─── Retry helper with exponential backoff ────────────────────────
 async function callGeminiWithRetry(geminiModel, prompt, maxRetries = 3) {
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      const result = await geminiModel.generateContent(prompt);
+      const result = await geminiModel.generateContent({
+        contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      });
       return result.response.text();
     } catch (err) {
       const status = err?.status || err?.response?.status;
@@ -64,19 +91,19 @@ export const analyzeResumeWithGemini = async (resumeText) => {
     throw new Error('Resume text content is empty or missing.');
   }
 
-  const prompt = `${PROMPT_PREFIX}\n\nAnalyze this resume:\n\n${resumeText}`;
+  const prompt = buildPrompt(resumeText);
   console.log('[Gemini] Request received — sending prompt to model...');
 
-  // Use the retry-aware wrapper instead of calling model.generateContent directly
+  // Use the retry-aware wrapper
   const responseText = await callGeminiWithRetry(model, prompt);
 
   console.log('[Gemini] Raw response:', responseText);
 
-  // Defensively strip markdown fences in case the model wraps the JSON
-  const cleaned = responseText.replace(/```json|```/g, '').trim();
-  const parsed = JSON.parse(cleaned);
+  // Structured output guarantees valid JSON — no regex cleanup needed
+  const parsed = JSON.parse(responseText);
 
   console.log('[Gemini] Parsed successfully:', JSON.stringify(parsed, null, 2));
 
   return parsed;
 };
+
