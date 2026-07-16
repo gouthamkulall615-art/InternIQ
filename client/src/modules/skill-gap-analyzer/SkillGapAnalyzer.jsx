@@ -160,18 +160,18 @@ export default function SkillGapAnalyzer() {
             <FileSearch className="h-8 w-8 text-[#0A66C2]" />
           </div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-            No resume analyzed yet
+            Upload your resume first
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-md mx-auto">
-            Analyze your resume first to get personalized skill gap insights.
-            We'll extract your skills automatically.
+            Head to the Resume Analyzer to upload your resume, then come back here to
+            see your skill gaps for any target role.
           </p>
           <Link
             to="/resume-analyzer"
             className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold text-white bg-[#0A66C2] rounded-xl hover:bg-[#004182] transition-colors"
           >
             <FileSearch className="h-4 w-4" />
-            Analyze Your Resume
+            Go to Resume Analyzer
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
