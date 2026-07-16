@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import { LayoutDashboard, FileSearch, FileSignature, Map, Target, BrainCircuit, Sun, Moon, Menu, X, LogOut, ChevronDown, FileDown } from 'lucide-react';
 import InstallPrompt from './components/InstallPrompt';
+import UpdatePrompt from './components/UpdatePrompt';
 import Dashboard from './pages/Dashboard';
 import ResumeAnalyzer from './modules/resume-analyzer/ResumeAnalyzer';
 import SkillGapAnalyzer from './modules/skill-gap-analyzer/SkillGapAnalyzer';
@@ -342,6 +343,7 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
       <Navbar />
+      <UpdatePrompt />
       <Routes>
         {/* Public routes */}
         <Route path="/login" element={<Login />} />
