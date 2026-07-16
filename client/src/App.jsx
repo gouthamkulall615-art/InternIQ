@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
-import { LayoutDashboard, FileSearch, FileSignature, Map, Target, BrainCircuit, Sun, Moon, Menu, X, LogOut, ChevronDown } from 'lucide-react';
+import { LayoutDashboard, FileSearch, FileSignature, Map, Target, BrainCircuit, Sun, Moon, Menu, X, LogOut, ChevronDown, FileDown } from 'lucide-react';
 import InstallPrompt from './components/InstallPrompt';
 import Dashboard from './pages/Dashboard';
 import ResumeAnalyzer from './modules/resume-analyzer/ResumeAnalyzer';
@@ -118,6 +118,16 @@ function Navbar() {
 
           {/* Right side */}
           <div className="flex items-center gap-2">
+            {/* Download Resume Template */}
+            <a
+              href="/ats-resume-template.pdf"
+              download
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#0A66C2] border border-[#0A66C2]/30 rounded-lg hover:bg-[#0A66C2]/5 dark:hover:bg-[#0A66C2]/10 transition-colors"
+            >
+              <FileDown className="h-4 w-4" />
+              Template
+            </a>
+
             {/* Install App (PWA) */}
             <InstallPrompt />
 
@@ -279,6 +289,14 @@ function Navbar() {
                     <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{displayEmail}</p>
                   </div>
                 </div>
+                <a
+                  href="/ats-resume-template.pdf"
+                  download
+                  className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium text-[#0A66C2] border border-[#0A66C2]/30 rounded-lg hover:bg-[#0A66C2]/5 dark:hover:bg-[#0A66C2]/10 transition-colors min-h-[44px]"
+                >
+                  <FileDown className="h-4 w-4" />
+                  Download Resume Template
+                </a>
                 <button
                   onClick={() => { logout(); setMobileMenuOpen(false); }}
                   className="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50/60 dark:hover:bg-red-900/20 rounded-lg transition-colors min-h-[44px]"
@@ -289,6 +307,14 @@ function Navbar() {
               </div>
             ) : (
               <div className="space-y-2">
+                <a
+                  href="/ats-resume-template.pdf"
+                  download
+                  className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium text-[#0A66C2] border border-[#0A66C2]/30 rounded-lg hover:bg-[#0A66C2]/5 dark:hover:bg-[#0A66C2]/10 transition-colors min-h-[44px]"
+                >
+                  <FileDown className="h-4 w-4" />
+                  Download Resume Template
+                </a>
                 <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}

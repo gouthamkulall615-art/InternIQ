@@ -14,6 +14,7 @@ import {
   ArrowRight,
   X,
   Download,
+  FileDown,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { extractResumeText } from './utils/parseResume';
@@ -288,18 +289,29 @@ export default function ResumeAnalyzer() {
             or click below to browse · PDF and DOCX supported
           </p>
 
-          <button
-            onClick={() => inputRef.current?.click()}
-            disabled={isDisabled}
-            className={`inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl min-h-[44px] transition-colors ${
-              isDisabled
-                ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
-                : 'text-white bg-[#0A66C2] hover:bg-[#004182]'
-            }`}
-          >
-            <Upload className="h-4 w-4" />
-            {cooldown > 0 ? `Please wait ${cooldown}s…` : 'Choose File'}
-          </button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-4">
+            <button
+              onClick={() => inputRef.current?.click()}
+              disabled={isDisabled}
+              className={`inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold rounded-xl min-h-[44px] transition-colors ${
+                isDisabled
+                  ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                  : 'text-white bg-[#0A66C2] hover:bg-[#004182]'
+              }`}
+            >
+              <Upload className="h-4 w-4" />
+              {cooldown > 0 ? `Please wait ${cooldown}s…` : 'Choose File'}
+            </button>
+
+            <a
+              href="/ats-resume-template.pdf"
+              download
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-sm font-semibold text-[#0A66C2] border border-[#0A66C2]/30 rounded-xl hover:bg-[#0A66C2]/5 dark:hover:bg-[#0A66C2]/10 transition-colors"
+            >
+              <FileDown className="h-4 w-4" />
+              Download Template
+            </a>
+          </div>
         </div>
       )}
 
