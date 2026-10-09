@@ -1,18 +1,19 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import api from '../lib/axios';
-import { supabase } from '../lib/supabase';
 
 const AuthContext = createContext();
+
+// STUB: Third-party OAuth login
+const triggerOAuthLogin = () => {
+  throw new Error('TODO: replace with MongoDB/Google auth');
+};
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [loading, setLoading] = useState(true);
 
-  // Supabase auth state
-  const [supabaseUser, setSupabaseUser] = useState(null);
-
-  const isAuthenticated = !!user || !!supabaseUser;
+  const isAuthenticated = !!user;
 
   // Restore backend session on mount
   useEffect(() => {
@@ -40,28 +41,6 @@ export function AuthProvider({ children }) {
     restoreSession();
   }, []);
 
-  // Check Supabase session on mount + listen for auth state changes
-  useEffect(() => {
-    // Check if a Supabase user is already logged in
-    const checkSupabaseUser = async () => {
-      const { data: { user: currentUser } } = await supabase.auth.getUser();
-      setSupabaseUser(currentUser ?? null);
-    };
-    checkSupabaseUser();
-
-    // Listen for auth state changes (sign in, sign out, token refresh)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setSupabaseUser(session?.user ?? null);
-      }
-    );
-
-    // Clean up the listener on unmount
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
-
   const login = async (email, password) => {
     const res = await api.post('/api/auth/login', { email, password });
     const { token: newToken, ...userData } = res.data;
@@ -85,21 +64,14 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('token');
     setToken(null);
     setUser(null);
-    // Clear Supabase session
-    await supabase.auth.signOut();
-    setSupabaseUser(null);
   };
 
   const googleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    });
-    if (error) console.error('Google login error:', error.message);
+    triggerOAuthLogin();
   };
 
   return (
-    <AuthContext.Provider value={{ user, supabaseUser, token, isAuthenticated, loading, login, register, logout, googleLogin }}>
+    <AuthContext.Provider value={{ user, token, isAuthenticated, loading, login, register, logout, googleLogin }}>
       {children}
     </AuthContext.Provider>
   );
@@ -112,4 +84,3 @@ export function useAuth() {
   }
   return context;
 }
-

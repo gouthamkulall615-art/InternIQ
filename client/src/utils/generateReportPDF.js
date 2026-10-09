@@ -236,3 +236,63 @@ export function generateReportPDF({ fileName, atsScore, scoreReasoning, improvem
   const cleanName = (fileName || 'resume').replace(/\.[^/.]+$/, '');
   doc.save(`InternIQ_Resume_Report_${cleanName}.pdf`);
 }
+
+// ─── Cover Letter PDF export ────────────────────────────────────────
+export function generateCoverLetterPDF(coverLetterText) {
+  const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const contentWidth = pageWidth - 40; // 20mm margins each side
+  let y = 20;
+
+  // ━━━━━━━━━━ HEADER ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  doc.setFontSize(28);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(10, 102, 194); // #0A66C2
+  doc.text('InternIQ', 20, y);
+
+  y += 9;
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(100, 100, 100);
+  doc.text('Cover Letter', 20, y);
+
+  y += 5;
+  doc.setDrawColor(10, 102, 194);
+  doc.setLineWidth(0.6);
+  doc.line(20, y, pageWidth - 20, y);
+  y += 10;
+
+  // ━━━━━━━━━━ DATE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(150, 150, 150);
+  doc.text(formatDate(new Date()), 20, y);
+  y += 10;
+
+  // ━━━━━━━━━━ BODY ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(40, 40, 40);
+
+  // Split by paragraphs (double newline), then word-wrap each paragraph
+  const paragraphs = coverLetterText.split(/\n\s*\n/);
+
+  for (const paragraph of paragraphs) {
+    const trimmed = paragraph.trim();
+    if (!trimmed) continue;
+
+    const lines = doc.splitTextToSize(trimmed, contentWidth);
+    for (const line of lines) {
+      y = ensureSpace(doc, y, 6);
+      doc.text(line, 20, y);
+      y += 6;
+    }
+    y += 4; // paragraph spacing
+  }
+
+  // ━━━━━━━━━━ FOOTER (all pages) ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  addFooter(doc);
+
+  // ━━━━━━━━━━ SAVE ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  doc.save('InternIQ_Cover_Letter.pdf');
+}

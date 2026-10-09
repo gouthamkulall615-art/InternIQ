@@ -6,6 +6,7 @@ import UpdatePrompt from './components/UpdatePrompt';
 import Dashboard from './pages/Dashboard';
 import ResumeAnalyzer from './modules/resume-analyzer/ResumeAnalyzer';
 import SkillGapAnalyzer from './modules/skill-gap-analyzer/SkillGapAnalyzer';
+import CoverLetterGenerator from './modules/cover-letter/CoverLetterGenerator';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import AuthCallback from './pages/AuthCallback';
@@ -16,7 +17,7 @@ import { useAuth } from './contexts/AuthContext';
 function Navbar() {
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
-  const { user, supabaseUser, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
@@ -30,17 +31,17 @@ function Navbar() {
     return () => document.body.classList.remove('overflow-hidden');
   }, [mobileMenuOpen]);
 
-  // Derive display values from whichever auth method is active
-  const activeUser = user || supabaseUser;
-  const displayName = user?.name || supabaseUser?.user_metadata?.full_name || 'User';
-  const displayEmail = user?.email || supabaseUser?.email || '';
-  const displayAvatar = user?.avatar || supabaseUser?.user_metadata?.avatar_url || null;
+  // Derive display values from active user
+  const activeUser = user;
+  const displayName = user?.name || 'User';
+  const displayEmail = user?.email || '';
+  const displayAvatar = user?.avatar || null;
 
   const navigation = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
     { name: 'Resume Analyzer', href: '/resume-analyzer', icon: FileSearch },
     { name: 'Skill Gap', href: '/skill-gap', icon: BrainCircuit },
-    { name: 'Cover Letters', href: '#', icon: FileSignature, disabled: true },
+    { name: 'Cover Letters', href: '/cover-letter', icon: FileSignature },
     { name: 'Roadmap Provider', href: 'https://path-forge-amber.vercel.app/', icon: Map, external: true },
     { name: 'App Tracker', href: '#', icon: Target, disabled: true },
   ];
@@ -354,6 +355,7 @@ function App() {
         <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/resume-analyzer" element={<ProtectedRoute><ResumeAnalyzer /></ProtectedRoute>} />
         <Route path="/skill-gap" element={<ProtectedRoute><SkillGapAnalyzer /></ProtectedRoute>} />
+        <Route path="/cover-letter" element={<ProtectedRoute><CoverLetterGenerator /></ProtectedRoute>} />
 
         {/* Catch all */}
         <Route path="*" element={<Navigate to="/" replace />} />

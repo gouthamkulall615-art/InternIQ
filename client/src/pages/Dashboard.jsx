@@ -18,8 +18,8 @@ export default function Dashboard() {
       name: 'Cover Letter Generator',
       description: 'Create tailored cover letters instantly based on your resume and job description.',
       icon: FileSignature,
-      href: '#',
-      active: false,
+      href: '/cover-letter',
+      active: true,
     },
     {
       name: 'Roadmap Provider',

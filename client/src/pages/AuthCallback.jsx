@@ -1,32 +1,22 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+
+// STUB: OAuth callback session processing
+const handleOAuthCallback = () => {
+  throw new Error('TODO: replace with MongoDB/Google auth');
+};
 
 export default function AuthCallback() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
-        navigate('/');
-      }
-    });
-
-    // Fallback: if nothing fires within 3 seconds, check once directly
-    const timeout = setTimeout(async () => {
-      const { data } = await supabase.auth.getSession();
-      if (data.session) {
-        navigate('/');
-      } else {
-        navigate('/login');
-      }
-    }, 3000);
-
-    return () => {
-      subscription.unsubscribe();
-      clearTimeout(timeout);
-    };
+    try {
+      handleOAuthCallback();
+    } catch (err) {
+      console.warn(err.message);
+      navigate('/login');
+    }
   }, [navigate]);
 
   return (

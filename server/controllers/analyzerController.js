@@ -1,4 +1,4 @@
-import { analyzeResumeWithGemini } from '../services/geminiService.js';
+import { analyzeResumeWithGemini, generateCoverLetterWithGemini } from '../services/geminiService.js';
 import ResumeAnalysis from '../models/ResumeAnalysis.js';
 
 export const analyzeResume = async (req, res) => {
@@ -79,5 +79,58 @@ export const getLatestAnalysis = async (req, res) => {
   } catch (error) {
     console.error('[Analyzer] getLatestAnalysis error:', error.message);
     res.status(500).json({ error: 'Failed to fetch analysis data.' });
+  }
+};
+
+export const generateCoverLetter = async (req, res) => {
+  const { jobDescription, companyName, roleTitle } = req.body;
+
+  console.log('[Analyzer] POST /api/analyzer/generate-cover-letter — request received');
+
+  if (!jobDescription || jobDescription.trim() === '') {
+    return res.status(400).json({ error: 'Job description is required.' });
+  }
+
+  try {
+    // Fetch the user's most recent resume analysis for extractedText
+    const analysis = await ResumeAnalysis.findOne({ userId: req.user.id })
+      .sort({ analyzedAt: -1 })
+      .lean();
+
+    if (!analysis) {
+      return res.status(404).json({ message: 'No resume analyzed yet' });
+    }
+
+    const coverLetter = await generateCoverLetterWithGemini(
+      analysis.extractedText,
+      jobDescription,
+      companyName || '',
+      roleTitle || ''
+    );
+
+    res.json({ coverLetter });
+  } catch (error) {
+    console.error('[Analyzer] generateCoverLetter Error:', error.message);
+
+    const status = error?.status || error?.response?.status;
+
+    if (status === 429) {
+      return res.status(429).json({
+        error:
+          'Our AI service is experiencing high demand right now. Please try again in a minute.',
+      });
+    }
+
+    if (status === 503) {
+      return res.status(503).json({
+        error:
+          'The cover letter service is temporarily unavailable. Please try again shortly.',
+      });
+    }
+
+    res.status(500).json({
+      error:
+        'Something went wrong generating your cover letter. Please try again.',
+    });
   }
 };

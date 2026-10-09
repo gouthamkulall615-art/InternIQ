@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
-import { supabase } from '../lib/supabase';
-import { useEffect } from 'react';
+
+// STUB: Google OAuth login
+const triggerGoogleOAuth = () => {
+  throw new Error('TODO: replace with MongoDB/Google auth');
+};
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,13 +25,12 @@ export default function Login() {
     }
   }, [isAuthenticated, navigate]);
 
-  const handleGoogleLogin = async () => {
-    console.log('Redirecting to:', `${window.location.origin}/auth/callback`);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { redirectTo: `${window.location.origin}/auth/callback` },
-    });
-    if (error) console.error('Google login error:', error.message);
+  const handleGoogleLogin = () => {
+    try {
+      triggerGoogleOAuth();
+    } catch (err) {
+      setError(err.message);
+    }
   };
 
   const handleSubmit = async (e) => {

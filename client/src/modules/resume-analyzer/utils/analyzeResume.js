@@ -1,22 +1,20 @@
 import api from '../../../lib/axios';
-import { supabase } from '../../../lib/supabase';
 
 /**
  * Get the best available auth token.
- * Prefers the custom JWT from localStorage; falls back to the
- * Supabase session access_token (Google login flow).
+ * Prefers the custom JWT from localStorage.
  */
 async function getAuthToken() {
   const customToken = localStorage.getItem('token');
   if (customToken) return customToken;
 
-  const { data: { session } } = await supabase.auth.getSession();
-  return session?.access_token || null;
+  // STUB: Fallback token retrieval
+  throw new Error('TODO: replace with MongoDB/Google auth');
 }
 
 /**
  * Send extracted resume text to the server for Gemini AI analysis.
- * Automatically resolves the correct auth token (custom JWT or Supabase).
+ * Automatically resolves the correct auth token.
  */
 export async function analyzeResume(resumeText, fileName) {
   try {

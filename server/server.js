@@ -32,6 +32,14 @@ app.use(cors({
 
 app.use(express.json());
 
+// Maintenance mode middleware: return HTTP 503 when maintenance flag is true
+app.use((_req, res, next) => {
+  if (process.env.VITE_MAINTENANCE_MODE === 'true' || process.env.MAINTENANCE_MODE === 'true') {
+    return res.status(503).json({ message: "Under maintenance" });
+  }
+  next();
+});
+
 // Initialize Passport (no sessions — we use JWT)
 configurePassport();
 app.use(passport.initialize());

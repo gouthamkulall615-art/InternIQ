@@ -11,17 +11,14 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import api from '../../lib/axios';
-import { supabase } from '../../lib/supabase';
 import roleSkills, { roleGroups } from '../../data/roleSkills';
 
-// ─── Auth token helper (mirrors the one in resume-analyzer) ─────────
+// ─── Auth token helper ──────────────────────────────────────────────
 async function getAuthToken() {
   const customToken = localStorage.getItem('token');
   if (customToken) return customToken;
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-  return session?.access_token || null;
+  // STUB: Fallback token retrieval
+  throw new Error('TODO: replace with MongoDB/Google auth');
 }
 
 // ─── Case-insensitive skill matching ────────────────────────────────

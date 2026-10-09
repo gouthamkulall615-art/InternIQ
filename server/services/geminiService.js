@@ -86,6 +86,43 @@ async function callGeminiWithRetry(geminiModel, prompt, maxRetries = 3) {
   }
 }
 
+// ─── Cover letter model — slightly more creative, plain text output ──
+const coverLetterModel = genAI.getGenerativeModel({
+  model: 'gemini-2.5-flash',
+  generationConfig: {
+    temperature: 0.4,
+    topP: 0.9,
+  },
+});
+
+// ─── Cover letter prompt builder ────────────────────────────────────
+function buildCoverLetterPrompt(extractedText, jobDescription, companyName, roleTitle) {
+  return `You are an expert career coach writing a tailored cover letter. Using the candidate's resume content below and the job description provided, write a professional, concise cover letter (250-400 words) that:
+- Opens with genuine interest in the specific role${roleTitle ? ` (${roleTitle})` : ''}${companyName ? ` at ${companyName}` : ''}
+- Connects 2-3 specific experiences/skills from the resume directly to what the job description asks for
+- Uses a confident, professional but natural tone — not generic corporate filler
+- Closes with genuine enthusiasm and a call to action
+- Does NOT invent experience not present in the resume
+
+Resume:
+"""${extractedText}"""
+
+Job Description:
+"""${jobDescription}"""
+
+Return ONLY the cover letter text, no preamble, no markdown formatting, no placeholder brackets.`;
+}
+
+export const generateCoverLetterWithGemini = async (extractedText, jobDescription, companyName, roleTitle) => {
+  const prompt = buildCoverLetterPrompt(extractedText, jobDescription, companyName, roleTitle);
+  console.log('[Gemini] Cover letter request — sending prompt to model...');
+
+  const responseText = await callGeminiWithRetry(coverLetterModel, prompt);
+
+  console.log('[Gemini] Cover letter generated successfully.');
+  return responseText.trim();
+};
+
 export const analyzeResumeWithGemini = async (resumeText) => {
   if (!resumeText || resumeText.trim() === '') {
     throw new Error('Resume text content is empty or missing.');
