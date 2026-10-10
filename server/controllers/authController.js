@@ -9,11 +9,14 @@ const generateToken = (id) => {
 
 // POST /api/auth/register
 export const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  let { name, email, password } = req.body;
   try {
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'Please provide name, email, and password' });
     }
+    name = name.trim();
+    email = email.toLowerCase().trim();
+
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ message: 'User already exists' });
@@ -37,8 +40,12 @@ export const registerUser = async (req, res) => {
 
 // POST /api/auth/login
 export const authUser = async (req, res) => {
-  const { email, password } = req.body;
+  let { email, password } = req.body;
   try {
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Please provide email and password' });
+    }
+    email = email.toLowerCase().trim();
     const user = await User.findOne({ email });
     if (user && (await user.matchPassword(password))) {
       res.json({
@@ -59,6 +66,9 @@ export const authUser = async (req, res) => {
 // GET /api/auth/me — restore session from token
 export const getMe = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'User not found or unauthenticated' });
+    }
     const user = await User.findById(req.user._id).select('-password');
     if (user) {
       res.json({

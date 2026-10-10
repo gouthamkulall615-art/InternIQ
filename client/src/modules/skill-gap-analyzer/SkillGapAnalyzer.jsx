@@ -17,8 +17,7 @@ import roleSkills, { roleGroups } from '../../data/roleSkills';
 async function getAuthToken() {
   const customToken = localStorage.getItem('token');
   if (customToken) return customToken;
-  // STUB: Fallback token retrieval
-  throw new Error('TODO: replace with MongoDB/Google auth');
+  throw new Error('Please sign in to continue.');
 }
 
 // ─── Case-insensitive skill matching ────────────────────────────────

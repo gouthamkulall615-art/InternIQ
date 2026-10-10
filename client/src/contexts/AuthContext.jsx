@@ -3,11 +3,6 @@ import api from '../lib/axios';
 
 const AuthContext = createContext();
 
-// STUB: Third-party OAuth login
-const triggerOAuthLogin = () => {
-  throw new Error('TODO: replace with MongoDB/Google auth');
-};
-
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
@@ -60,18 +55,46 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    // Clear backend session
-    localStorage.removeItem('token');
-    setToken(null);
-    setUser(null);
+    try {
+      await api.post('/api/auth/logout');
+    } catch {
+      // Ignore network errors on logout
+    } finally {
+      localStorage.removeItem('token');
+      setToken(null);
+      setUser(null);
+    }
   };
 
-  const googleLogin = async () => {
-    triggerOAuthLogin();
+  const googleLogin = () => {
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    window.location.href = `${apiUrl}/api/auth/google`;
+  };
+
+  const loginWithToken = async (newToken) => {
+    localStorage.setItem('token', newToken);
+    setToken(newToken);
+    const res = await api.get('/api/auth/me', {
+      headers: { Authorization: `Bearer ${newToken}` },
+    });
+    setUser(res.data);
+    return res.data;
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, isAuthenticated, loading, login, register, logout, googleLogin }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        isAuthenticated,
+        loading,
+        login,
+        register,
+        logout,
+        googleLogin,
+        loginWithToken,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

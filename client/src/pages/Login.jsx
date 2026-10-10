@@ -1,13 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Mail, Lock, Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
-
-// STUB: Google OAuth login
-const triggerGoogleOAuth = () => {
-  throw new Error('TODO: replace with MongoDB/Google auth');
-};
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -16,8 +11,16 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { login, isAuthenticated } = useAuth()
+  const { login, googleLogin, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const errorParam = searchParams.get('error');
+    if (errorParam) {
+      setError(decodeURIComponent(errorParam));
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -26,11 +29,8 @@ export default function Login() {
   }, [isAuthenticated, navigate]);
 
   const handleGoogleLogin = () => {
-    try {
-      triggerGoogleOAuth();
-    } catch (err) {
-      setError(err.message);
-    }
+    setError('');
+    googleLogin();
   };
 
   const handleSubmit = async (e) => {

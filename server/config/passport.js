@@ -16,40 +16,53 @@ import User from '../models/User.js';
  */
 
 const configurePassport = () => {
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    console.warn('⚠️ Google OAuth credentials missing in environment variables. Google login is disabled.');
+    return;
+  }
+
   passport.use(
     new GoogleStrategy(
       {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        // ⬇️ CONFIGURE YOUR REDIRECT URI HERE — must match Google Cloud Console
-        callbackURL: '/api/auth/google/callback',
+        callbackURL: process.env.GOOGLE_CALLBACK_URL || '/api/auth/google/callback',
+        proxy: true,
       },
       async (_accessToken, _refreshToken, profile, done) => {
         try {
-          // Check if user already exists by googleId
-          let user = await User.findOne({ googleId: profile.id });
+          const email = profile.emails?.[0]?.value ? profile.emails[0].value.toLowerCase().trim() : null;
+          const googleId = profile.id;
+          const avatar = profile.photos?.[0]?.value || '';
+
+          // 1. Check if user already exists by googleId
+          let user = await User.findOne({ googleId });
 
           if (user) {
             return done(null, user);
           }
 
-          // Check if a user with same email exists (registered via email/password)
-          user = await User.findOne({ email: profile.emails[0].value });
+          // 2. Check if a user with same email exists (registered via email/password)
+          if (email) {
+            user = await User.findOne({ email });
+          }
 
           if (user) {
             // Link Google account to existing email user
-            user.googleId = profile.id;
-            user.avatar = user.avatar || profile.photos?.[0]?.value || '';
+            user.googleId = googleId;
+            if (!user.avatar && avatar) {
+              user.avatar = avatar;
+            }
             await user.save();
             return done(null, user);
           }
 
-          // Create a new user
+          // 3. Create a new user
           user = await User.create({
-            name: profile.displayName,
-            email: profile.emails[0].value,
-            googleId: profile.id,
-            avatar: profile.photos?.[0]?.value || '',
+            name: profile.displayName || profile.name?.givenName || 'Google User',
+            email: email || `${googleId}@google.user`,
+            googleId: googleId,
+            avatar: avatar,
           });
 
           return done(null, user);

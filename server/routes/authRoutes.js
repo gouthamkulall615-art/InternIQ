@@ -18,20 +18,31 @@ router.post('/logout', logoutUser);
 
 // Google OAuth
 // Initiates the Google OAuth consent screen
-router.get('/google', passport.authenticate('google', {
-  scope: ['profile', 'email'],
-  session: false,
-}));
+router.get('/google', (req, res, next) => {
+  if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+    return res.status(500).json({ message: 'Google OAuth credentials not configured on server' });
+  }
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+    session: false,
+    prompt: 'select_account',
+  })(req, res, next);
+});
 
 // Google OAuth callback — issues JWT and redirects to frontend
-router.get('/google/callback',
-  passport.authenticate('google', { session: false, failureRedirect: '/login' }),
-  (req, res) => {
-    const token = generateToken(req.user._id);
-    // Redirect to frontend with token as query param — frontend will extract and store it
-    const clientURL = process.env.CLIENT_URL || 'http://localhost:5173';
-    res.redirect(`${clientURL}/auth/callback?token=${token}`);
-  }
-);
+router.get('/google/callback', (req, res, next) => {
+  const clientURL = (process.env.CLIENT_URL || 'http://localhost:5173').replace(/\/+$/, '');
+
+  passport.authenticate('google', { session: false }, (err, user, info) => {
+    if (err || !user) {
+      console.error('Google OAuth callback error:', err || info);
+      const errorMsg = err?.message || info?.message || 'Authentication with Google failed';
+      return res.redirect(`${clientURL}/login?error=${encodeURIComponent(errorMsg)}`);
+    }
+
+    const token = generateToken(user._id);
+    return res.redirect(`${clientURL}/auth/callback?token=${token}`);
+  })(req, res, next);
+});
 
 export default router;

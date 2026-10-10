@@ -13,19 +13,27 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Allow both local dev and production frontend to talk to this backend
+const clientUrl = process.env.CLIENT_URL ? process.env.CLIENT_URL.replace(/\/+$/, '') : null;
 const allowedOrigins = [
   'http://localhost:5173',
-  process.env.CLIENT_URL, // production Vercel URL, set in Render env vars
-];
+  'http://127.0.0.1:5173',
+  'http://localhost:3000',
+  clientUrl,
+].filter(Boolean);
 
 app.use(cors({
   origin: function (origin, callback) {
     // Allow requests with no origin (like server-to-server, curl, Postman)
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
+    if (!origin) return callback(null, true);
+    const normalizedOrigin = origin.replace(/\/+$/, '');
+    if (
+      allowedOrigins.includes(normalizedOrigin) ||
+      /^http:\/\/localhost:\d+$/.test(origin) ||
+      /^http:\/\/127\.0\.0\.1:\d+$/.test(origin)
+    ) {
+      return callback(null, true);
     }
+    return callback(new Error(`Not allowed by CORS: ${origin}`));
   },
   credentials: true,
 }));
