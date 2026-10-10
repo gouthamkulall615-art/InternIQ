@@ -68,7 +68,8 @@ export function AuthProvider({ children }) {
 
   const googleLogin = () => {
     const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-    window.location.href = `${apiUrl}/api/auth/google`;
+    const currentOrigin = window.location.origin;
+    window.location.href = `${apiUrl}/api/auth/google?origin=${encodeURIComponent(currentOrigin)}`;
   };
 
   const loginWithToken = async (newToken) => {
