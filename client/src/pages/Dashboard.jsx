@@ -7,7 +7,6 @@ import {
   Target,
   BrainCircuit,
   ArrowRight,
-  Sparkles,
   Award,
   Layers,
 } from 'lucide-react';
@@ -214,8 +213,7 @@ export default function Dashboard() {
                   <FileSearch className="h-6 w-6" />
                 </div>
 
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[var(--primary-soft)] text-[var(--primary)] border border-[var(--primary)]/20">
-                  <Sparkles className="h-3.5 w-3.5" />
+                <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-[var(--primary-soft)] text-[var(--primary)] border border-[var(--primary)]/20">
                   <span>Featured Tool</span>
                 </div>
               </div>
