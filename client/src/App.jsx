@@ -52,24 +52,27 @@ function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-40 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 transition-colors">
+    <header className="sticky top-0 z-40 bg-[var(--surface)]/85 backdrop-blur-md border-b border-[var(--border)] transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Left side: hamburger + logo */}
           <div className="flex items-center gap-2">
-            {/* Mobile menu button (left side for natural left-drawer UX) */}
+            {/* Mobile menu button */}
             <button
               onClick={() => setMobileMenuOpen(true)}
-              className="md:hidden p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              className="md:hidden p-2 text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--surface-muted)] rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
               aria-label="Open menu"
             >
               <Menu className="h-5 w-5" />
             </button>
 
             {/* Logo */}
-            <Link to="/" className="flex-shrink-0">
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
-                Intern<span className="text-[#0A66C2]">IQ</span>
+            <Link
+              to="/"
+              className="flex-shrink-0 group flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] rounded-lg px-1 py-0.5"
+            >
+              <h1 className="text-xl font-bold text-[var(--text)] tracking-tight">
+                Intern<span className="text-[var(--primary)]">IQ</span>
               </h1>
             </Link>
           </div>
@@ -78,12 +81,12 @@ function Navbar() {
           <nav className="hidden md:flex items-center gap-1">
             {navigation.map((item) => {
               const isActive = !item.external && location.pathname === item.href;
-              const classes = `px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+              const classes = `px-3.5 py-1.5 text-sm font-medium rounded-full transition-all duration-150 flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] ${
                 isActive
-                  ? 'text-[#0A66C2] bg-blue-50 dark:bg-[#0A66C2]/10'
+                  ? 'text-[var(--primary)] bg-[var(--primary-soft)] font-semibold shadow-xs'
                   : item.disabled
-                    ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
-                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800'
+                    ? 'text-[var(--text-muted)] opacity-50 cursor-not-allowed'
+                    : 'text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--surface-muted)]'
               }`;
 
               if (item.external) {
@@ -109,7 +112,7 @@ function Navbar() {
                 >
                   {item.name}
                   {item.disabled && (
-                    <span className="ml-1.5 text-[9px] uppercase font-bold bg-gray-100 dark:bg-gray-800 text-gray-400 py-0.5 px-1.5 rounded-full align-middle">
+                    <span className="ml-1.5 text-[9px] uppercase font-bold bg-[var(--surface-muted)] text-[var(--text-muted)] py-0.5 px-1.5 rounded-full align-middle border border-[var(--border)]">
                       Soon
                     </span>
                   )}
@@ -120,11 +123,11 @@ function Navbar() {
 
           {/* Right side */}
           <div className="flex items-center gap-2">
-            {/* Download Resume Template */}
+            {/* Download Resume Template (Outline Style) */}
             <a
               href="/ats-resume-template.pdf"
               download
-              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[#0A66C2] border border-[#0A66C2]/30 rounded-lg hover:bg-[#0A66C2]/5 dark:hover:bg-[#0A66C2]/10 transition-colors"
+              className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-[var(--text)] border border-[var(--border)] rounded-lg hover:border-[var(--primary)] hover:text-[var(--primary)] hover:bg-[var(--surface-muted)] transition-all shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
             >
               <FileDown className="h-4 w-4" />
               Template
@@ -136,7 +139,7 @@ function Navbar() {
             {/* Theme toggle */}
             <button
               onClick={toggleTheme}
-              className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              className="p-2 text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--surface-muted)] rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
               aria-label="Toggle theme"
             >
               {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
@@ -147,9 +150,9 @@ function Navbar() {
               <div className="relative hidden md:block">
                 <button
                   onClick={() => setUserMenuOpen(!userMenuOpen)}
-                  className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+                  className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-[var(--text)] hover:bg-[var(--surface-muted)] rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
                 >
-                  <div className="w-7 h-7 rounded-full bg-[#0A66C2] flex items-center justify-center text-white text-xs font-semibold flex-shrink-0">
+                  <div className="w-7 h-7 rounded-full bg-[var(--primary)] flex items-center justify-center text-white text-xs font-semibold flex-shrink-0 shadow-xs">
                     {displayAvatar ? (
                       <img src={displayAvatar} alt="" className="w-full h-full rounded-full object-cover" />
                     ) : (
@@ -157,20 +160,20 @@ function Navbar() {
                     )}
                   </div>
                   <span className="max-w-[120px] truncate">{displayName}</span>
-                  <ChevronDown className="h-4 w-4 text-gray-400" />
+                  <ChevronDown className="h-4 w-4 text-[var(--text-muted)]" />
                 </button>
 
                 {userMenuOpen && (
                   <>
                     <div className="fixed inset-0 z-40" onClick={() => setUserMenuOpen(false)} />
-                    <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg z-50 py-1">
-                      <div className="px-4 py-2 border-b border-gray-100 dark:border-gray-800">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{displayName}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{displayEmail}</p>
+                    <div className="absolute right-0 mt-2 w-52 bg-[var(--surface)] border border-[var(--border)] rounded-xl shadow-xl z-50 py-1.5 backdrop-blur-md">
+                      <div className="px-4 py-2 border-b border-[var(--border)]">
+                        <p className="text-sm font-semibold text-[var(--text)] truncate">{displayName}</p>
+                        <p className="text-xs text-[var(--text-muted)] truncate">{displayEmail}</p>
                       </div>
                       <button
                         onClick={() => { logout(); setUserMenuOpen(false); }}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                        className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
                       >
                         <LogOut className="h-4 w-4" />
                         Sign out
@@ -181,10 +184,16 @@ function Navbar() {
               </div>
             ) : (
               <div className="hidden md:flex items-center gap-2">
-                <Link to="/login" className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">
+                <Link
+                  to="/login"
+                  className="px-3.5 py-1.5 text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--surface-muted)] rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
+                >
                   Sign in
                 </Link>
-                <Link to="/register" className="px-4 py-2 text-sm font-semibold text-white bg-[#0A66C2] rounded-lg hover:bg-[#004182] transition-colors">
+                <Link
+                  to="/register"
+                  className="px-3.5 py-1.5 text-sm font-semibold text-white bg-[var(--primary)] hover:bg-[var(--primary-hover)] rounded-lg transition-all shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
+                >
                   Get Started
                 </Link>
               </div>
@@ -201,24 +210,24 @@ function Navbar() {
       >
         {/* Backdrop overlay */}
         <div
-          className="absolute inset-0 bg-black/40"
+          className="absolute inset-0 bg-black/50 backdrop-blur-xs"
           onClick={() => setMobileMenuOpen(false)}
         />
 
         {/* Drawer panel */}
         <div
-          className={`absolute top-0 left-0 h-full w-4/5 max-w-sm bg-white/75 dark:bg-gray-900/75 backdrop-blur-xl border-r border-white/20 dark:border-gray-700/50 shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
+          className={`absolute top-0 left-0 h-full w-4/5 max-w-sm bg-[var(--surface)]/95 backdrop-blur-xl border-r border-[var(--border)] shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
             mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
           }`}
         >
           {/* Drawer header */}
-          <div className="flex items-center justify-between px-5 h-16 border-b border-gray-200/50 dark:border-gray-800/50">
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white tracking-tight">
-              Intern<span className="text-[#0A66C2]">IQ</span>
+          <div className="flex items-center justify-between px-5 h-16 border-b border-[var(--border)]">
+            <h2 className="text-lg font-bold text-[var(--text)] tracking-tight">
+              Intern<span className="text-[var(--primary)]">IQ</span>
             </h2>
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100/60 dark:hover:bg-gray-800/60 rounded-lg transition-colors"
+              className="p-2 text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--surface-muted)] rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]"
               aria-label="Close menu"
             >
               <X className="h-5 w-5" />
@@ -230,12 +239,12 @@ function Navbar() {
             {navigation.map((item) => {
               const isActive = !item.external && location.pathname === item.href;
               const Icon = item.icon;
-              const classes = `flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-lg transition-colors min-h-[44px] ${
+              const classes = `flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl transition-colors min-h-[44px] ${
                 isActive
-                  ? 'text-[#0A66C2] bg-[#0A66C2]/10'
+                  ? 'text-[var(--primary)] bg-[var(--primary-soft)] font-semibold'
                   : item.disabled
-                    ? 'text-gray-400 dark:text-gray-600 cursor-not-allowed'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100/60 dark:hover:bg-gray-800/60'
+                    ? 'text-[var(--text-muted)] opacity-50 cursor-not-allowed'
+                    : 'text-[var(--text)] hover:bg-[var(--surface-muted)]'
               }`;
 
               if (item.external) {
@@ -265,9 +274,11 @@ function Navbar() {
                   className={classes}
                 >
                   <Icon className="h-5 w-5" />
-                  {item.name}
+                  <span className="flex-1">{item.name}</span>
                   {item.disabled && (
-                    <span className="text-[9px] uppercase font-bold bg-gray-100/80 dark:bg-gray-800/80 text-gray-400 py-0.5 px-1.5 rounded-full">Soon</span>
+                    <span className="text-[9px] uppercase font-bold bg-[var(--surface-muted)] text-[var(--text-muted)] py-0.5 px-1.5 rounded-full border border-[var(--border)]">
+                      Soon
+                    </span>
                   )}
                 </Link>
               );
@@ -275,11 +286,11 @@ function Navbar() {
           </nav>
 
           {/* User section (bottom) */}
-          <div className="px-4 py-4 border-t border-gray-200/50 dark:border-gray-800/50">
+          <div className="px-4 py-4 border-t border-[var(--border)]">
             {isAuthenticated && activeUser ? (
               <div className="space-y-2">
                 <div className="flex items-center gap-3 px-3 py-2">
-                  <div className="w-8 h-8 rounded-full bg-[#0A66C2] flex items-center justify-center text-white text-sm font-semibold flex-shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-[var(--primary)] flex items-center justify-center text-white text-sm font-semibold flex-shrink-0 shadow-xs">
                     {displayAvatar ? (
                       <img src={displayAvatar} alt="" className="w-full h-full rounded-full object-cover" />
                     ) : (
@@ -287,21 +298,21 @@ function Navbar() {
                     )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{displayName}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{displayEmail}</p>
+                    <p className="text-sm font-medium text-[var(--text)] truncate">{displayName}</p>
+                    <p className="text-xs text-[var(--text-muted)] truncate">{displayEmail}</p>
                   </div>
                 </div>
                 <a
                   href="/ats-resume-template.pdf"
                   download
-                  className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium text-[#0A66C2] border border-[#0A66C2]/30 rounded-lg hover:bg-[#0A66C2]/5 dark:hover:bg-[#0A66C2]/10 transition-colors min-h-[44px]"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 text-sm font-medium text-[var(--text)] border border-[var(--border)] rounded-lg hover:border-[var(--primary)] hover:text-[var(--primary)] hover:bg-[var(--surface-muted)] transition-colors min-h-[44px]"
                 >
                   <FileDown className="h-4 w-4" />
                   Download Resume Template
                 </a>
                 <button
                   onClick={() => { logout(); setMobileMenuOpen(false); }}
-                  className="w-full flex items-center gap-3 px-3 py-3 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50/60 dark:hover:bg-red-900/20 rounded-lg transition-colors min-h-[44px]"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors min-h-[44px]"
                 >
                   <LogOut className="h-5 w-5" />
                   Sign out
@@ -312,7 +323,7 @@ function Navbar() {
                 <a
                   href="/ats-resume-template.pdf"
                   download
-                  className="flex items-center justify-center gap-2 w-full px-4 py-3 text-sm font-medium text-[#0A66C2] border border-[#0A66C2]/30 rounded-lg hover:bg-[#0A66C2]/5 dark:hover:bg-[#0A66C2]/10 transition-colors min-h-[44px]"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 text-sm font-medium text-[var(--text)] border border-[var(--border)] rounded-lg hover:border-[var(--primary)] hover:text-[var(--primary)] hover:bg-[var(--surface-muted)] transition-colors min-h-[44px]"
                 >
                   <FileDown className="h-4 w-4" />
                   Download Resume Template
@@ -320,14 +331,14 @@ function Navbar() {
                 <Link
                   to="/login"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block w-full text-center px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 border border-gray-300/60 dark:border-gray-700/60 rounded-lg hover:bg-gray-50/60 dark:hover:bg-gray-800/60 transition-colors min-h-[44px]"
+                  className="block w-full text-center px-4 py-2.5 text-sm font-medium text-[var(--text)] border border-[var(--border)] rounded-lg hover:bg-[var(--surface-muted)] transition-colors min-h-[44px]"
                 >
                   Sign in
                 </Link>
                 <Link
                   to="/register"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="block w-full text-center px-4 py-3 text-sm font-semibold text-white bg-[#0A66C2] rounded-lg hover:bg-[#004182] transition-colors min-h-[44px]"
+                  className="block w-full text-center px-4 py-2.5 text-sm font-semibold text-white bg-[var(--primary)] hover:bg-[var(--primary-hover)] rounded-lg transition-colors min-h-[44px] shadow-xs"
                 >
                   Get Started
                 </Link>
@@ -342,7 +353,7 @@ function Navbar() {
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 transition-colors">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] transition-colors duration-200">
       <Navbar />
       <UpdatePrompt />
       <Routes>

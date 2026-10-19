@@ -2,16 +2,113 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+:root {
+  /* Design Tokens - Light Mode */
+  --bg: #F8F9FC;
+  --surface: #FFFFFF;
+  --surface-muted: #F1F3F9;
+  --border: #E6E8F0;
+  --text: #0F172A;
+  --text-muted: #64748B;
+  --primary: #4F46E5;
+  --primary-hover: #4338CA;
+  --accent: #7C3AED;
+  --primary-soft: #EEF0FF;
+
+  /* Per-Tool Tints: Light Mode */
+  --tint-resume-bg: #EEF0FF;
+  --tint-resume-icon: #4F46E5;
+  --tint-resume-border: #818CF8;
+
+  --tint-cover-bg: #F5F3FF;
+  --tint-cover-icon: #7C3AED;
+  --tint-cover-border: #A78BFA;
+
+  --tint-roadmap-bg: #F0FDFA;
+  --tint-roadmap-icon: #0D9488;
+  --tint-roadmap-border: #2DD4BF;
+
+  --tint-skill-bg: #FFFBEB;
+  --tint-skill-icon: #D97706;
+  --tint-skill-border: #FBBF24;
+
+  --tint-tracker-bg: #F1F5F9;
+  --tint-tracker-icon: #64748B;
+  --tint-tracker-border: #CBD5E1;
+
+  --tint-linkedin-bg: #F1F5F9;
+  --tint-linkedin-icon: #64748B;
+  --tint-linkedin-border: #CBD5E1;
+}
+
+.dark {
+  /* Design Tokens - Dark Mode */
+  --bg: #0B0D17;
+  --surface: #131626;
+  --surface-muted: #1A1E33;
+  --border: #252A45;
+  --text: #E8EAF6;
+  --text-muted: #9AA3BF;
+  --primary: #818CF8;
+  --primary-hover: #6366F1;
+  --accent: #A78BFA;
+  --primary-soft: rgba(129, 140, 248, 0.16);
+
+  /* Per-Tool Tints: Dark Mode */
+  --tint-resume-bg: rgba(129, 140, 248, 0.16);
+  --tint-resume-icon: #818CF8;
+  --tint-resume-border: rgba(129, 140, 248, 0.45);
+
+  --tint-cover-bg: rgba(167, 139, 250, 0.16);
+  --tint-cover-icon: #A78BFA;
+  --tint-cover-border: rgba(167, 139, 250, 0.45);
+
+  --tint-roadmap-bg: rgba(45, 212, 191, 0.16);
+  --tint-roadmap-icon: #2DD4BF;
+  --tint-roadmap-border: rgba(45, 212, 191, 0.45);
+
+  --tint-skill-bg: rgba(251, 191, 36, 0.16);
+  --tint-skill-icon: #FBBF24;
+  --tint-skill-border: rgba(251, 191, 36, 0.45);
+
+  --tint-tracker-bg: rgba(148, 163, 184, 0.12);
+  --tint-tracker-icon: #94A3B8;
+  --tint-tracker-border: rgba(148, 163, 184, 0.3);
+
+  --tint-linkedin-bg: rgba(148, 163, 184, 0.12);
+  --tint-linkedin-icon: #94A3B8;
+  --tint-linkedin-border: rgba(148, 163, 184, 0.3);
+}
+
 @theme {
-  --color-primary: #0A66C2;
-  --color-primary-dark: #004182;
-  --color-secondary: #1B1F23;
-  --color-accent: #0A66C2;
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-border-token: var(--border);
+  --color-text-main: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-accent: var(--accent);
+  --color-primary-soft: var(--primary-soft);
 }
 
 @layer base {
   body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    @apply bg-gray-50 text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    transition: background-color 200ms ease, color 200ms ease;
+    @apply antialiased min-h-screen selection:bg-[var(--primary)] selection:text-white;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+    transform: none !important;
   }
 }
