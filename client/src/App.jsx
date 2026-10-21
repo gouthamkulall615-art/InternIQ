@@ -361,7 +361,7 @@ function App() {
       <Navbar />
       <UpdatePrompt />
       <Routes>
-        {/* Root starting route & explicit /landing route */}
+        {/* Landing page at root / and explicit /landing */}
         <Route path="/" element={<Landing />} />
         <Route path="/landing" element={<Landing />} />
 

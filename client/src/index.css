@@ -126,3 +126,26 @@
     font-feature-settings: "zero" 1;
   }
 }
+
+/* Scoped Landing Page Design Tokens */
+.landing {
+  --landing-bg: #FAF8F4;
+  --landing-surface: #FFFFFF;
+  --landing-ink: #14161F;
+  --landing-border: #E4E0D8;
+  --landing-accent: #4F46E5;
+  --landing-accent-hover: #4338CA;
+  --landing-dark-bg: #0F111A;
+  --landing-dark-surface: #171926;
+  --landing-dark-border: #262938;
+
+  background-color: var(--landing-bg);
+  color: var(--landing-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing *, .landing *::before, .landing *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
