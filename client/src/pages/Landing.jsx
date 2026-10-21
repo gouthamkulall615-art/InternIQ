@@ -77,7 +77,7 @@ export default function Landing() {
   return (
     <div className="landing font-editorial-sans antialiased min-h-screen selection:bg-[#4F46E5] selection:text-white">
       {/* 1. TOP NAV */}
-      <header className="sticky top-0 z-40 bg-[#FAF8F4]/95 backdrop-blur-xs border-b border-[#E4E0D8]">
+      <header className="sticky top-0 z-40 bg-[#F3EFE6] border-b border-[#E4E0D8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Wordmark in Fraunces serif */}
           <div className="flex items-center gap-8">
@@ -144,7 +144,7 @@ export default function Landing() {
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-b border-[#E4E0D8] bg-[#FAF8F4] px-4 py-4 space-y-3">
+          <div className="md:hidden border-b border-[#E4E0D8] bg-[#F3EFE6] px-4 py-4 space-y-3">
             <a
               href="#tools"
               onClick={() => setMobileMenuOpen(false)}
@@ -203,11 +203,11 @@ export default function Landing() {
       </header>
 
       {/* 2. HERO SECTION */}
-      <section className="py-12 sm:py-16 lg:py-20 border-b border-[#E4E0D8]">
+      <section className="py-12 sm:py-16 lg:py-20 bg-[#F3EFE6] overflow-x-clip">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
-            {/* Left Column: Asymmetric, Left-aligned Typography */}
-            <div className="lg:col-span-6 space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+            {/* Left Column: Centered vertically with Poppins font and italic accent */}
+            <div className="lg:col-span-6 space-y-6 flex flex-col justify-center">
               <span className="font-editorial-mono text-xs uppercase tracking-wider text-[#6B7280] block">
                 CAREER PREPARATION WORKSPACE
               </span>
@@ -221,12 +221,12 @@ export default function Landing() {
                 ]}
               />
 
-              <p className="text-base sm:text-lg text-[#5A5D6B] leading-relaxed max-w-xl">
+              <p className="font-poppins text-base sm:text-lg text-[#5A5D6B] leading-relaxed max-w-xl">
                 A straightforward ATS scanner, skill gap evaluator, and cover letter writer. Free for students and early-career job applicants.
               </p>
 
               {/* Action Buttons */}
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 font-poppins">
                 <Link
                   to={isAuthenticated ? "/resume-analyzer" : "/register"}
                   className="inline-flex items-center justify-center px-5 py-3 text-sm font-medium text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-[4px] transition-colors min-h-[44px]"
@@ -247,16 +247,23 @@ export default function Landing() {
               </p>
             </div>
 
-            {/* Right Column: HeroResumeToggle Segmented Component */}
-            <div className="lg:col-span-6">
-              <HeroResumeToggle />
+            {/* Right Column: HeroResumeToggle Segmented Component with Print Misregistration Offset Block */}
+            <div className="lg:col-span-6 relative">
+              <div className="relative">
+                {/* Offset block behind hero panel */}
+                <div
+                  aria-hidden="true"
+                  className="absolute inset-0 rounded-[6px] bg-[var(--l-block)] translate-x-[8px] translate-y-[8px] sm:translate-x-[12px] sm:translate-y-[12px] -z-10 pointer-events-none"
+                />
+                <HeroResumeToggle />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* 3. PROBLEM STRIP (Three text-only columns with mono numbers 01/02/03) */}
-      <section className="py-12 border-b border-[#E4E0D8] bg-white">
+      <section className="py-12 bg-[#FAF8F4] border-t border-b border-[#E4E0D8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
             {/* Column 1 */}
@@ -302,7 +309,7 @@ export default function Landing() {
       </section>
 
       {/* 4. THE FOUR TOOLS (EDITORIAL GRID WITH UNEQUAL CELLS) */}
-      <section id="tools" className="py-16 sm:py-20 border-b border-[#E4E0D8]">
+      <section id="tools" className="py-16 sm:py-20 bg-[#FFFFFF] border-b border-[#E4E0D8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="mb-12 max-w-2xl">
@@ -539,7 +546,7 @@ export default function Landing() {
       </section>
 
       {/* 5. HOW IT WORKS (Three horizontal steps with large Fraunces numerals 1, 2, 3) */}
-      <section id="how-it-works" className="py-16 sm:py-20 border-b border-[#E4E0D8] bg-white">
+      <section id="how-it-works" className="py-16 sm:py-20 bg-[#F3EFE6]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12 max-w-2xl">
             <span className="font-editorial-mono text-xs uppercase tracking-wider text-[#6B7280] block">
@@ -612,7 +619,7 @@ export default function Landing() {
       </section>
 
       {/* 6. DARK SECTION (#0F111A) FOR SKILL GAP IN DETAIL */}
-      <section id="skill-benchmark" className="py-16 sm:py-20 bg-[#0F111A] text-white border-b border-[#262938]">
+      <section id="skill-benchmark" className="py-16 sm:py-20 bg-[#0F111A] text-white relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
             {/* Left Side: Context */}
@@ -750,7 +757,7 @@ export default function Landing() {
       </section>
 
       {/* 7. "COMING NEXT" ROW */}
-      <section className="py-16 sm:py-20 border-b border-[#E4E0D8] bg-[#FAF8F4]">
+      <section className="py-16 sm:py-20 bg-[#FAF8F4]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10 max-w-2xl">
             <span className="font-editorial-mono text-xs uppercase tracking-wider text-[#6B7280] block">
@@ -801,7 +808,7 @@ export default function Landing() {
       </section>
 
       {/* 8. FAQ SECTION (Accessible Accordion) */}
-      <section id="faq" className="py-16 sm:py-20 border-b border-[#E4E0D8] bg-white">
+      <section id="faq" className="py-16 sm:py-20 bg-[#FFFFFF] border-t border-[#E4E0D8]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10 text-left">
             <span className="font-editorial-mono text-xs uppercase tracking-wider text-[#6B7280] block">
@@ -848,7 +855,7 @@ export default function Landing() {
       </section>
 
       {/* 9. FINAL CTA BAND */}
-      <section className="py-16 sm:py-20 bg-[#FAF8F4] border-b border-[#E4E0D8]">
+      <section className="py-16 sm:py-20 bg-[#EEF0FB] border-t border-[#E4E0D8]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-left space-y-4">
           <span className="font-editorial-mono text-xs uppercase tracking-wider text-[#6B7280] block">
             GET STARTED
@@ -871,7 +878,7 @@ export default function Landing() {
       </section>
 
       {/* 10. MINIMAL FOOTER */}
-      <footer className="py-12 bg-white">
+      <footer className="py-12 bg-[#F3EFE6] border-t border-[#E4E0D8]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-8 border-b border-[#E4E0D8]">
             <div>

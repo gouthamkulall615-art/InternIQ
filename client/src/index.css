@@ -125,22 +125,69 @@
     font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     font-feature-settings: "zero" 1;
   }
+  .font-poppins {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
 }
 
-/* Scoped Landing Page Design Tokens */
+/* Scoped Landing Page Design Tokens & Background System */
 .landing {
-  --landing-bg: #FAF8F4;
-  --landing-surface: #FFFFFF;
-  --landing-ink: #14161F;
-  --landing-border: #E4E0D8;
-  --landing-accent: #4F46E5;
+  --l-paper:         #FAF8F4;
+  --l-paper-warm:    #F3EFE6;
+  --l-surface:       #FFFFFF;
+  --l-ink:           #14161F;
+  --l-line:          #E4E0D8;
+  --l-dark:          #0F111A;
+  --l-accent:        #4F46E5;
+  --l-cta:           #EEF0FB;   /* pale indigo CTA band */
+  --l-block:         #E4E0D8;   /* offset block behind hero panel */
+
+  /* Scoped aliases for compatibility */
+  --landing-bg: var(--l-paper);
+  --landing-surface: var(--l-surface);
+  --landing-ink: var(--l-ink);
+  --landing-border: var(--l-line);
+  --landing-accent: var(--l-accent);
   --landing-accent-hover: #4338CA;
-  --landing-dark-bg: #0F111A;
+  --landing-dark-bg: var(--l-dark);
   --landing-dark-surface: #171926;
   --landing-dark-border: #262938;
 
-  background-color: var(--landing-bg);
-  color: var(--landing-ink);
+  background-color: var(--l-paper);
+  color: var(--l-ink);
+  position: relative;
+  isolation: isolate;
+}
+
+/* Static paper grain overlay: ink-colored noise at 0.08 alpha */
+.landing::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.0784 0 0 0 0 0.0863 0 0 0 0 0.1216 0.08 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* Base landing sections sit at z-index 0 beneath the grain overlay */
+.landing > * {
+  position: relative;
+  z-index: 0;
+}
+
+/* Dark section sits above grain layer so grain is completely absent */
+.landing #skill-benchmark {
+  position: relative;
+  z-index: 2;
+  background-color: var(--l-dark, #0F111A);
+}
+
+/* Sticky top navigation sits above all sections and grain */
+.landing header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
 }
 
 @media (prefers-reduced-motion: reduce) {

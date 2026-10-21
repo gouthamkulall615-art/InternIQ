@@ -110,10 +110,12 @@ export default function GhostType({
   return (
     <h1
       ref={containerRef}
-      className="font-editorial-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-[#14161F] leading-[1.14] min-h-[2.5em] sm:min-h-[2.35em] select-text"
+      className="font-poppins text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-[#14161F] leading-[1.18] min-h-[2.5em] sm:min-h-[2.35em] select-text"
     >
-      {/* Base permanent text */}
-      <span className="text-[#14161F] font-normal">{text}</span>
+      {/* Base permanent text in distinct elegant italic serif */}
+      <span className="font-editorial-serif italic font-normal tracking-normal text-[#14161F] pr-0.5">
+        {text}
+      </span>
 
       {/* Cursor between base and ghost text during typing / suggested */}
       {!isAccepted && !isDeleting && (
@@ -123,9 +125,9 @@ export default function GhostType({
         />
       )}
 
-      {/* Completion text (ghost color if typing/suggested, solid ink if accepted/deleting) */}
+      {/* Completion text in Poppins (ghost color if typing/suggested, solid ink if accepted/deleting) */}
       <span
-        className={`whitespace-pre-wrap transition-colors duration-200 ${
+        className={`whitespace-pre-wrap font-poppins font-medium transition-colors duration-200 ${
           isAccepted || isDeleting
             ? 'text-[#14161F]'
             : 'text-[#8F94A6] select-none'
