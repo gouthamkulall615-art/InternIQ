@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   FileSearch,
   FileSignature,
@@ -12,10 +12,14 @@ import {
 } from 'lucide-react';
 import { FaLinkedin } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
+import FlyingButton from '../components/FlyingButton';
 import api from '../lib/axios';
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { theme } = useTheme();
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     atsScore: null,
     skillsToLearn: null,
@@ -189,6 +193,47 @@ export default function Dashboard() {
               </Link>
             );
           })}
+        </div>
+      </section>
+
+      {/* 2.5 Career Launchpad Interactive Thruster */}
+      <section aria-label="Career Launchpad" className="rounded-2xl bg-[var(--surface)] border border-[var(--border)] p-6 sm:p-7 overflow-hidden shadow-xs">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-4">
+          <div>
+            <span className="text-xs font-semibold uppercase tracking-wider text-[var(--primary)]">
+              Career Launchpad
+            </span>
+            <h2 className="text-xl sm:text-2xl font-bold text-[var(--text)] tracking-tight">
+              Ready to take off?
+            </h2>
+            <p className="text-sm text-[var(--text-muted)] mt-1">
+              Hover over or drag the thruster craft to launch an instant resume scan with live smoke physics.
+            </p>
+          </div>
+        </div>
+
+        <div className="relative w-full h-[340px] sm:h-[400px] rounded-xl overflow-hidden bg-gray-50/60 dark:bg-gray-950/40 border border-[var(--border)]">
+          <FlyingButton
+            theme={theme === 'dark' ? 'dark' : 'light'}
+            size="medium"
+            altitude={160}
+            hoverTime={2.4}
+            jets={2}
+            thrusters
+            trigger="hover"
+            carryCursor
+            smoke={1}
+            turbulence={1}
+            wobble={1}
+            ramp={false}
+            thrustColor={theme === 'dark' ? '#818CF8' : '#4F46E5'}
+            smokeColor={theme === 'dark' ? '#334155' : '#CBD5E1'}
+            buttonColor={theme === 'dark' ? '#27272a' : '#4F46E5'}
+            textColor="#FFFFFF"
+            onClick={() => navigate('/resume-analyzer')}
+          >
+            Launch Resume Scan
+          </FlyingButton>
         </div>
       </section>
 

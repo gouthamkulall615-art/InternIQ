@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
+import FlyingButton from '../components/FlyingButton';
 import { User, Mail, Lock, Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
 
 export default function Register() {
+  const { theme } = useTheme();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -145,12 +148,29 @@ export default function Register() {
               </div>
             </div>
 
-            <button type="submit" disabled={loading}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-white bg-[#0A66C2] rounded-lg hover:bg-[#004182] disabled:opacity-60 disabled:cursor-not-allowed transition-colors min-h-[44px]"
-            >
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-              {loading ? 'Creating account…' : 'Create Account'}
-            </button>
+            <div className="relative w-full h-[230px] rounded-xl overflow-hidden bg-gray-50/70 dark:bg-gray-900/60 border border-gray-200 dark:border-gray-800">
+              <FlyingButton
+                theme={theme === 'dark' ? 'dark' : 'light'}
+                size="medium"
+                altitude={110}
+                hoverTime={2.4}
+                jets={2}
+                thrusters
+                trigger="hover"
+                carryCursor
+                smoke={1}
+                turbulence={1}
+                wobble={1}
+                ramp={false}
+                thrustColor={theme === 'dark' ? '#818CF8' : '#0A66C2'}
+                smokeColor={theme === 'dark' ? '#334155' : '#CBD5E1'}
+                buttonColor="#0A66C2"
+                textColor="#FFFFFF"
+                onClick={handleSubmit}
+              >
+                {loading ? 'Creating account…' : 'Create Account'}
+              </FlyingButton>
+            </div>
           </form>
         </div>
 
