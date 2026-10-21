@@ -15,6 +15,7 @@ import {
   X,
 } from 'lucide-react';
 import HeroResumeToggle from '../components/HeroResumeToggle';
+import GhostType from '../components/GhostType';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Landing() {
@@ -211,9 +212,14 @@ export default function Landing() {
                 CAREER PREPARATION WORKSPACE
               </span>
 
-              <h1 className="font-editorial-serif text-3xl sm:text-4xl lg:text-5xl font-normal tracking-tight text-[#14161F] leading-[1.12]">
-                Know where your resume stands before a recruiter does.
-              </h1>
+              <GhostType
+                text="Fix your resume"
+                completions={[
+                  " before they see it.",
+                  " before you apply.",
+                  " before it's rejected.",
+                ]}
+              />
 
               <p className="text-base sm:text-lg text-[#5A5D6B] leading-relaxed max-w-xl">
                 A straightforward ATS scanner, skill gap evaluator, and cover letter writer. Free for students and early-career job applicants.
