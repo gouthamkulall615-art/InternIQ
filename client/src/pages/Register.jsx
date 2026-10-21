@@ -25,7 +25,7 @@ export default function Register() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      navigate('/dashboard');
     }
   }, [isAuthenticated, navigate]);
 
@@ -49,7 +49,7 @@ export default function Register() {
     setLoading(true);
     try {
       await register(name, email, password);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {

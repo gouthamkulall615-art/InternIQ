@@ -24,7 +24,7 @@ export default function Login() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      navigate('/dashboard');
     }
   }, [isAuthenticated, navigate]);
 
@@ -43,7 +43,7 @@ export default function Login() {
     setLoading(true);
     try {
       await login(email, password);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed. Please try again.');
     } finally {

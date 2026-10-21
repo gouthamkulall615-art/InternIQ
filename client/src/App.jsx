@@ -11,6 +11,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import AuthCallback from './pages/AuthCallback';
 import ProtectedRoute from './components/ProtectedRoute';
+import Landing from './pages/Landing';
 import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext';
 
@@ -38,7 +39,7 @@ function Navbar() {
   const displayAvatar = user?.avatar || null;
 
   const navigation = [
-    { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Resume Analyzer', href: '/resume-analyzer', icon: FileSearch },
     { name: 'Skill Gap', href: '/skill-gap', icon: BrainCircuit },
     { name: 'Cover Letters', href: '/cover-letter', icon: FileSignature },
@@ -46,8 +47,11 @@ function Navbar() {
     { name: 'App Tracker', href: '#', icon: Target, disabled: true },
   ];
 
-  // Don't show navbar on auth pages
-  if (['/login', '/register'].includes(location.pathname) || location.pathname.startsWith('/auth/')) {
+  // Don't show app navbar on landing page (root / or /landing) or auth pages
+  if (
+    ['/', '/landing', '/login', '/register'].includes(location.pathname) ||
+    location.pathname.startsWith('/auth/')
+  ) {
     return null;
   }
 
@@ -68,7 +72,7 @@ function Navbar() {
 
             {/* Logo */}
             <Link
-              to="/"
+              to="/dashboard"
               className="flex-shrink-0 group flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] rounded-lg px-1 py-0.5"
             >
               <h1 className="text-xl font-bold text-[var(--text)] tracking-tight">
@@ -357,13 +361,19 @@ function App() {
       <Navbar />
       <UpdatePrompt />
       <Routes>
-        {/* Public routes */}
+        {/* Root starting route & explicit /landing route */}
+        <Route path="/" element={<Landing />} />
+        <Route path="/landing" element={<Landing />} />
+
+        {/* Public auth routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/auth/callback" element={<AuthCallback />} />
 
+        {/* Direct dashboard route */}
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+
         {/* Protected routes */}
-        <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
         <Route path="/resume-analyzer" element={<ProtectedRoute><ResumeAnalyzer /></ProtectedRoute>} />
         <Route path="/skill-gap" element={<ProtectedRoute><SkillGapAnalyzer /></ProtectedRoute>} />
         <Route path="/cover-letter" element={<ProtectedRoute><CoverLetterGenerator /></ProtectedRoute>} />

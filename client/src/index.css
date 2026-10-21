@@ -112,3 +112,17 @@
     transform: none !important;
   }
 }
+
+@layer utilities {
+  .font-editorial-serif {
+    font-family: 'Fraunces', Georgia, serif;
+    font-feature-settings: "liga" 1, "kern" 1;
+  }
+  .font-editorial-sans {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+  .font-editorial-mono {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-feature-settings: "zero" 1;
+  }
+}

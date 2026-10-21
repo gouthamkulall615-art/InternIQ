@@ -29,7 +29,7 @@ export default function AuthCallback() {
 
     loginWithToken(token)
       .then(() => {
-        navigate('/', { replace: true });
+        navigate('/dashboard', { replace: true });
       })
       .catch((err) => {
         console.error('Failed to authenticate with token:', err);
