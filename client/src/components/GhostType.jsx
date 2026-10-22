@@ -110,10 +110,10 @@ export default function GhostType({
   return (
     <h1
       ref={containerRef}
-      className="font-poppins text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-[#14161F] leading-[1.18] min-h-[2.5em] sm:min-h-[2.35em] select-text"
+      className="font-poppins text-4xl sm:text-5xl md:text-6xl lg:text-[3.75rem] xl:text-[4.25rem] font-semibold tracking-tight text-[#14161F] dark:text-[#F1F3F9] leading-[1.14] sm:leading-[1.1] min-h-[2.8em] sm:min-h-[2.4em] lg:min-h-[2.3em] select-text"
     >
       {/* Base permanent text in distinct elegant italic serif */}
-      <span className="font-editorial-serif italic font-normal tracking-normal text-[#14161F] pr-0.5">
+      <span className="font-editorial-serif italic font-normal tracking-normal text-[#14161F] dark:text-[#F1F3F9] pr-1">
         {text}
       </span>
 
@@ -121,7 +121,7 @@ export default function GhostType({
       {!isAccepted && !isDeleting && (
         <span
           aria-hidden="true"
-          className="inline-block w-[3px] h-[0.88em] bg-[#4F46E5] mx-1 align-baseline rounded-[1px] animate-pulse"
+          className="inline-block w-[3.5px] sm:w-[4px] h-[0.88em] bg-[#4F46E5] dark:bg-[#818CF8] mx-1 align-baseline rounded-[1px] animate-pulse"
         />
       )}
 
@@ -129,8 +129,8 @@ export default function GhostType({
       <span
         className={`whitespace-pre-wrap font-poppins font-medium transition-colors duration-200 ${
           isAccepted || isDeleting
-            ? 'text-[#14161F]'
-            : 'text-[#8F94A6] select-none'
+            ? 'text-[#14161F] dark:text-[#F1F3F9]'
+            : 'text-[#8F94A6] dark:text-[#64748B] select-none'
         }`}
       >
         {displayedText}
@@ -140,7 +140,7 @@ export default function GhostType({
       {(isAccepted || isDeleting) && (
         <span
           aria-hidden="true"
-          className="inline-block w-[3px] h-[0.88em] bg-[#4F46E5] ml-1 align-baseline rounded-[1px] animate-pulse"
+          className="inline-block w-[3.5px] sm:w-[4px] h-[0.88em] bg-[#4F46E5] dark:bg-[#818CF8] ml-1 align-baseline rounded-[1px] animate-pulse"
         />
       )}
 
@@ -150,7 +150,7 @@ export default function GhostType({
           type="button"
           onClick={handleAccept}
           title="Press Tab or click to complete"
-          className="inline-flex items-center justify-center ml-2.5 px-2 py-0.5 align-middle text-[10px] font-editorial-mono font-medium tracking-normal text-white bg-[#1E212B] hover:bg-[#4F46E5] border border-[#2D3142] rounded-[4px] shadow-xs transition-all cursor-pointer select-none -translate-y-0.5 hover:scale-105 active:scale-95"
+          className="inline-flex items-center justify-center ml-2.5 px-2.5 py-0.5 align-middle text-[11px] font-editorial-mono font-medium tracking-normal text-white bg-[#1E212B] dark:bg-[#1E233A] hover:bg-[#4F46E5] dark:hover:bg-[#4F46E5] border border-[#2D3142] dark:border-[#373E61] rounded-[4px] shadow-xs transition-all cursor-pointer select-none -translate-y-0.5 hover:scale-105 active:scale-95"
         >
           Tab
         </button>

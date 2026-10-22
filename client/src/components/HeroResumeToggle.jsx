@@ -48,14 +48,14 @@ export default function HeroResumeToggle() {
   };
 
   return (
-    <div className="w-full bg-white border border-[#E4E0D8] rounded-[6px] overflow-hidden shadow-xs">
+    <div className="w-full bg-white dark:bg-[#131626] border border-[#E4E0D8] dark:border-[#1E233A] rounded-[6px] overflow-hidden shadow-xs transition-colors">
       {/* Segmented Top Bar / Tablist */}
-      <div className="px-4 py-3 bg-[#FAF8F4] border-b border-[#E4E0D8] flex flex-wrap items-center justify-between gap-3">
+      <div className="px-4 py-3 bg-[#FAF8F4] dark:bg-[#0B0D17] border-b border-[#E4E0D8] dark:border-[#1E233A] flex flex-wrap items-center justify-between gap-3">
         <div
           role="tablist"
           aria-label="Resume comparison toggle"
           onKeyDown={handleKeyDown}
-          className="inline-flex items-center p-1 bg-white border border-[#E4E0D8] rounded-[4px]"
+          className="inline-flex items-center p-1 bg-white dark:bg-[#1A1E33] border border-[#E4E0D8] dark:border-[#252A45] rounded-[4px]"
         >
           <button
             ref={tabHumanRef}
@@ -67,8 +67,8 @@ export default function HeroResumeToggle() {
             onClick={() => selectTab('human')}
             className={`inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-[3px] transition-colors min-h-[36px] ${
               view === 'human'
-                ? 'bg-[#14161F] text-white shadow-xs'
-                : 'text-[#5A5D6B] hover:text-[#14161F]'
+                ? 'bg-[#14161F] dark:bg-[#4F46E5] text-white shadow-xs'
+                : 'text-[#5A5D6B] dark:text-[#9AA3BF] hover:text-[#14161F] dark:hover:text-white'
             }`}
           >
             <Eye className="h-3.5 w-3.5" strokeWidth={1.5} />
@@ -85,8 +85,8 @@ export default function HeroResumeToggle() {
             onClick={() => selectTab('ats')}
             className={`inline-flex items-center gap-2 px-3 py-1.5 text-xs font-medium rounded-[3px] transition-colors min-h-[36px] ${
               view === 'ats'
-                ? 'bg-[#14161F] text-white shadow-xs'
-                : 'text-[#5A5D6B] hover:text-[#14161F]'
+                ? 'bg-[#14161F] dark:bg-[#4F46E5] text-white shadow-xs'
+                : 'text-[#5A5D6B] dark:text-[#9AA3BF] hover:text-[#14161F] dark:hover:text-white'
             }`}
           >
             <Terminal className="h-3.5 w-3.5" strokeWidth={1.5} />
@@ -97,12 +97,12 @@ export default function HeroResumeToggle() {
         {/* View Badge Status */}
         <div className="hidden sm:flex items-center gap-2">
           {view === 'human' ? (
-            <span className="font-editorial-mono text-[11px] text-[#15803D] bg-[#F0FDF4] border border-[#DCFCE7] px-2 py-0.5 rounded-[3px] inline-flex items-center gap-1">
+            <span className="font-editorial-mono text-[11px] text-[#15803D] dark:text-[#4ADE80] bg-[#F0FDF4] dark:bg-[#0B2816] border border-[#DCFCE7] dark:border-[#1E502B] px-2 py-0.5 rounded-[3px] inline-flex items-center gap-1">
               <CheckCircle2 className="h-3 w-3" strokeWidth={1.5} />
               <span>Clean Two-Column Layout</span>
             </span>
           ) : (
-            <span className="font-editorial-mono text-[11px] text-[#B45309] bg-[#FFFBEB] border border-[#FEF3C7] px-2 py-0.5 rounded-[3px] inline-flex items-center gap-1">
+            <span className="font-editorial-mono text-[11px] text-[#B45309] dark:text-[#FBBF24] bg-[#FFFBEB] dark:bg-[#2D1807] border border-[#FEF3C7] dark:border-[#572F0E] px-2 py-0.5 rounded-[3px] inline-flex items-center gap-1">
               <AlertCircle className="h-3 w-3" strokeWidth={1.5} />
               <span>Parser Stream Corruption</span>
             </span>
@@ -118,19 +118,19 @@ export default function HeroResumeToggle() {
           role="tabpanel"
           aria-labelledby="tab-human"
           hidden={view !== 'human'}
-          className={`p-5 sm:p-6 text-[#14161F] transition-opacity duration-200 ${
+          className={`p-5 sm:p-6 text-[#14161F] dark:text-[#F1F3F9] transition-opacity duration-200 ${
             view === 'human' ? 'opacity-100' : 'opacity-0 pointer-events-none absolute inset-0'
           }`}
         >
           {/* Resume Header */}
-          <div className="border-b border-[#E4E0D8] pb-4 mb-4">
-            <h2 className="font-editorial-serif text-2xl font-semibold tracking-tight text-[#14161F]">
+          <div className="border-b border-[#E4E0D8] dark:border-[#1E233A] pb-4 mb-4">
+            <h2 className="font-editorial-serif text-2xl font-semibold tracking-tight text-[#14161F] dark:text-white">
               {cleanResume.name}
             </h2>
-            <p className="text-xs text-[#5A5D6B] font-medium mt-0.5">
+            <p className="text-xs text-[#5A5D6B] dark:text-[#9AA3BF] font-medium mt-0.5">
               {cleanResume.title}
             </p>
-            <div className="font-editorial-mono text-[11px] text-[#6B7280] flex flex-wrap gap-x-4 gap-y-1 mt-2">
+            <div className="font-editorial-mono text-[11px] text-[#6B7280] dark:text-[#7E88A8] flex flex-wrap gap-x-4 gap-y-1 mt-2">
               <span>{cleanResume.contact.email}</span>
               <span>{cleanResume.contact.location}</span>
               <span>{cleanResume.contact.github}</span>
@@ -142,29 +142,29 @@ export default function HeroResumeToggle() {
             {/* Left Column (7 cols): Summary & Projects */}
             <div className="md:col-span-7 space-y-4">
               <div>
-                <h3 className="font-editorial-mono text-[10px] uppercase font-bold text-[#6B7280] tracking-wider mb-1">
+                <h3 className="font-editorial-mono text-[10px] uppercase font-bold text-[#6B7280] dark:text-[#7E88A8] tracking-wider mb-1">
                   Summary
                 </h3>
-                <p className="text-[#5A5D6B] leading-relaxed">
+                <p className="text-[#5A5D6B] dark:text-[#9AA3BF] leading-relaxed">
                   {cleanResume.summary}
                 </p>
               </div>
 
               <div>
-                <h3 className="font-editorial-mono text-[10px] uppercase font-bold text-[#6B7280] tracking-wider mb-2">
+                <h3 className="font-editorial-mono text-[10px] uppercase font-bold text-[#6B7280] dark:text-[#7E88A8] tracking-wider mb-2">
                   Key Projects
                 </h3>
                 <div className="space-y-3">
                   {cleanResume.projects.map((proj) => (
-                    <div key={proj.title} className="p-2.5 bg-[#FAF8F4] border border-[#E4E0D8] rounded-[4px]">
+                    <div key={proj.title} className="p-2.5 bg-[#FAF8F4] dark:bg-[#1A1E33] border border-[#E4E0D8] dark:border-[#252A45] rounded-[4px]">
                       <div className="flex items-baseline justify-between mb-1">
-                        <span className="font-semibold text-[#14161F] text-[12px]">{proj.title}</span>
-                        <span className="font-editorial-mono text-[10px] text-[#6B7280]">{proj.period}</span>
+                        <span className="font-semibold text-[#14161F] dark:text-white text-[12px]">{proj.title}</span>
+                        <span className="font-editorial-mono text-[10px] text-[#6B7280] dark:text-[#7E88A8]">{proj.period}</span>
                       </div>
-                      <span className="font-editorial-mono text-[10px] text-[#4F46E5] block mb-1.5">
+                      <span className="font-editorial-mono text-[10px] text-[#4F46E5] dark:text-[#818CF8] block mb-1.5">
                         {proj.tech}
                       </span>
-                      <ul className="list-disc list-outside pl-3.5 space-y-1 text-[#5A5D6B] leading-normal text-[11px]">
+                      <ul className="list-disc list-outside pl-3.5 space-y-1 text-[#5A5D6B] dark:text-[#9AA3BF] leading-normal text-[11px]">
                         {proj.bullets.map((b, i) => (
                           <li key={i}>{b}</li>
                         ))}
@@ -176,22 +176,22 @@ export default function HeroResumeToggle() {
             </div>
 
             {/* Right Column (5 cols): Skills & Education */}
-            <div className="md:col-span-5 space-y-4 border-t md:border-t-0 md:border-l border-[#E4E0D8] pt-4 md:pt-0 md:pl-5">
+            <div className="md:col-span-5 space-y-4 border-t md:border-t-0 md:border-l border-[#E4E0D8] dark:border-[#1E233A] pt-4 md:pt-0 md:pl-5">
               <div>
-                <h3 className="font-editorial-mono text-[10px] uppercase font-bold text-[#6B7280] tracking-wider mb-2">
+                <h3 className="font-editorial-mono text-[10px] uppercase font-bold text-[#6B7280] dark:text-[#7E88A8] tracking-wider mb-2">
                   Skills & Tools
                 </h3>
                 <div className="space-y-2">
                   {cleanResume.skills.map((grp) => (
                     <div key={grp.category}>
-                      <span className="font-editorial-mono text-[10px] text-[#6B7280] block">
+                      <span className="font-editorial-mono text-[10px] text-[#6B7280] dark:text-[#7E88A8] block">
                         {grp.category}:
                       </span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {grp.items.map((s) => (
                           <span
                             key={s}
-                            className="font-editorial-mono text-[10px] bg-[#FAF8F4] text-[#14161F] border border-[#E4E0D8] px-1.5 py-0.5 rounded-[3px]"
+                            className="font-editorial-mono text-[10px] bg-[#FAF8F4] dark:bg-[#131626] text-[#14161F] dark:text-[#E8EAF6] border border-[#E4E0D8] dark:border-[#252A45] px-1.5 py-0.5 rounded-[3px]"
                           >
                             {s}
                           </span>
@@ -203,17 +203,17 @@ export default function HeroResumeToggle() {
               </div>
 
               <div>
-                <h3 className="font-editorial-mono text-[10px] uppercase font-bold text-[#6B7280] tracking-wider mb-1.5">
+                <h3 className="font-editorial-mono text-[10px] uppercase font-bold text-[#6B7280] dark:text-[#7E88A8] tracking-wider mb-1.5">
                   Education
                 </h3>
-                <div className="p-2.5 bg-[#FAF8F4] border border-[#E4E0D8] rounded-[4px] space-y-1">
-                  <p className="font-medium text-[#14161F] text-[11px]">
+                <div className="p-2.5 bg-[#FAF8F4] dark:bg-[#1A1E33] border border-[#E4E0D8] dark:border-[#252A45] rounded-[4px] space-y-1">
+                  <p className="font-medium text-[#14161F] dark:text-white text-[11px]">
                     {cleanResume.education.degree}
                   </p>
-                  <p className="text-[#5A5D6B] text-[10px]">
+                  <p className="text-[#5A5D6B] dark:text-[#9AA3BF] text-[10px]">
                     {cleanResume.education.institution}
                   </p>
-                  <p className="font-editorial-mono text-[10px] text-[#4F46E5]">
+                  <p className="font-editorial-mono text-[10px] text-[#4F46E5] dark:text-[#818CF8]">
                     GPA: {cleanResume.education.gpa} ({cleanResume.education.period})
                   </p>
                 </div>

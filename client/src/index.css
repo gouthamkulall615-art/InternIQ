@@ -157,6 +157,32 @@
   color: var(--l-ink);
   position: relative;
   isolation: isolate;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.dark .landing {
+  --l-paper:         #0B0D17;
+  --l-paper-warm:    #0F1220;
+  --l-surface:       #131626;
+  --l-ink:           #F1F3F9;
+  --l-line:          #1E233A;
+  --l-dark:          #07090F;
+  --l-accent:        #6366F1;
+  --l-cta:           #12162B;
+  --l-block:         #1E233A;
+
+  --landing-bg: var(--l-paper);
+  --landing-surface: var(--l-surface);
+  --landing-ink: var(--l-ink);
+  --landing-border: var(--l-line);
+  --landing-accent: var(--l-accent);
+  --landing-accent-hover: #4F46E5;
+  --landing-dark-bg: var(--l-dark);
+  --landing-dark-surface: #131626;
+  --landing-dark-border: #1E233A;
+
+  background-color: var(--l-paper);
+  color: var(--l-ink);
 }
 
 /* Static paper grain overlay: ink-colored noise at 0.08 alpha */
@@ -168,6 +194,11 @@
   z-index: 1;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.0784 0 0 0 0 0.0863 0 0 0 0 0.1216 0.08 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-repeat: repeat;
+  transition: opacity 200ms ease;
+}
+
+.dark .landing::before {
+  opacity: 0.15;
 }
 
 /* Base landing sections sit at z-index 0 beneath the grain overlay */
