@@ -16,7 +16,6 @@ import {
   Sun,
   Moon,
 } from 'lucide-react';
-import HeroResumeToggle from '../components/HeroResumeToggle';
 import GhostType from '../components/GhostType';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -79,7 +78,13 @@ export default function Landing() {
   ];
 
   return (
-    <div className="landing font-editorial-sans antialiased min-h-screen selection:bg-[#4F46E5] selection:text-white">
+    <div className="landing font-editorial-sans antialiased min-h-screen selection:bg-[#4F46E5] selection:text-white relative bg-[#F3EFE6] dark:bg-[#0B0D17] transition-colors">
+      {/* Full Landing Page Modern Grid Background */}
+      <div aria-hidden="true" className="landing-grid-bg">
+        {/* Subtle radial ambient glow at the top */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(79,70,229,0.06),transparent_70%)] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(129,140,248,0.12),transparent_70%)] pointer-events-none" />
+      </div>
+
       {/* 1. TOP NAV */}
       <header className="sticky top-0 z-40 bg-[#F3EFE6] dark:bg-[#0F1220] border-b border-[#E4E0D8] dark:border-[#1E233A] transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -231,62 +236,54 @@ export default function Landing() {
       </header>
 
       {/* 2. HERO SECTION */}
-      <section className="py-12 sm:py-16 lg:py-20 bg-[#F3EFE6] dark:bg-[#0F1220] overflow-x-clip transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-            {/* Left Column: Centered vertically with Poppins font and italic accent */}
-            <div className="lg:col-span-6 space-y-6 flex flex-col justify-center">
-              <span className="font-editorial-mono text-xs uppercase tracking-wider text-[#6B7280] dark:text-[#818CF8] block font-medium">
-                CAREER PREPARATION WORKSPACE
-              </span>
+      <section className="relative min-h-[540px] sm:min-h-[600px] flex items-center justify-center overflow-hidden transition-colors">
+        {/* Subtle ambient radial glow in the center */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(79,70,229,0.07)_0%,transparent_65%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(129,140,248,0.13)_0%,transparent_65%)]"
+        />
 
-              <GhostType
-                text="Fix your resume"
-                completions={[
-                  " before they see it.",
-                  " before you apply.",
-                  " before it's rejected.",
-                ]}
-              />
+        {/* Centered Hero Content with GhostType */}
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center flex flex-col items-center justify-center">
+          <span className="font-editorial-mono text-xs uppercase tracking-widest text-[#4F46E5] dark:text-[#818CF8] block font-semibold mb-6 px-3.5 py-1 rounded-full bg-indigo-50/90 dark:bg-indigo-950/50 border border-indigo-200/90 dark:border-indigo-800/50 backdrop-blur-md shadow-xs">
+            CAREER PREPARATION WORKSPACE
+          </span>
 
-              <p className="font-poppins text-base sm:text-lg text-[#5A5D6B] dark:text-[#9AA3BF] leading-relaxed max-w-xl">
-                A straightforward ATS scanner, skill gap evaluator, and cover letter writer. Free for students and early-career job applicants.
-              </p>
-
-              {/* Action Buttons: ONLY the blue button is rounded-full */}
-              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 font-poppins">
-                <Link
-                  to={isAuthenticated ? "/resume-analyzer" : "/register"}
-                  className="inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-full transition-all hover:shadow-md min-h-[44px]"
-                >
-                  Analyze my resume
-                </Link>
-                <a
-                  href="#how-it-works"
-                  className="inline-flex items-center justify-center px-5 py-3 text-sm font-medium text-[#14161F] dark:text-[#F1F3F9] bg-white dark:bg-[#131626] border border-[#E4E0D8] dark:border-[#252A45] hover:border-[#14161F]/40 dark:hover:border-white/40 rounded-[4px] transition-colors min-h-[44px]"
-                >
-                  See how it works
-                </a>
-              </div>
-
-              {/* Small Mono Note */}
-              <p className="font-editorial-mono text-xs text-[#6B7280] dark:text-[#7E88A8] pt-1">
-                Free. PDF, DOCX or TXT up to 5MB.
-              </p>
-            </div>
-
-            {/* Right Column: HeroResumeToggle Segmented Component with Print Misregistration Offset Block */}
-            <div className="lg:col-span-6 relative">
-              <div className="relative">
-                {/* Offset block behind hero panel */}
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 rounded-[6px] bg-[var(--l-block)] translate-x-[8px] translate-y-[8px] sm:translate-x-[12px] sm:translate-y-[12px] -z-10 pointer-events-none"
-                />
-                <HeroResumeToggle />
-              </div>
-            </div>
+          <div className="w-full flex justify-center">
+            <GhostType
+              text="Fix your resume"
+              completions={[
+                " before they see it.",
+                " before you apply.",
+                " before it's rejected.",
+              ]}
+            />
           </div>
+
+          <p className="font-poppins text-base sm:text-lg text-[#475569] dark:text-[#9AA3BF] leading-relaxed max-w-2xl mt-4">
+            A straightforward ATS scanner, skill gap evaluator, and cover letter writer. Free for students and early-career job applicants.
+          </p>
+
+          {/* Action Buttons */}
+          <div className="pt-7 flex flex-col sm:flex-row items-center justify-center gap-3.5 font-poppins w-full sm:w-auto">
+            <Link
+              to={isAuthenticated ? "/resume-analyzer" : "/register"}
+              className="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3 text-sm font-medium text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-full transition-all hover:shadow-lg hover:shadow-indigo-500/25 min-h-[44px]"
+            >
+              Analyze my resume
+            </Link>
+            <a
+              href="#how-it-works"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-[#0F172A] dark:text-[#F1F3F9] bg-white/90 dark:bg-[#131626]/90 hover:bg-white dark:hover:bg-[#1A1E33] border border-[#CBD5E1] dark:border-[#252A45] hover:border-[#94A3B8] dark:hover:border-[#373E61] rounded-full backdrop-blur-md transition-all min-h-[44px] shadow-xs"
+            >
+              See how it works
+            </a>
+          </div>
+
+          {/* Small Mono Note */}
+          <p className="font-editorial-mono text-xs text-[#64748B] dark:text-[#7E88A8] pt-3">
+            Free. PDF, DOCX or TXT up to 5MB.
+          </p>
         </div>
       </section>
 
