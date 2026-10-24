@@ -12,6 +12,7 @@ import Register from './pages/Register';
 import AuthCallback from './pages/AuthCallback';
 import ProtectedRoute from './components/ProtectedRoute';
 import Landing from './pages/Landing';
+import AsciiBackground from './components/AsciiBackground';
 import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext';
 
@@ -356,31 +357,37 @@ function Navbar() {
 }
 
 function App() {
+  const location = useLocation();
+  const showAsciiBackground = ['/', '/landing', '/login', '/register'].includes(location.pathname);
+
   return (
-    <div className="min-h-screen bg-[var(--bg)] text-[var(--text)] transition-colors duration-200">
+    <div className="relative min-h-screen text-[var(--text)] transition-colors duration-200">
+      {showAsciiBackground && <AsciiBackground />}
       <Navbar />
       <UpdatePrompt />
-      <Routes>
-        {/* Landing page at root / and explicit /landing */}
-        <Route path="/" element={<Landing />} />
-        <Route path="/landing" element={<Landing />} />
+      <div className="relative z-10">
+        <Routes>
+          {/* Landing page at root / and explicit /landing */}
+          <Route path="/" element={<Landing />} />
+          <Route path="/landing" element={<Landing />} />
 
-        {/* Public auth routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/auth/callback" element={<AuthCallback />} />
+          {/* Public auth routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
 
-        {/* Direct dashboard route */}
-        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+          {/* Direct dashboard route */}
+          <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
 
-        {/* Protected routes */}
-        <Route path="/resume-analyzer" element={<ProtectedRoute><ResumeAnalyzer /></ProtectedRoute>} />
-        <Route path="/skill-gap" element={<ProtectedRoute><SkillGapAnalyzer /></ProtectedRoute>} />
-        <Route path="/cover-letter" element={<ProtectedRoute><CoverLetterGenerator /></ProtectedRoute>} />
+          {/* Protected routes */}
+          <Route path="/resume-analyzer" element={<ProtectedRoute><ResumeAnalyzer /></ProtectedRoute>} />
+          <Route path="/skill-gap" element={<ProtectedRoute><SkillGapAnalyzer /></ProtectedRoute>} />
+          <Route path="/cover-letter" element={<ProtectedRoute><CoverLetterGenerator /></ProtectedRoute>} />
 
-        {/* Catch all */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+          {/* Catch all */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </div>
     </div>
   );
 }

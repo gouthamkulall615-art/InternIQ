@@ -78,37 +78,31 @@ export default function Landing() {
   ];
 
   return (
-    <div className="landing font-editorial-sans antialiased min-h-screen selection:bg-[#4F46E5] selection:text-white relative bg-[#F3EFE6] dark:bg-[#0B0D17] transition-colors">
-      {/* Full Landing Page Modern Grid Background */}
-      <div aria-hidden="true" className="landing-grid-bg">
-        {/* Subtle radial ambient glow at the top */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(79,70,229,0.06),transparent_70%)] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(129,140,248,0.12),transparent_70%)] pointer-events-none" />
-      </div>
-
+    <div className="landing font-editorial-sans antialiased min-h-screen selection:bg-[#4F46E5] selection:text-white relative bg-transparent transition-colors">
       {/* 1. TOP NAV */}
-      <header className="sticky top-0 z-40 bg-[#F3EFE6] dark:bg-[#0F1220] border-b border-[#E4E0D8] dark:border-[#1E233A] transition-colors">
+      <header className="sticky top-0 z-40 bg-black/40 backdrop-blur-md border-b border-white/10 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           {/* Wordmark in Fraunces serif */}
           <div className="flex items-center gap-8">
             <Link
               to="/"
-              className="font-editorial-serif text-2xl font-semibold tracking-tight text-[#14161F] dark:text-white hover:opacity-90 transition-opacity"
+              className="font-editorial-serif text-2xl font-semibold tracking-tight text-white hover:opacity-90 transition-opacity"
             >
               InternIQ
             </Link>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-6 text-sm text-[#5A5D6B] dark:text-[#9AA3BF]">
-              <a href="#tools" className="hover:text-[#14161F] dark:hover:text-white transition-colors py-2">
+            <nav className="hidden md:flex items-center gap-6 text-sm text-slate-300">
+              <a href="#tools" className="hover:text-white transition-colors py-2">
                 Tools
               </a>
-              <a href="#how-it-works" className="hover:text-[#14161F] dark:hover:text-white transition-colors py-2">
+              <a href="#how-it-works" className="hover:text-white transition-colors py-2">
                 How it works
               </a>
-              <a href="#skill-benchmark" className="hover:text-[#14161F] dark:hover:text-white transition-colors py-2">
+              <a href="#skill-benchmark" className="hover:text-white transition-colors py-2">
                 Skill benchmark
               </a>
-              <a href="#faq" className="hover:text-[#14161F] dark:hover:text-white transition-colors py-2">
+              <a href="#faq" className="hover:text-white transition-colors py-2">
                 FAQ
               </a>
             </nav>
@@ -121,19 +115,19 @@ export default function Landing() {
               type="button"
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="p-2 text-[#5A5D6B] dark:text-[#9AA3BF] hover:text-[#14161F] dark:hover:text-white rounded-[4px] border border-[#E4E0D8] dark:border-[#1E233A] bg-white/60 dark:bg-[#131626]/80 hover:bg-white dark:hover:bg-[#131626] transition-colors flex items-center justify-center min-h-[40px] min-w-[40px] cursor-pointer"
+              className="p-2 text-slate-300 hover:text-white rounded-[4px] border border-white/15 bg-white/5 hover:bg-white/15 transition-colors flex items-center justify-center min-h-[40px] min-w-[40px] cursor-pointer"
             >
               {theme === 'dark' ? (
                 <Sun className="h-4.5 w-4.5 text-amber-400" strokeWidth={1.75} />
               ) : (
-                <Moon className="h-4.5 w-4.5 text-[#5A5D6B]" strokeWidth={1.75} />
+                <Moon className="h-4.5 w-4.5 text-slate-300" strokeWidth={1.75} />
               )}
             </button>
 
             {isAuthenticated ? (
               <Link
                 to="/dashboard"
-                className="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-full transition-colors min-h-[44px] shadow-xs"
+                className="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-[#1e3fd8] hover:bg-[#2563eb] rounded-full transition-colors min-h-[44px] shadow-lg shadow-blue-600/30"
               >
                 Open Dashboard
               </Link>
@@ -141,13 +135,13 @@ export default function Landing() {
               <>
                 <Link
                   to="/login"
-                  className="inline-flex items-center justify-center px-3.5 py-2 text-sm font-medium text-[#5A5D6B] dark:text-[#9AA3BF] hover:text-[#14161F] dark:hover:text-white transition-colors min-h-[44px]"
+                  className="inline-flex items-center justify-center px-3.5 py-2 text-sm font-medium text-slate-200 hover:text-white transition-colors min-h-[44px]"
                 >
                   Log in
                 </Link>
                 <Link
                   to="/register"
-                  className="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-full transition-colors min-h-[44px] shadow-xs"
+                  className="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-[#1e3fd8] hover:bg-[#2563eb] rounded-full transition-colors min-h-[44px] shadow-lg shadow-blue-600/30"
                 >
                   Get started
                 </Link>
@@ -161,13 +155,13 @@ export default function Landing() {
               type="button"
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="p-2 text-[#5A5D6B] dark:text-[#9AA3BF] hover:text-[#14161F] dark:hover:text-white rounded-[4px] border border-[#E4E0D8] dark:border-[#1E233A] bg-white/60 dark:bg-[#131626]/80 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+              className="p-2 text-slate-300 hover:text-white rounded-[4px] border border-white/15 bg-white/5 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
             >
               {theme === 'dark' ? <Sun className="h-5 w-5 text-amber-400" strokeWidth={1.5} /> : <Moon className="h-5 w-5" strokeWidth={1.5} />}
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-[#5A5D6B] dark:text-[#9AA3BF] hover:text-[#14161F] dark:hover:text-white rounded-[4px] border border-[#E4E0D8] dark:border-[#1E233A] bg-white/60 dark:bg-[#131626]/80 min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="p-2 text-slate-300 hover:text-white rounded-[4px] border border-white/15 bg-white/5 min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="h-5 w-5" strokeWidth={1.5} /> : <Menu className="h-5 w-5" strokeWidth={1.5} />}
@@ -177,7 +171,7 @@ export default function Landing() {
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-b border-[#E4E0D8] dark:border-[#1E233A] bg-[#F3EFE6] dark:bg-[#0F1220] px-4 py-4 space-y-3 transition-colors">
+          <div className="md:hidden border-b border-[#E4E0D8] dark:border-[#1E233A] bg-[#F3EFE6]/90 dark:bg-[#0F1220]/90 backdrop-blur-md px-4 py-4 space-y-3 transition-colors">
             <a
               href="#tools"
               onClick={() => setMobileMenuOpen(false)}
@@ -236,20 +230,14 @@ export default function Landing() {
       </header>
 
       {/* 2. HERO SECTION */}
-      <section className="relative min-h-[540px] sm:min-h-[600px] flex items-center justify-center overflow-hidden transition-colors">
-        {/* Subtle ambient radial glow in the center */}
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(79,70,229,0.07)_0%,transparent_65%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(129,140,248,0.13)_0%,transparent_65%)]"
-        />
-
-        {/* Centered Hero Content with GhostType */}
+      <section className="relative min-h-[560px] sm:min-h-[640px] flex items-center justify-center overflow-hidden transition-colors">
+        {/* Centered Hero Content with GhostType - NO CARD */}
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center flex flex-col items-center justify-center">
-          <span className="font-editorial-mono text-xs uppercase tracking-widest text-[#4F46E5] dark:text-[#818CF8] block font-semibold mb-6 px-3.5 py-1 rounded-full bg-indigo-50/90 dark:bg-indigo-950/50 border border-indigo-200/90 dark:border-indigo-800/50 backdrop-blur-md shadow-xs">
+          <span className="font-editorial-mono text-xs uppercase tracking-widest text-[#818CF8] block font-semibold mb-6 px-3.5 py-1 rounded-full bg-indigo-950/70 border border-indigo-500/40 backdrop-blur-md shadow-xs">
             CAREER PREPARATION WORKSPACE
           </span>
 
-          <div className="w-full flex justify-center">
+          <div className="w-full flex justify-center text-white">
             <GhostType
               text="Fix your resume"
               completions={[
@@ -260,7 +248,7 @@ export default function Landing() {
             />
           </div>
 
-          <p className="font-poppins text-base sm:text-lg text-[#475569] dark:text-[#9AA3BF] leading-relaxed max-w-2xl mt-4">
+          <p className="font-poppins text-base sm:text-lg text-slate-200 leading-relaxed max-w-2xl mt-4">
             A straightforward ATS scanner, skill gap evaluator, and cover letter writer. Free for students and early-career job applicants.
           </p>
 
@@ -268,20 +256,20 @@ export default function Landing() {
           <div className="pt-7 flex flex-col sm:flex-row items-center justify-center gap-3.5 font-poppins w-full sm:w-auto">
             <Link
               to={isAuthenticated ? "/resume-analyzer" : "/register"}
-              className="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3 text-sm font-medium text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-full transition-all hover:shadow-lg hover:shadow-indigo-500/25 min-h-[44px]"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3 text-sm font-medium text-white bg-[#1e3fd8] hover:bg-[#2563eb] rounded-full transition-all hover:shadow-lg hover:shadow-blue-500/30 min-h-[44px]"
             >
               Analyze my resume
             </Link>
             <a
               href="#how-it-works"
-              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-[#0F172A] dark:text-[#F1F3F9] bg-white/90 dark:bg-[#131626]/90 hover:bg-white dark:hover:bg-[#1A1E33] border border-[#CBD5E1] dark:border-[#252A45] hover:border-[#94A3B8] dark:hover:border-[#373E61] rounded-full backdrop-blur-md transition-all min-h-[44px] shadow-xs"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-full backdrop-blur-md transition-all min-h-[44px] shadow-xs"
             >
               See how it works
             </a>
           </div>
 
           {/* Small Mono Note */}
-          <p className="font-editorial-mono text-xs text-[#64748B] dark:text-[#7E88A8] pt-3">
+          <p className="font-editorial-mono text-xs text-slate-400 pt-3">
             Free. PDF, DOCX or TXT up to 5MB.
           </p>
         </div>

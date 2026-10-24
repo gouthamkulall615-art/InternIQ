@@ -63,7 +63,7 @@ export default function Register() {
   const inputClass = "w-full pl-10 pr-4 py-3 text-base rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#0A66C2] focus:border-transparent transition-colors min-h-[44px]";
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950 px-4 py-12 transition-colors">
+    <div className="min-h-screen flex items-center justify-center bg-transparent px-4 py-12 transition-colors">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
@@ -74,12 +74,12 @@ export default function Register() {
         </div>
 
         {/* Card */}
-        <div className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm p-8">
+        <div className="bg-[var(--surface)]/75 backdrop-blur-md rounded-2xl border border-[var(--border)]/70 shadow-xl p-8">
           {/* Google Button */}
           <button
             onClick={googleLogin}
             type="button"
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors min-h-[44px]"
+            className="w-full flex items-center justify-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white/90 dark:bg-gray-800/90 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors min-h-[44px]"
           >
             <FcGoogle className="h-5 w-5" />
             Continue with Google
@@ -91,7 +91,7 @@ export default function Register() {
               <div className="w-full border-t border-gray-200 dark:border-gray-800" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="bg-white dark:bg-gray-900 px-3 text-gray-400 dark:text-gray-500 uppercase tracking-wider">or</span>
+              <span className="bg-[var(--surface)] px-3 text-gray-400 dark:text-gray-500 uppercase tracking-wider rounded">or</span>
             </div>
           </div>
 

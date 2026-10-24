@@ -111,10 +111,10 @@ export default function GhostType({
   return (
     <h1
       ref={containerRef}
-      className={`font-poppins text-4xl sm:text-5xl md:text-6xl lg:text-[3.75rem] xl:text-[4.25rem] font-semibold tracking-tight text-[#0F172A] dark:text-[#F8FAFC] leading-[1.14] sm:leading-[1.1] min-h-[2.8em] sm:min-h-[2.4em] lg:min-h-[2.3em] select-text ${className}`}
+      className={`font-poppins text-4xl sm:text-5xl md:text-6xl lg:text-[3.75rem] xl:text-[4.25rem] font-semibold tracking-tight text-white leading-[1.14] sm:leading-[1.1] min-h-[2.8em] sm:min-h-[2.4em] lg:min-h-[2.3em] select-text ${className}`}
     >
       {/* Base permanent text in distinct elegant italic serif */}
-      <span className="font-editorial-serif italic font-normal tracking-normal text-[#0F172A] dark:text-[#F8FAFC] pr-1">
+      <span className="font-editorial-serif italic font-normal tracking-normal text-white pr-1">
         {text}
       </span>
 
@@ -122,7 +122,7 @@ export default function GhostType({
       {!isAccepted && !isDeleting && (
         <span
           aria-hidden="true"
-          className="inline-block w-[3.5px] sm:w-[4px] h-[0.88em] bg-[#4F46E5] dark:bg-[#38BDF8] mx-1 align-baseline rounded-[1px] animate-pulse shadow-[0_0_8px_rgba(79,70,229,0.5)] dark:shadow-[0_0_12px_rgba(56,189,248,0.8)]"
+          className="inline-block w-[3.5px] sm:w-[4px] h-[0.88em] bg-[#38BDF8] mx-1 align-baseline rounded-[1px] animate-pulse shadow-[0_0_12px_rgba(56,189,248,0.8)]"
         />
       )}
 
@@ -130,8 +130,8 @@ export default function GhostType({
       <span
         className={`whitespace-pre-wrap font-poppins font-medium transition-colors duration-200 ${
           isAccepted || isDeleting
-            ? 'text-[#0F172A] dark:text-[#F8FAFC]'
-            : 'text-[#64748B] dark:text-[#94A3B8] select-none'
+            ? 'text-white'
+            : 'text-slate-400 select-none'
         }`}
       >
         {displayedText}
