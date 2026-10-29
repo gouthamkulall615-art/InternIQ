@@ -177,21 +177,21 @@ export default function ToolsSection(): React.JSX.Element {
             >
               <SpotlightCard
                 theme={cardTheme}
-                spotlightColor="#9CA3AF"
-                intensity={0.08}
-                spotlightSize={260}
+                spotlightColor={cardTheme === 'dark' ? '#818CF8' : '#4F46E5'}
+                intensity={cardTheme === 'dark' ? 0.16 : 0.22}
+                spotlightSize={280}
                 softness={0.7}
-                borderGlow={0.25}
-                proximity={60}
-                className="h-full rounded-[12px] bg-[#F9F8F4] dark:bg-[#121524] border border-[#E4E0D8] dark:border-[#1E233A] p-6 sm:p-8 flex flex-col justify-between transition-colors shadow-none"
+                borderGlow={cardTheme === 'dark' ? 0.7 : 0.85}
+                proximity={80}
+                className="h-full rounded-[12px] bg-[#F9F8F4] dark:bg-[#121524] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/5 hover:-translate-y-0.5 cursor-default"
                 style={{
                   borderRadius: '12px',
                   '--spotlight-card-surface': cardTheme === 'dark' ? '#121524' : '#F9F8F4',
                   '--spotlight-card-border': cardTheme === 'dark' ? '#1E233A' : '#E4E0D8',
-                  '--spotlight-card-shadow': 'none'
+                  '--spotlight-card-shadow': cardTheme === 'dark' ? '0 10px 30px -10px rgba(0,0,0,0.5)' : '0 1px 3px rgba(0,0,0,0.03)'
                 }}
               >
-                <div>
+                <div className="relative z-10">
                   {/* Top: 28px rounded-md number badge + sentence-case label, 40px rounded-lg duotone icon */}
                   <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center gap-2.5">
@@ -254,7 +254,7 @@ export default function ToolsSection(): React.JSX.Element {
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
+                <div className="relative z-10 pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
                   <span className="font-sans text-xs text-[#6B7280] dark:text-[#7E88A8]">
                     {TOOLS_DATA[0].footerNote}
                   </span>
@@ -285,21 +285,21 @@ export default function ToolsSection(): React.JSX.Element {
             >
               <SpotlightCard
                 theme={cardTheme}
-                spotlightColor="#9CA3AF"
-                intensity={0.08}
-                spotlightSize={260}
+                spotlightColor={cardTheme === 'dark' ? '#818CF8' : '#4F46E5'}
+                intensity={cardTheme === 'dark' ? 0.16 : 0.22}
+                spotlightSize={280}
                 softness={0.7}
-                borderGlow={0.25}
-                proximity={60}
-                className="h-full rounded-[12px] bg-[#F9F8F4] dark:bg-[#121524] border border-[#E4E0D8] dark:border-[#1E233A] p-6 sm:p-8 flex flex-col justify-between transition-colors shadow-none"
+                borderGlow={cardTheme === 'dark' ? 0.7 : 0.85}
+                proximity={80}
+                className="h-full rounded-[12px] bg-[#F9F8F4] dark:bg-[#121524] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/5 hover:-translate-y-0.5 cursor-default"
                 style={{
                   borderRadius: '12px',
                   '--spotlight-card-surface': cardTheme === 'dark' ? '#121524' : '#F9F8F4',
                   '--spotlight-card-border': cardTheme === 'dark' ? '#1E233A' : '#E4E0D8',
-                  '--spotlight-card-shadow': 'none'
+                  '--spotlight-card-shadow': cardTheme === 'dark' ? '0 10px 30px -10px rgba(0,0,0,0.5)' : '0 1px 3px rgba(0,0,0,0.03)'
                 }}
               >
-                <div>
+                <div className="relative z-10">
                   {/* Top: 28px rounded-md number badge + sentence-case label, 40px rounded-lg duotone icon */}
                   <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center gap-2.5">
@@ -363,7 +363,7 @@ export default function ToolsSection(): React.JSX.Element {
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
+                <div className="relative z-10 pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
                   <span className="font-sans text-xs text-[#6B7280] dark:text-[#7E88A8]">
                     {TOOLS_DATA[1].footerNote}
                   </span>
@@ -394,21 +394,21 @@ export default function ToolsSection(): React.JSX.Element {
             >
               <SpotlightCard
                 theme={cardTheme}
-                spotlightColor="#9CA3AF"
-                intensity={0.08}
-                spotlightSize={260}
+                spotlightColor={cardTheme === 'dark' ? '#818CF8' : '#4F46E5'}
+                intensity={cardTheme === 'dark' ? 0.16 : 0.22}
+                spotlightSize={280}
                 softness={0.7}
-                borderGlow={0.25}
-                proximity={60}
-                className="h-full rounded-[12px] bg-[#F9F8F4] dark:bg-[#121524] border border-[#E4E0D8] dark:border-[#1E233A] p-6 sm:p-8 flex flex-col justify-between transition-colors shadow-none"
+                borderGlow={cardTheme === 'dark' ? 0.7 : 0.85}
+                proximity={80}
+                className="h-full rounded-[12px] bg-[#F9F8F4] dark:bg-[#121524] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/5 hover:-translate-y-0.5 cursor-default"
                 style={{
                   borderRadius: '12px',
                   '--spotlight-card-surface': cardTheme === 'dark' ? '#121524' : '#F9F8F4',
                   '--spotlight-card-border': cardTheme === 'dark' ? '#1E233A' : '#E4E0D8',
-                  '--spotlight-card-shadow': 'none'
+                  '--spotlight-card-shadow': cardTheme === 'dark' ? '0 10px 30px -10px rgba(0,0,0,0.5)' : '0 1px 3px rgba(0,0,0,0.03)'
                 }}
               >
-                <div>
+                <div className="relative z-10">
                   {/* Top: 28px rounded-md number badge + sentence-case label, 40px rounded-lg duotone icon */}
                   <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center gap-2.5">
@@ -490,7 +490,7 @@ export default function ToolsSection(): React.JSX.Element {
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
+                <div className="relative z-10 pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
                   <span className="font-sans text-xs text-[#6B7280] dark:text-[#7E88A8]">
                     {TOOLS_DATA[2].footerNote}
                   </span>
@@ -521,21 +521,21 @@ export default function ToolsSection(): React.JSX.Element {
             >
               <SpotlightCard
                 theme={cardTheme}
-                spotlightColor="#9CA3AF"
-                intensity={0.08}
-                spotlightSize={260}
+                spotlightColor={cardTheme === 'dark' ? '#818CF8' : '#4F46E5'}
+                intensity={cardTheme === 'dark' ? 0.16 : 0.22}
+                spotlightSize={280}
                 softness={0.7}
-                borderGlow={0.25}
-                proximity={60}
-                className="h-full rounded-[12px] bg-[#F9F8F4] dark:bg-[#121524] border border-[#E4E0D8] dark:border-[#1E233A] p-6 sm:p-8 flex flex-col justify-between transition-colors shadow-none"
+                borderGlow={cardTheme === 'dark' ? 0.7 : 0.85}
+                proximity={80}
+                className="h-full rounded-[12px] bg-[#F9F8F4] dark:bg-[#121524] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/5 hover:-translate-y-0.5 cursor-default"
                 style={{
                   borderRadius: '12px',
                   '--spotlight-card-surface': cardTheme === 'dark' ? '#121524' : '#F9F8F4',
                   '--spotlight-card-border': cardTheme === 'dark' ? '#1E233A' : '#E4E0D8',
-                  '--spotlight-card-shadow': 'none'
+                  '--spotlight-card-shadow': cardTheme === 'dark' ? '0 10px 30px -10px rgba(0,0,0,0.5)' : '0 1px 3px rgba(0,0,0,0.03)'
                 }}
               >
-                <div>
+                <div className="relative z-10">
                   {/* Top: 28px rounded-md number badge + sentence-case label, 40px rounded-lg duotone icon */}
                   <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center gap-2.5">
@@ -584,7 +584,7 @@ export default function ToolsSection(): React.JSX.Element {
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
+                <div className="relative z-10 pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
                   <span className="font-sans text-xs text-[#6B7280] dark:text-[#7E88A8]">
                     {TOOLS_DATA[3].footerNote}
                   </span>

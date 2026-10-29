@@ -6,6 +6,7 @@
   border-radius: 1.5rem;
   background-color: var(--spotlight-card-surface);
   box-shadow: var(--spotlight-card-shadow);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .spotlight-card__light,
@@ -20,7 +21,7 @@
 
 .spotlight-card__light,
 .spotlight-card__grain {
-  z-index: -1;
+  z-index: 1;
   opacity: 0;
 }
 
@@ -31,7 +32,7 @@
 
 .spotlight-card__border,
 .spotlight-card__edge {
-  z-index: 1;
+  z-index: 2;
   padding: 1px;
   -webkit-mask:
     linear-gradient(#000 0 0) content-box,
