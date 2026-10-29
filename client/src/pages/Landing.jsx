@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FileText,
@@ -17,6 +17,7 @@ import {
   Moon,
 } from 'lucide-react';
 import GhostType from '../components/GhostType';
+import GooeyNav from '../components/GooeyNav';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -26,6 +27,64 @@ export default function Landing() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState(null);
   const [selectedRoleIndex, setSelectedRoleIndex] = useState(0);
+  const [activeNavIndex, setActiveNavIndex] = useState(0);
+  const isClickScrollingRef = useRef(false);
+  const clickTimeoutRef = useRef(null);
+
+  const navItems = [
+    { label: 'Overview', href: '#overview' },
+    { label: 'Tools', href: '#tools' },
+    { label: 'How it works', href: '#how-it-works' },
+    { label: 'Skill benchmark', href: '#skill-benchmark' },
+    { label: 'FAQ', href: '#faq' },
+  ];
+
+  const handleNavChange = (index, item) => {
+    isClickScrollingRef.current = true;
+    setActiveNavIndex(index);
+    if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    clickTimeoutRef.current = setTimeout(() => {
+      isClickScrollingRef.current = false;
+    }, 1000);
+
+    if (item.href === '#overview' || item.href === '#') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (item.href?.startsWith('#')) {
+      const el = document.querySelector(item.href);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
+  useEffect(() => {
+    const sectionIds = ['overview', 'tools', 'how-it-works', 'skill-benchmark', 'faq'];
+
+    const handleScroll = () => {
+      if (isClickScrollingRef.current) return;
+      const scrollPosition = window.scrollY + 160;
+
+      let currentSectionIndex = 0;
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sectionIds[i]);
+        if (el) {
+          const top = el.offsetTop;
+          if (scrollPosition >= top) {
+            currentSectionIndex = i;
+            break;
+          }
+        }
+      }
+      setActiveNavIndex(currentSectionIndex);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
+    };
+  }, []);
 
   const roles = [
     {
@@ -81,35 +140,43 @@ export default function Landing() {
     <div className="landing font-editorial-sans antialiased min-h-screen selection:bg-[#4F46E5] selection:text-white relative bg-transparent transition-colors">
       {/* 1. TOP NAV */}
       <header className="sticky top-0 z-40 bg-black/40 backdrop-blur-md border-b border-white/10 transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           {/* Wordmark in Fraunces serif */}
-          <div className="flex items-center gap-8">
+          <div className="flex items-center flex-shrink-0">
             <Link
               to="/"
+              onClick={() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setActiveNavIndex(0);
+              }}
               className="font-editorial-serif text-2xl font-semibold tracking-tight text-white hover:opacity-90 transition-opacity"
             >
               InternIQ
             </Link>
+          </div>
 
-            {/* Desktop Navigation Links */}
-            <nav className="hidden md:flex items-center gap-6 text-sm text-slate-300">
-              <a href="#tools" className="hover:text-white transition-colors py-2">
-                Tools
-              </a>
-              <a href="#how-it-works" className="hover:text-white transition-colors py-2">
-                How it works
-              </a>
-              <a href="#skill-benchmark" className="hover:text-white transition-colors py-2">
-                Skill benchmark
-              </a>
-              <a href="#faq" className="hover:text-white transition-colors py-2">
-                FAQ
-              </a>
-            </nav>
+          {/* Gooey Navigation Bar (Desktop) */}
+          <div className="hidden md:flex items-center justify-center">
+            <GooeyNav
+              items={navItems}
+              activeIndex={activeNavIndex}
+              onChange={(index, item) => handleNavChange(index, item)}
+              theme="dark"
+              size="sm"
+              frame={true}
+              particleCount={15}
+              spread={56}
+              animationTime={600}
+              timeVariance={300}
+              gooeyness={0.5}
+              wobble={0.5}
+              hoverEffect={true}
+              colors={['#818CF8', '#6366F1', '#38BDF8']}
+            />
           </div>
 
           {/* Action Links */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3 flex-shrink-0">
             {/* Theme Toggle Button */}
             <button
               type="button"
@@ -171,35 +238,24 @@ export default function Landing() {
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-b border-[#E4E0D8] dark:border-[#1E233A] bg-[#F3EFE6]/90 dark:bg-[#0F1220]/90 backdrop-blur-md px-4 py-4 space-y-3 transition-colors">
-            <a
-              href="#tools"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm font-medium text-[#5A5D6B] dark:text-[#9AA3BF] hover:text-[#14161F] dark:hover:text-white py-2"
-            >
-              Tools
-            </a>
-            <a
-              href="#how-it-works"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm font-medium text-[#5A5D6B] dark:text-[#9AA3BF] hover:text-[#14161F] dark:hover:text-white py-2"
-            >
-              How it works
-            </a>
-            <a
-              href="#skill-benchmark"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm font-medium text-[#5A5D6B] dark:text-[#9AA3BF] hover:text-[#14161F] dark:hover:text-white py-2"
-            >
-              Skill benchmark
-            </a>
-            <a
-              href="#faq"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-sm font-medium text-[#5A5D6B] dark:text-[#9AA3BF] hover:text-[#14161F] dark:hover:text-white py-2"
-            >
-              FAQ
-            </a>
+          <div className="md:hidden border-b border-[#E4E0D8] dark:border-[#1E233A] bg-[#F3EFE6]/90 dark:bg-[#0F1220]/90 backdrop-blur-md px-4 py-4 space-y-2 transition-colors">
+            {navItems.map((item, idx) => (
+              <a
+                key={item.label}
+                href={item.href}
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  handleNavChange(idx, item);
+                }}
+                className={`block text-sm font-medium py-2 transition-colors ${
+                  activeNavIndex === idx
+                    ? 'text-[#4F46E5] dark:text-[#818CF8] font-semibold'
+                    : 'text-[#5A5D6B] dark:text-[#9AA3BF] hover:text-[#14161F] dark:hover:text-white'
+                }`}
+              >
+                {item.label}
+              </a>
+            ))}
             <div className="pt-3 border-t border-[#E4E0D8] dark:border-[#1E233A] flex flex-col gap-2">
               {isAuthenticated ? (
                 <Link
@@ -230,7 +286,7 @@ export default function Landing() {
       </header>
 
       {/* 2. HERO SECTION */}
-      <section className="relative min-h-[560px] sm:min-h-[640px] flex items-center justify-center overflow-hidden transition-colors">
+      <section id="overview" className="scroll-mt-20 relative min-h-[560px] sm:min-h-[640px] flex items-center justify-center overflow-hidden transition-colors">
         {/* Centered Hero Content with GhostType - NO CARD */}
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center flex flex-col items-center justify-center">
           <span className="font-editorial-mono text-xs uppercase tracking-widest text-[#818CF8] block font-semibold mb-6 px-3.5 py-1 rounded-full bg-indigo-950/70 border border-indigo-500/40 backdrop-blur-md shadow-xs">
@@ -322,7 +378,7 @@ export default function Landing() {
       </section>
 
       {/* 4. THE FOUR TOOLS (EDITORIAL GRID WITH UNEQUAL CELLS) */}
-      <section id="tools" className="py-16 sm:py-20 bg-[#FFFFFF] dark:bg-[#0B0D17] border-b border-[#E4E0D8] dark:border-[#1E233A] transition-colors">
+      <section id="tools" className="scroll-mt-20 py-16 sm:py-20 bg-[#FFFFFF] dark:bg-[#0B0D17] border-b border-[#E4E0D8] dark:border-[#1E233A] transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="mb-12 max-w-2xl">
@@ -559,7 +615,7 @@ export default function Landing() {
       </section>
 
       {/* 5. HOW IT WORKS (Three horizontal steps with large Fraunces numerals 1, 2, 3) */}
-      <section id="how-it-works" className="py-16 sm:py-20 bg-[#F3EFE6] dark:bg-[#0F1220] transition-colors">
+      <section id="how-it-works" className="scroll-mt-20 py-16 sm:py-20 bg-[#F3EFE6] dark:bg-[#0F1220] transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12 max-w-2xl">
             <span className="font-editorial-mono text-xs uppercase tracking-wider text-[#6B7280] dark:text-[#818CF8] block font-medium">
@@ -632,7 +688,7 @@ export default function Landing() {
       </section>
 
       {/* 6. DARK SECTION (#0F111A) FOR SKILL GAP IN DETAIL */}
-      <section id="skill-benchmark" className="py-16 sm:py-20 bg-[#0F111A] text-white relative z-10">
+      <section id="skill-benchmark" className="scroll-mt-20 py-16 sm:py-20 bg-[#0F111A] text-white relative z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
             {/* Left Side: Context */}
@@ -821,7 +877,7 @@ export default function Landing() {
       </section>
 
       {/* 8. FAQ SECTION (Accessible Accordion) */}
-      <section id="faq" className="py-16 sm:py-20 bg-[#FFFFFF] dark:bg-[#0B0D17] border-t border-[#E4E0D8] dark:border-[#1E233A] transition-colors">
+      <section id="faq" className="scroll-mt-20 py-16 sm:py-20 bg-[#FFFFFF] dark:bg-[#0B0D17] border-t border-[#E4E0D8] dark:border-[#1E233A] transition-colors">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10 text-left">
             <span className="font-editorial-mono text-xs uppercase tracking-wider text-[#6B7280] dark:text-[#818CF8] block font-medium">
