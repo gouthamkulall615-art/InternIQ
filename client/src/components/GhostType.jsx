@@ -111,10 +111,10 @@ export default function GhostType({
   return (
     <h1
       ref={containerRef}
-      className={`font-poppins text-4xl sm:text-5xl md:text-6xl lg:text-[3.75rem] xl:text-[4.25rem] font-semibold tracking-tight text-white leading-[1.14] sm:leading-[1.1] min-h-[2.8em] sm:min-h-[2.4em] lg:min-h-[2.3em] select-text ${className}`}
+      className={`font-heading text-4xl sm:text-5xl md:text-6xl lg:text-[3.75rem] xl:text-[4.25rem] font-semibold tracking-[-0.02em] text-white leading-[1.14] sm:leading-[1.1] min-h-[2.8em] sm:min-h-[2.4em] lg:min-h-[2.3em] select-text ${className}`}
     >
-      {/* Base permanent text in distinct elegant italic serif */}
-      <span className="font-editorial-serif italic font-normal tracking-normal text-white pr-1">
+      {/* Base permanent text in Bricolage Grotesque */}
+      <span className="font-heading font-semibold tracking-[-0.02em] text-white pr-1">
         {text}
       </span>
 

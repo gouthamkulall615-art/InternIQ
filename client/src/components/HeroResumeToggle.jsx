@@ -124,7 +124,7 @@ export default function HeroResumeToggle() {
         >
           {/* Resume Header */}
           <div className="border-b border-[#E4E0D8] dark:border-[#1E233A] pb-4 mb-4">
-            <h2 className="font-editorial-serif text-2xl font-semibold tracking-tight text-[#14161F] dark:text-white">
+            <h2 className="font-heading text-2xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-white">
               {cleanResume.name}
             </h2>
             <p className="text-xs text-[#5A5D6B] dark:text-[#9AA3BF] font-medium mt-0.5">

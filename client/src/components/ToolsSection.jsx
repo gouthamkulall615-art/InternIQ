@@ -1,6 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { FileText, Target, PenLine, Map, ArrowUpRight, Copy, Check, FileDown } from 'lucide-react';
+import {
+  FileText,
+  Target,
+  NotePencil,
+  Compass,
+  ArrowUpRight,
+  Copy,
+  Check,
+  FileArrowDown
+} from '@phosphor-icons/react';
 import SpotlightCard from './SpotlightCard';
 import CountUp from './CountUp';
 import TextType from './TextType';
@@ -11,7 +20,7 @@ import { useTheme } from '../contexts/ThemeContext';
 /**
  * @typedef {Object} ToolCardData
  * @property {string} id
- * @property {string} tag
+ * @property {string} number
  * @property {string} title
  * @property {string} headline
  * @property {string} description
@@ -25,7 +34,7 @@ import { useTheme } from '../contexts/ThemeContext';
 export const TOOLS_DATA = [
   {
     id: 'resume-analyzer',
-    tag: '01 / RESUME ANALYZER',
+    number: '1',
     title: 'Resume Analyzer',
     headline: 'ATS scoring on a strict five-part rubric.',
     description:
@@ -36,7 +45,7 @@ export const TOOLS_DATA = [
   },
   {
     id: 'skill-gap',
-    tag: '02 / SKILL GAP ANALYZER',
+    number: '2',
     title: 'Skill Gap Analyzer',
     headline: 'Target role comparison and readiness index.',
     description:
@@ -47,7 +56,7 @@ export const TOOLS_DATA = [
   },
   {
     id: 'cover-letter',
-    tag: '03 / COVER LETTER GENERATOR',
+    number: '3',
     title: 'Cover Letter Generator',
     headline: 'Grounded in your actual work history.',
     description:
@@ -58,7 +67,7 @@ export const TOOLS_DATA = [
   },
   {
     id: 'roadmap-provider',
-    tag: '04 / ROADMAP PROVIDER',
+    number: '4',
     title: 'Roadmap Provider',
     headline: 'Curated learning paths on PathForge.',
     description:
@@ -140,20 +149,20 @@ export default function ToolsSection() {
       className="scroll-mt-20 py-16 sm:py-20 bg-[#FFFFFF] dark:bg-[#07090E] border-b border-[#E4E0D8] dark:border-[#1E233A] transition-colors"
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+        {/* Section Header: Bricolage Grotesque (600-700), tight letter-spacing (-0.02em), no serif */}
         <div className="mb-12 max-w-2xl">
-          <span className="font-editorial-mono text-xs uppercase tracking-wider text-[#6B7280] dark:text-[#818CF8] block font-medium">
+          <span className="font-sans font-medium text-xs uppercase tracking-wider text-[#6B7280] dark:text-[#818CF8] block">
             THE FOUR TOOLS
           </span>
-          <h2 className="font-editorial-serif text-3xl sm:text-4xl font-normal tracking-tight text-[#14161F] dark:text-[#F1F3F9] mt-2">
+          <h2 className="font-heading text-3xl sm:text-4xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] mt-2">
             Four focused tools. One transparent workflow.
           </h2>
-          <p className="font-editorial-sans text-sm sm:text-base text-[#5A5D6B] dark:text-[#9AA3BF] mt-2 leading-relaxed">
+          <p className="font-sans text-sm sm:text-base text-[#5A5D6B] dark:text-[#9AA3BF] mt-2 leading-[1.6]">
             Every tool operates on real text, concrete rubrics, and zero artificial hype.
           </p>
         </div>
 
-        {/* 2x2 Bento Grid: Row 1 is 1.2fr / 1fr, Row 2 is 1fr / 1.2fr, stacking to 1 col on mobile */}
+        {/* 2x2 Bento Grid: Row 1 is 1.2fr / 1fr (7/5), Row 2 is 1fr / 1.2fr (5/7) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* ============================================================== */}
           {/* Card 01: Resume Analyzer (Row 1: 1.2fr -> 7 cols on lg)        */}
@@ -185,29 +194,37 @@ export default function ToolsSection() {
                 }}
               >
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="font-editorial-mono text-xs text-[#6B7280] dark:text-[#7E88A8]">
-                      {TOOLS_DATA[0].tag}
-                    </span>
-                    <FileText className="h-5 w-5 text-[#4F46E5] dark:text-[#818CF8]" strokeWidth={1.5} />
+                  {/* Top: 28px rounded-md number badge + sentence-case label, 40px rounded-lg duotone icon */}
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="flex items-center gap-2.5">
+                      <span className="w-7 h-7 rounded-md bg-[#EEF2FF] dark:bg-[#1C2035] text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center text-xs font-semibold border border-[#E0E7FF] dark:border-[#282F4E] flex-shrink-0">
+                        {TOOLS_DATA[0].number}
+                      </span>
+                      <span className="font-sans font-medium text-[13px] text-[#475569] dark:text-[#94A3B8]">
+                        {TOOLS_DATA[0].title}
+                      </span>
+                    </div>
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#F1F3F9] dark:bg-[#1C2035] border border-[#E2E6F0] dark:border-[#282F4E] text-[#4F46E5] dark:text-[#818CF8] flex-shrink-0">
+                      <FileText size={22} weight="duotone" />
+                    </div>
                   </div>
 
-                  <h3 className="font-editorial-serif text-xl sm:text-2xl font-normal text-[#14161F] dark:text-[#F1F3F9] mb-2">
+                  <h3 className="font-heading text-xl sm:text-2xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] mb-2">
                     {TOOLS_DATA[0].headline}
                   </h3>
 
-                  <p className="font-editorial-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-relaxed mb-6">
+                  <p className="font-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6] mb-6">
                     {TOOLS_DATA[0].description}
                   </p>
 
-                  {/* Preview Panel: Rubric List with CountUp */}
+                  {/* Preview Panel: Rubric List with JetBrains Mono numbers */}
                   <div className="bg-white dark:bg-[#191D32] border border-[#E4E0D8] dark:border-[#252A45] rounded-[6px] p-4 space-y-2 mb-6">
                     <div className="flex items-center justify-between pb-2 border-b border-[#E4E0D8] dark:border-[#252A45]">
-                      <span className="font-editorial-mono text-[11px] text-[#6B7280] dark:text-[#7E88A8] uppercase tracking-wider">
+                      <span className="font-sans text-[11px] font-medium text-[#6B7280] dark:text-[#7E88A8] uppercase tracking-wider">
                         Scoring Rubric (5 Dimensions)
                       </span>
-                      {/* Total Score Line counting from 0 to 8 */}
-                      <span className="font-editorial-mono text-xs font-semibold text-[#4F46E5] dark:text-[#818CF8]">
+                      {/* Monospace score only */}
+                      <span className="font-mono text-xs font-semibold text-[#4F46E5] dark:text-[#818CF8]">
                         Score: <CountUp to={8} from={0} duration={1.2} /> / 10
                       </span>
                     </div>
@@ -218,10 +235,10 @@ export default function ToolsSection() {
                           key={item.label}
                           className="flex items-center justify-between border-b border-[#E4E0D8]/60 dark:border-[#252A45]/60 pb-1"
                         >
-                          <span className="text-[#14161F] dark:text-[#E8EAF6] font-editorial-sans">
+                          <span className="text-[#14161F] dark:text-[#E8EAF6] font-sans">
                             {item.label}
                           </span>
-                          <span className="font-editorial-mono text-[#6B7280] dark:text-[#7E88A8]">
+                          <span className="font-mono text-[#6B7280] dark:text-[#7E88A8]">
                             0 - <CountUp to={item.maxPts} from={0} duration={1} /> pts
                           </span>
                         </div>
@@ -229,10 +246,10 @@ export default function ToolsSection() {
                     </div>
 
                     <div className="flex items-center justify-between pt-1 text-xs">
-                      <span className="text-[#14161F] dark:text-[#E8EAF6] font-editorial-sans">
+                      <span className="text-[#14161F] dark:text-[#E8EAF6] font-sans">
                         {RUBRIC_ITEMS[4].label}
                       </span>
-                      <span className="font-editorial-mono text-[#6B7280] dark:text-[#7E88A8]">
+                      <span className="font-mono text-[#6B7280] dark:text-[#7E88A8]">
                         0 - <CountUp to={RUBRIC_ITEMS[4].maxPts} from={0} duration={1} /> pts
                       </span>
                     </div>
@@ -240,15 +257,15 @@ export default function ToolsSection() {
                 </div>
 
                 <div className="pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
-                  <span className="font-editorial-mono text-xs text-[#6B7280] dark:text-[#7E88A8]">
+                  <span className="font-sans text-xs text-[#6B7280] dark:text-[#7E88A8]">
                     {TOOLS_DATA[0].footerNote}
                   </span>
                   <Link
                     to={TOOLS_DATA[0].actionHref}
                     className="inline-flex items-center gap-1.5 text-sm font-medium text-[#4F46E5] dark:text-[#818CF8] hover:text-[#4338CA] dark:hover:text-[#A5B4FC] transition-colors min-h-[36px]"
                   >
-                    <span>{TOOLS_DATA[0].actionText}</span>
-                    <ArrowUpRight className="h-4 w-4" strokeWidth={1.5} />
+                    <span className="font-sans">{TOOLS_DATA[0].actionText}</span>
+                    <ArrowUpRight size={16} weight="bold" />
                   </Link>
                 </div>
               </SpotlightCard>
@@ -285,28 +302,36 @@ export default function ToolsSection() {
                 }}
               >
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="font-editorial-mono text-xs text-[#6B7280] dark:text-[#7E88A8]">
-                      {TOOLS_DATA[1].tag}
-                    </span>
-                    <Target className="h-5 w-5 text-[#4F46E5] dark:text-[#818CF8]" strokeWidth={1.5} />
+                  {/* Top: 28px rounded-md number badge + sentence-case label, 40px rounded-lg duotone icon */}
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="flex items-center gap-2.5">
+                      <span className="w-7 h-7 rounded-md bg-[#EEF2FF] dark:bg-[#1C2035] text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center text-xs font-semibold border border-[#E0E7FF] dark:border-[#282F4E] flex-shrink-0">
+                        {TOOLS_DATA[1].number}
+                      </span>
+                      <span className="font-sans font-medium text-[13px] text-[#475569] dark:text-[#94A3B8]">
+                        {TOOLS_DATA[1].title}
+                      </span>
+                    </div>
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#F1F3F9] dark:bg-[#1C2035] border border-[#E2E6F0] dark:border-[#282F4E] text-[#4F46E5] dark:text-[#818CF8] flex-shrink-0">
+                      <Target size={22} weight="duotone" />
+                    </div>
                   </div>
 
-                  <h3 className="font-editorial-serif text-xl sm:text-2xl font-normal text-[#14161F] dark:text-[#F1F3F9] mb-2">
+                  <h3 className="font-heading text-xl sm:text-2xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] mb-2">
                     {TOOLS_DATA[1].headline}
                   </h3>
 
-                  <p className="font-editorial-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-relaxed mb-6">
+                  <p className="font-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6] mb-6">
                     {TOOLS_DATA[1].description}
                   </p>
 
                   {/* Preview Panel: Role Benchmark + Progress Bar + Chips */}
                   <div className="bg-white dark:bg-[#191D32] border border-[#E4E0D8] dark:border-[#252A45] rounded-[6px] p-4 mb-6 space-y-3">
                     <div className="flex justify-between items-center text-xs">
-                      <span className="font-medium text-[#14161F] dark:text-[#E8EAF6] font-editorial-sans">
+                      <span className="font-medium text-[#14161F] dark:text-[#E8EAF6] font-sans">
                         Frontend Developer
                       </span>
-                      <span className="font-editorial-mono text-[#4F46E5] dark:text-[#818CF8] font-semibold">
+                      <span className="font-mono text-[#4F46E5] dark:text-[#818CF8] font-semibold">
                         <CountUp to={67} from={0} duration={1.2} suffix="%" /> Match
                       </span>
                     </div>
@@ -322,18 +347,18 @@ export default function ToolsSection() {
                       />
                     </div>
 
-                    {/* Matched (Green) and Missing (Amber) Chips */}
+                    {/* Monospace Skill Chips (JetBrains Mono) */}
                     <div className="flex flex-wrap gap-1.5 pt-1">
-                      <span className="font-editorial-mono text-[10px] text-[#15803D] dark:text-[#4ADE80] bg-[#F0FDF4] dark:bg-[#0B2816] border border-[#DCFCE7] dark:border-[#1E502B] px-1.5 py-0.5 rounded-[3px]">
+                      <span className="font-mono text-[10px] text-[#15803D] dark:text-[#4ADE80] bg-[#F0FDF4] dark:bg-[#0B2816] border border-[#DCFCE7] dark:border-[#1E502B] px-1.5 py-0.5 rounded-[3px]">
                         + React
                       </span>
-                      <span className="font-editorial-mono text-[10px] text-[#15803D] dark:text-[#4ADE80] bg-[#F0FDF4] dark:bg-[#0B2816] border border-[#DCFCE7] dark:border-[#1E502B] px-1.5 py-0.5 rounded-[3px]">
+                      <span className="font-mono text-[10px] text-[#15803D] dark:text-[#4ADE80] bg-[#F0FDF4] dark:bg-[#0B2816] border border-[#DCFCE7] dark:border-[#1E502B] px-1.5 py-0.5 rounded-[3px]">
                         + Git
                       </span>
-                      <span className="font-editorial-mono text-[10px] text-[#B45309] dark:text-[#FBBF24] bg-[#FFFBEB] dark:bg-[#2D1807] border border-[#FEF3C7] dark:border-[#572F0E] px-1.5 py-0.5 rounded-[3px]">
+                      <span className="font-mono text-[10px] text-[#B45309] dark:text-[#FBBF24] bg-[#FFFBEB] dark:bg-[#2D1807] border border-[#FEF3C7] dark:border-[#572F0E] px-1.5 py-0.5 rounded-[3px]">
                         - TypeScript
                       </span>
-                      <span className="font-editorial-mono text-[10px] text-[#B45309] dark:text-[#FBBF24] bg-[#FFFBEB] dark:bg-[#2D1807] border border-[#FEF3C7] dark:border-[#572F0E] px-1.5 py-0.5 rounded-[3px]">
+                      <span className="font-mono text-[10px] text-[#B45309] dark:text-[#FBBF24] bg-[#FFFBEB] dark:bg-[#2D1807] border border-[#FEF3C7] dark:border-[#572F0E] px-1.5 py-0.5 rounded-[3px]">
                         - Jest
                       </span>
                     </div>
@@ -341,15 +366,15 @@ export default function ToolsSection() {
                 </div>
 
                 <div className="pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
-                  <span className="font-editorial-mono text-xs text-[#6B7280] dark:text-[#7E88A8]">
+                  <span className="font-sans text-xs text-[#6B7280] dark:text-[#7E88A8]">
                     {TOOLS_DATA[1].footerNote}
                   </span>
                   <Link
                     to={TOOLS_DATA[1].actionHref}
                     className="inline-flex items-center gap-1.5 text-sm font-medium text-[#4F46E5] dark:text-[#818CF8] hover:text-[#4338CA] dark:hover:text-[#A5B4FC] transition-colors min-h-[36px]"
                   >
-                    <span>{TOOLS_DATA[1].actionText}</span>
-                    <ArrowUpRight className="h-4 w-4" strokeWidth={1.5} />
+                    <span className="font-sans">{TOOLS_DATA[1].actionText}</span>
+                    <ArrowUpRight size={16} weight="bold" />
                   </Link>
                 </div>
               </SpotlightCard>
@@ -386,34 +411,42 @@ export default function ToolsSection() {
                 }}
               >
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="font-editorial-mono text-xs text-[#6B7280] dark:text-[#7E88A8]">
-                      {TOOLS_DATA[2].tag}
-                    </span>
-                    <PenLine className="h-5 w-5 text-[#4F46E5] dark:text-[#818CF8]" strokeWidth={1.5} />
+                  {/* Top: 28px rounded-md number badge + sentence-case label, 40px rounded-lg duotone icon */}
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="flex items-center gap-2.5">
+                      <span className="w-7 h-7 rounded-md bg-[#EEF2FF] dark:bg-[#1C2035] text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center text-xs font-semibold border border-[#E0E7FF] dark:border-[#282F4E] flex-shrink-0">
+                        {TOOLS_DATA[2].number}
+                      </span>
+                      <span className="font-sans font-medium text-[13px] text-[#475569] dark:text-[#94A3B8]">
+                        {TOOLS_DATA[2].title}
+                      </span>
+                    </div>
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#F1F3F9] dark:bg-[#1C2035] border border-[#E2E6F0] dark:border-[#282F4E] text-[#4F46E5] dark:text-[#818CF8] flex-shrink-0">
+                      <NotePencil size={22} weight="duotone" />
+                    </div>
                   </div>
 
-                  <h3 className="font-editorial-serif text-xl sm:text-2xl font-normal text-[#14161F] dark:text-[#F1F3F9] mb-2">
+                  <h3 className="font-heading text-xl sm:text-2xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] mb-2">
                     {TOOLS_DATA[2].headline}
                   </h3>
 
-                  <p className="font-editorial-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-relaxed mb-6">
+                  <p className="font-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6] mb-6">
                     {TOOLS_DATA[2].description}
                   </p>
 
                   {/* Preview Panel: Target header + TextType typed excerpt + Action buttons */}
                   <div className="bg-white dark:bg-[#191D32] border border-[#E4E0D8] dark:border-[#252A45] rounded-[6px] p-4 mb-6 space-y-3">
                     <div className="flex justify-between items-center text-xs pb-2 border-b border-[#E4E0D8]/60 dark:border-[#252A45]/60">
-                      <span className="font-editorial-mono text-[#14161F] dark:text-[#E8EAF6] font-medium">
+                      <span className="font-sans text-[#14161F] dark:text-[#E8EAF6] font-medium">
                         Target: Stripe · Intern
                       </span>
-                      <span className="font-editorial-mono text-[#6B7280] dark:text-[#7E88A8]">
+                      <span className="font-sans text-[#6B7280] dark:text-[#7E88A8]">
                         312 words
                       </span>
                     </div>
 
                     {/* Italic Sample Letter Excerpt with TextType typing animation */}
-                    <div className="text-xs italic text-[#5A5D6B] dark:text-[#9AA3BF] leading-relaxed min-h-[56px] font-editorial-sans">
+                    <div className="text-xs italic text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6] min-h-[56px] font-sans">
                       <TextType
                         text={SAMPLE_LETTER_TEXT}
                         typingSpeed={25}
@@ -427,21 +460,21 @@ export default function ToolsSection() {
                       />
                     </div>
 
-                    {/* Action buttons: Copy text and Export PDF */}
+                    {/* Action buttons: Copy text and Export PDF with Phosphor icons */}
                     <div className="flex items-center gap-2 pt-1 border-t border-[#E4E0D8]/60 dark:border-[#252A45]/60">
                       <button
                         type="button"
                         onClick={handleCopySample}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-editorial-mono font-medium rounded-[4px] border border-[#E4E0D8] dark:border-[#252A45] bg-[#FAF8F4] dark:bg-[#121524] text-[#14161F] dark:text-[#E8EAF6] hover:border-[#4F46E5] dark:hover:border-[#818CF8] transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-sans font-medium rounded-[4px] border border-[#E4E0D8] dark:border-[#252A45] bg-[#FAF8F4] dark:bg-[#121524] text-[#14161F] dark:text-[#E8EAF6] hover:border-[#4F46E5] dark:hover:border-[#818CF8] transition-colors cursor-pointer"
                       >
                         {copied ? (
                           <>
-                            <Check className="h-3 w-3 text-emerald-600" />
+                            <Check size={13} weight="bold" className="text-emerald-600" />
                             <span>Copied</span>
                           </>
                         ) : (
                           <>
-                            <Copy className="h-3 w-3" />
+                            <Copy size={13} weight="duotone" />
                             <span>Copy text</span>
                           </>
                         )}
@@ -450,9 +483,9 @@ export default function ToolsSection() {
                       <button
                         type="button"
                         onClick={handleExportDummy}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-editorial-mono font-medium rounded-[4px] border border-[#E4E0D8] dark:border-[#252A45] bg-[#FAF8F4] dark:bg-[#121524] text-[#14161F] dark:text-[#E8EAF6] hover:border-[#4F46E5] dark:hover:border-[#818CF8] transition-colors cursor-pointer"
+                        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-sans font-medium rounded-[4px] border border-[#E4E0D8] dark:border-[#252A45] bg-[#FAF8F4] dark:bg-[#121524] text-[#14161F] dark:text-[#E8EAF6] hover:border-[#4F46E5] dark:hover:border-[#818CF8] transition-colors cursor-pointer"
                       >
-                        <FileDown className="h-3 w-3" />
+                        <FileArrowDown size={13} weight="duotone" />
                         <span>Export PDF</span>
                       </button>
                     </div>
@@ -460,15 +493,15 @@ export default function ToolsSection() {
                 </div>
 
                 <div className="pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
-                  <span className="font-editorial-mono text-xs text-[#6B7280] dark:text-[#7E88A8]">
+                  <span className="font-sans text-xs text-[#6B7280] dark:text-[#7E88A8]">
                     {TOOLS_DATA[2].footerNote}
                   </span>
                   <Link
                     to={TOOLS_DATA[2].actionHref}
                     className="inline-flex items-center gap-1.5 text-sm font-medium text-[#4F46E5] dark:text-[#818CF8] hover:text-[#4338CA] dark:hover:text-[#A5B4FC] transition-colors min-h-[36px]"
                   >
-                    <span>{TOOLS_DATA[2].actionText}</span>
-                    <ArrowUpRight className="h-4 w-4" strokeWidth={1.5} />
+                    <span className="font-sans">{TOOLS_DATA[2].actionText}</span>
+                    <ArrowUpRight size={16} weight="bold" />
                   </Link>
                 </div>
               </SpotlightCard>
@@ -505,24 +538,32 @@ export default function ToolsSection() {
                 }}
               >
                 <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="font-editorial-mono text-xs text-[#6B7280] dark:text-[#7E88A8]">
-                      {TOOLS_DATA[3].tag}
-                    </span>
-                    <Map className="h-5 w-5 text-[#4F46E5] dark:text-[#818CF8]" strokeWidth={1.5} />
+                  {/* Top: 28px rounded-md number badge + sentence-case label, 40px rounded-lg duotone icon */}
+                  <div className="flex items-center justify-between mb-5">
+                    <div className="flex items-center gap-2.5">
+                      <span className="w-7 h-7 rounded-md bg-[#EEF2FF] dark:bg-[#1C2035] text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center text-xs font-semibold border border-[#E0E7FF] dark:border-[#282F4E] flex-shrink-0">
+                        {TOOLS_DATA[3].number}
+                      </span>
+                      <span className="font-sans font-medium text-[13px] text-[#475569] dark:text-[#94A3B8]">
+                        {TOOLS_DATA[3].title}
+                      </span>
+                    </div>
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#F1F3F9] dark:bg-[#1C2035] border border-[#E2E6F0] dark:border-[#282F4E] text-[#4F46E5] dark:text-[#818CF8] flex-shrink-0">
+                      <Compass size={22} weight="duotone" />
+                    </div>
                   </div>
 
-                  <h3 className="font-editorial-serif text-xl sm:text-2xl font-normal text-[#14161F] dark:text-[#F1F3F9] mb-2">
+                  <h3 className="font-heading text-xl sm:text-2xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] mb-2">
                     {TOOLS_DATA[3].headline}
                   </h3>
 
-                  <p className="font-editorial-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-relaxed mb-6">
+                  <p className="font-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6] mb-6">
                     {TOOLS_DATA[3].description}
                   </p>
 
                   {/* Preview Panel: 4 Pathway Buttons with Magnet */}
                   <div className="bg-white dark:bg-[#191D32] border border-[#E4E0D8] dark:border-[#252A45] rounded-[6px] p-4 mb-6 space-y-3">
-                    <span className="font-editorial-mono text-[11px] text-[#6B7280] dark:text-[#7E88A8] uppercase tracking-wider block">
+                    <span className="font-sans text-[11px] font-medium text-[#6B7280] dark:text-[#7E88A8] uppercase tracking-wider block">
                       AVAILABLE PATHWAYS ON PATHFORGE:
                     </span>
 
@@ -534,10 +575,10 @@ export default function ToolsSection() {
                             href="https://path-forge-amber.vercel.app/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-editorial-mono font-medium rounded-[4px] border border-[#E4E0D8] dark:border-[#252A45] bg-[#FAF8F4] dark:bg-[#121524] text-[#14161F] dark:text-[#E8EAF6] hover:border-[#4F46E5] dark:hover:border-[#818CF8] hover:text-[#4F46E5] dark:hover:text-[#818CF8] transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-sans font-medium rounded-[4px] border border-[#E4E0D8] dark:border-[#252A45] bg-[#FAF8F4] dark:bg-[#121524] text-[#14161F] dark:text-[#E8EAF6] hover:border-[#4F46E5] dark:hover:border-[#818CF8] hover:text-[#4F46E5] dark:hover:text-[#818CF8] transition-colors"
                           >
                             <span>{pathway}</span>
-                            <ArrowUpRight className="h-3 w-3 opacity-60" />
+                            <ArrowUpRight size={13} weight="bold" className="opacity-60" />
                           </a>
                         </Magnet>
                       ))}
@@ -546,7 +587,7 @@ export default function ToolsSection() {
                 </div>
 
                 <div className="pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
-                  <span className="font-editorial-mono text-xs text-[#6B7280] dark:text-[#7E88A8]">
+                  <span className="font-sans text-xs text-[#6B7280] dark:text-[#7E88A8]">
                     {TOOLS_DATA[3].footerNote}
                   </span>
                   <a
@@ -555,8 +596,8 @@ export default function ToolsSection() {
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-sm font-medium text-[#4F46E5] dark:text-[#818CF8] hover:text-[#4338CA] dark:hover:text-[#A5B4FC] transition-colors min-h-[36px]"
                   >
-                    <span>{TOOLS_DATA[3].actionText}</span>
-                    <ArrowUpRight className="h-4 w-4" strokeWidth={1.5} />
+                    <span className="font-sans">{TOOLS_DATA[3].actionText}</span>
+                    <ArrowUpRight size={16} weight="bold" />
                   </a>
                 </div>
               </SpotlightCard>
