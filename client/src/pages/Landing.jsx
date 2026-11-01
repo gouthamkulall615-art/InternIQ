@@ -19,6 +19,7 @@ import {
 import GhostType from '../components/GhostType';
 import GooeyNav from '../components/GooeyNav';
 import CrowdStory from '../components/CrowdStory';
+import RibbonMarquee from '../components/RibbonMarquee';
 import ProblemStrip from '../components/ProblemStrip';
 import ToolsSection from '../components/ToolsSection';
 import { useAuth } from '../contexts/AuthContext';
@@ -337,6 +338,15 @@ export default function Landing() {
 
       {/* CROWD STORY (Scroll-driven storytelling) */}
       <CrowdStory onCta={() => navigate(isAuthenticated ? '/resume-analyzer' : '/register')} />
+
+      {/* 3D SATIN RIBBON MARQUEE */}
+      <RibbonMarquee
+        items={[
+          "Fix your resume before they see it",
+          "Beat the ATS",
+          "Get shortlisted",
+        ]}
+      />
 
       {/* 3. PROBLEM STRIP */}
       <ProblemStrip />
