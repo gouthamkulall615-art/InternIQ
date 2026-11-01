@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Upload,
   Check,
@@ -18,12 +18,14 @@ import {
 } from '@phosphor-icons/react';
 import GhostType from '../components/GhostType';
 import GooeyNav from '../components/GooeyNav';
+import CrowdStory from '../components/CrowdStory';
 import ProblemStrip from '../components/ProblemStrip';
 import ToolsSection from '../components/ToolsSection';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
 export default function Landing() {
+  const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -332,6 +334,9 @@ export default function Landing() {
           </p>
         </div>
       </section>
+
+      {/* CROWD STORY (Scroll-driven storytelling) */}
+      <CrowdStory onCta={() => navigate(isAuthenticated ? '/resume-analyzer' : '/register')} />
 
       {/* 3. PROBLEM STRIP */}
       <ProblemStrip />
