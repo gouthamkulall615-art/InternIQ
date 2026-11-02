@@ -1,47 +1,275 @@
+'use client';
+
 import { useLayoutEffect, useEffect, useRef } from 'react';
-import gsap from 'gsap';
+import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
-/* ------------------------------------------------------------------ *
- * CONFIG: everything you will want to tune lives here.
- * ------------------------------------------------------------------ */
+/**
+ * CrowdCanvas Component
+ * Animated canvas simulation of Open Peeps characters walking across the screen horizontally.
+ * Adapted from Szenia Zadvornykh (https://codepen.io/zadvorsky/pen/xxwbBQV)
+ * Illustrations by Pablo Stanley (https://www.openpeeps.com/)
+ */
+const CrowdCanvas = ({ src = '/images/peeps/all-peeps.png', rows = 15, cols = 7, className = '' }) => {
+  const canvasRef = useRef(null);
 
-// Put your clean crowd file in client/public/ (SVG or high-res PNG/WebP).
-const CROWD_SRC = '/crowd.png';
-const CROWD_W = 1422; // natural width of YOUR image, used only for aspect ratio
-const CROWD_H = 657;  // natural height of crowded ppl.png
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
 
-// The people who "get shortlisted", as % of the image (x from left, y from top).
-// Turn DEBUG_PICKS on, click a face, read the console, paste the numbers here.
-// Keep them between x = 30 and 70 so they stay visible on phones (the image is cropped sideways there).
-const PICKS = [
-  { x: 41.5, y: 42 }, // person in the turban
-  { x: 58, y: 43 },   // person with the eyepatch
-  { x: 49, y: 70 },   // person with sunglasses, lower centre
-];
-const DEBUG_PICKS = false;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
 
-// Sizes as a fraction of the image width, so they scale with the screen.
-const HOLE = 0.043; // radius of the sharp area around each pick
-const RING = 0.085; // diameter of the indigo ring
+    const config = {
+      src,
+      rows,
+      cols,
+    };
 
-// Image box: always covers the screen while keeping its aspect ratio,
-// so the PICKS percentages always land on the same faces.
-const ASPECT = CROWD_W / CROWD_H;
-const BOX_W = `max(100vw, ${(ASPECT * 100).toFixed(2)}vh)`;
+    const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
 
-const HEADING = 'font-heading';
+    // UTILS
+    const randomRange = (min, max) => min + Math.random() * (max - min);
+    const randomIndex = (array) => randomRange(0, array.length) | 0;
+    const removeFromArray = (array, i) => array.splice(i, 1)[0];
+    const removeItemFromArray = (array, item) => removeFromArray(array, array.indexOf(item));
+    const removeRandomFromArray = (array) => removeFromArray(array, randomIndex(array));
+    const getRandomFromArray = (array) => array[randomIndex(array) | 0];
 
-const holes = PICKS.map(
-  (p) =>
-    `radial-gradient(circle calc(${BOX_W} * ${HOLE}) at ${p.x}% ${p.y}%, transparent 96%, #000 100%)`
-).join(',');
+    // TWEEN FACTORIES
+    const resetPeep = ({ stage, peep }) => {
+      const direction = Math.random() > 0.5 ? 1 : -1;
+      const offsetY = 100 - 250 * gsap.parseEase('power2.in')(Math.random());
+      const startY = stage.height - peep.height + offsetY;
+      let startX;
+      let endX;
 
-/* ------------------------------------------------------------------ */
+      if (direction === 1) {
+        startX = -peep.width;
+        endX = stage.width;
+        peep.scaleX = 1;
+      } else {
+        startX = stage.width + peep.width;
+        endX = 0;
+        peep.scaleX = -1;
+      }
+
+      peep.x = startX;
+      peep.y = startY;
+      peep.anchorY = startY;
+
+      return {
+        startX,
+        startY,
+        endX,
+      };
+    };
+
+    const normalWalk = ({ peep, props }) => {
+      const { startX, startY, endX } = props;
+      const xDuration = 10;
+      const yDuration = 0.25;
+
+      const tl = gsap.timeline();
+      tl.timeScale(randomRange(0.5, 1.5));
+      tl.to(
+        peep,
+        {
+          duration: xDuration,
+          x: endX,
+          ease: 'none',
+        },
+        0,
+      );
+      tl.to(
+        peep,
+        {
+          duration: yDuration,
+          repeat: xDuration / yDuration,
+          yoyo: true,
+          y: startY - 10,
+        },
+        0,
+      );
+
+      return tl;
+    };
+
+    const walks = [normalWalk];
+
+    // FACTORY FUNCTIONS
+    const createPeep = ({ image, rect }) => {
+      const peep = {
+        image,
+        rect: [],
+        width: 0,
+        height: 0,
+        drawArgs: [],
+        x: 0,
+        y: 0,
+        anchorY: 0,
+        scaleX: 1,
+        walk: null,
+        setRect: (rect) => {
+          peep.rect = rect;
+          peep.width = rect[2];
+          peep.height = rect[3];
+          peep.drawArgs = [peep.image, ...rect, 0, 0, peep.width, peep.height];
+        },
+        render: (ctx) => {
+          ctx.save();
+          ctx.translate(peep.x, peep.y);
+          ctx.scale(peep.scaleX, 1);
+          ctx.drawImage(
+            peep.image,
+            peep.rect[0],
+            peep.rect[1],
+            peep.rect[2],
+            peep.rect[3],
+            0,
+            0,
+            peep.width,
+            peep.height,
+          );
+          ctx.restore();
+        },
+      };
+
+      peep.setRect(rect);
+      return peep;
+    };
+
+    // MAIN
+    const img = new Image();
+    const stage = {
+      width: 0,
+      height: 0,
+    };
+
+    const allPeeps = [];
+    const availablePeeps = [];
+    const crowd = [];
+
+    const createPeeps = () => {
+      const { rows, cols } = config;
+      const { naturalWidth: width, naturalHeight: height } = img;
+      const total = rows * cols;
+      const rectWidth = width / rows;
+      const rectHeight = height / cols;
+
+      for (let i = 0; i < total; i++) {
+        allPeeps.push(
+          createPeep({
+            image: img,
+            rect: [
+              (i % rows) * rectWidth,
+              ((i / rows) | 0) * rectHeight,
+              rectWidth,
+              rectHeight,
+            ],
+          }),
+        );
+      }
+    };
+
+    const initCrowd = () => {
+      while (availablePeeps.length) {
+        addPeepToCrowd().walk.progress(Math.random());
+      }
+    };
+
+    const addPeepToCrowd = () => {
+      const peep = removeRandomFromArray(availablePeeps);
+      const walk = getRandomFromArray(walks)({
+        peep,
+        props: resetPeep({
+          peep,
+          stage,
+        }),
+      }).eventCallback('onComplete', () => {
+        removePeepFromCrowd(peep);
+        addPeepToCrowd();
+      });
+
+      peep.walk = walk;
+
+      crowd.push(peep);
+      crowd.sort((a, b) => a.anchorY - b.anchorY);
+
+      return peep;
+    };
+
+    const removePeepFromCrowd = (peep) => {
+      removeItemFromArray(crowd, peep);
+      availablePeeps.push(peep);
+    };
+
+    const render = () => {
+      if (!canvas) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.scale(dpr, dpr);
+
+      crowd.forEach((peep) => {
+        peep.render(ctx);
+      });
+
+      ctx.restore();
+    };
+
+    const resize = () => {
+      if (!canvas) return;
+      stage.width = canvas.clientWidth;
+      stage.height = canvas.clientHeight;
+      canvas.width = stage.width * dpr;
+      canvas.height = stage.height * dpr;
+
+      crowd.forEach((peep) => {
+        if (peep.walk) peep.walk.kill();
+      });
+
+      crowd.length = 0;
+      availablePeeps.length = 0;
+      availablePeeps.push(...allPeeps);
+
+      initCrowd();
+    };
+
+    const init = () => {
+      createPeeps();
+      resize();
+      gsap.ticker.add(render);
+    };
+
+    img.onload = init;
+    img.src = config.src;
+    if (img.complete && img.naturalWidth) {
+      init();
+    }
+
+    const handleResize = () => resize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      gsap.ticker.remove(render);
+      crowd.forEach((peep) => {
+        if (peep.walk) peep.walk.kill();
+      });
+    };
+  }, [src, rows, cols]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className={`absolute inset-x-0 bottom-0 h-full w-full pointer-events-none select-none ${className}`}
+    />
+  );
+};
 
 export default function CrowdStory({ onCta }) {
   const root = useRef(null);
@@ -59,24 +287,22 @@ export default function CrowdStory({ onCta }) {
         (context) => {
           const { mobile, reduce } = context.conditions;
 
-          // Reduced motion: no pin, no scrub. Show the end state.
           if (reduce) {
-            gsap.set('.wash', { opacity: 0.92 });
-            gsap.set('.pick', { scale: 1, autoAlpha: 1 });
+            gsap.set('.beat-1, .beat-2', { display: 'none' });
             gsap.set('.beat-3', { autoAlpha: 1, y: 0 });
             return;
           }
 
-          gsap.set('.crowd', { scale: 1.6, transformOrigin: '50% 60%' });
-          gsap.set('.beat', { autoAlpha: 0, y: 24 });
-          gsap.set('.pick', { scale: 0, autoAlpha: 0 });
-          gsap.set('.scan', { autoAlpha: 0, top: '0%' });
+          // Initial state for scroll beats
+          gsap.set('.beat', { autoAlpha: 0, y: 20 });
+          gsap.set('.beat-1', { autoAlpha: 1, y: 0 });
+          gsap.set('.scan-wrap', { autoAlpha: 0, top: '2%' });
 
           const tl = gsap.timeline({
             scrollTrigger: {
               trigger: root.current,
               start: 'top top',
-              end: mobile ? '+=2200' : '+=3000',
+              end: mobile ? '+=1800' : '+=2600',
               scrub: 0.6,
               pin: true,
               anticipatePin: 1,
@@ -85,151 +311,109 @@ export default function CrowdStory({ onCta }) {
           });
 
           tl
-            // 1. Pull back from a few faces to the whole crowd
-            .to('.crowd', { scale: 1, duration: 2.5, ease: 'power2.out' })
-            .to('.beat-1', { autoAlpha: 1, y: 0, duration: 0.8 }, '<0.8')
+            // Pause on Beat 1 so user can read initial state
+            .to({}, { duration: 0.9 })
 
-            // 2. ATS scan sweeps down
-            .to('.beat-1', { autoAlpha: 0, y: -24, duration: 0.6 }, '+=0.8')
-            .to('.scan', { autoAlpha: 1, duration: 0.1 }, '<')
-            .to('.scan', { top: '100%', duration: 2, ease: 'none' }, '<')
-            .to('.beat-2', { autoAlpha: 1, y: 0, duration: 0.8 }, '<0.4')
+            // Beat 1 fades out, scan sweeps down, Beat 2 fades in
+            .to('.beat-1', { autoAlpha: 0, y: -20, duration: 0.6 })
+            .to('.scan-wrap', { autoAlpha: 1, duration: 0.2 }, '<')
+            .to('.scan-wrap', { top: '88%', duration: 2.2, ease: 'none' }, '<')
+            .to('.beat-2', { autoAlpha: 1, y: 0, duration: 0.7 }, '<0.3')
 
-            // 3. Everyone washes out except the picks
-            .to('.wash', { opacity: 0.92, duration: 1.5 }, '-=0.9')
-            .to('.scan', { autoAlpha: 0, duration: 0.3 }, '<')
-            .to('.pick', {
-              scale: 1,
-              autoAlpha: 1,
-              stagger: 0.25,
-              duration: 0.6,
-              ease: 'back.out(2)',
-            })
-            .to('.beat-2', { autoAlpha: 0, y: -24, duration: 0.6 }, '+=0.6')
+            // Pause on Beat 2
+            .to({}, { duration: 0.8 })
 
-            // 4. CTA
-            .to('.beat-3', { autoAlpha: 1, y: 0, duration: 0.8 });
+            // Scanner fades, Beat 2 fades out, Beat 3 (CTA) fades in
+            .to('.scan-wrap', { autoAlpha: 0, duration: 0.4 })
+            .to('.beat-2', { autoAlpha: 0, y: -20, duration: 0.6 }, '<')
+            .to('.beat-3', { autoAlpha: 1, y: 0, duration: 0.8 }, '<0.2')
+            .to({}, { duration: 0.8 });
         }
       );
     }, root);
 
-    // Pin spacing depends on fonts and the image being loaded.
-    document.fonts?.ready.then(() => ScrollTrigger.refresh());
+    document.fonts?.ready?.then(() => ScrollTrigger.refresh());
 
     return () => ctx.revert();
   }, []);
-
-  const logPick = (e) => {
-    if (!DEBUG_PICKS) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    const x = (((e.clientX - r.left) / r.width) * 100).toFixed(1);
-    const y = (((e.clientY - r.top) / r.height) * 100).toFixed(1);
-    // eslint-disable-next-line no-console
-    console.log(`{ x: ${x}, y: ${y} },`);
-  };
 
   return (
     <section
       ref={root}
       aria-label="Most applicants never reach a human reader"
-      className="relative z-10 h-screen overflow-hidden bg-[#FAF8F4] dark:bg-[#0B0D17]"
+      className="relative z-10 h-screen w-full overflow-hidden bg-[#FAF8F4] text-[#14161F] border-none select-none transition-colors"
     >
-      <p className="sr-only">
-        Hundreds of people apply to every opening. Most resumes are filtered out
-        by software before a person reads them. Only a few are shortlisted.
-        Analyze your resume to be one of them.
-      </p>
+      {/* Walking Crowd Canvas: spans full width and 85vh height */}
+      <div className="absolute inset-x-0 bottom-0 h-[82vh] sm:h-[86vh] w-full overflow-hidden pointer-events-none">
+        <CrowdCanvas src="/images/peeps/all-peeps.png" rows={15} cols={7} />
 
-      {/* Crowd: sized to cover the screen, centred, aspect ratio locked */}
-      <div
-        className="crowd absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 will-change-transform"
-        style={{ width: BOX_W, aspectRatio: `${CROWD_W} / ${CROWD_H}` }}
-      >
-        <div className="relative h-full w-full" onClick={logPick}>
-          <img
-            src={CROWD_SRC}
-            alt=""
-            aria-hidden="true"
-            draggable={false}
-            onLoad={() => ScrollTrigger.refresh()}
-            className="block h-full w-full select-none dark:invert"
-          />
-
-          {/* Wash-out: page-coloured veil with a clear hole over each pick */}
-          <div
-            className="wash pointer-events-none absolute inset-0 bg-[#FAF8F4] opacity-0 dark:bg-[#0B0D17]"
-            style={{
-              WebkitMaskImage: holes,
-              maskImage: holes,
-              WebkitMaskComposite: 'source-in',
-              maskComposite: 'intersect',
-            }}
-          />
-
-          {/* Rings and tags on the shortlisted */}
-          {PICKS.map((p, i) => (
-            <div
-              key={i}
-              className="pick pointer-events-none absolute -translate-x-1/2 -translate-y-1/2"
-              style={{ left: `${p.x}%`, top: `${p.y}%` }}
-            >
-              <div
-                className="rounded-full border-2 border-[#4F46E5] dark:border-[#818CF8]"
-                style={{
-                  width: `calc(${BOX_W} * ${RING})`,
-                  height: `calc(${BOX_W} * ${RING})`,
-                }}
-              />
-              <span className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#4F46E5] px-2.5 py-0.5 font-mono text-[11px] text-white dark:bg-[#818CF8] dark:text-[#0B0D17]">
-                Shortlisted
-              </span>
-            </div>
-          ))}
-
-          {/* ATS scan line */}
-          <div className="scan pointer-events-none absolute inset-x-0 h-[2px] bg-[#38BDF8] shadow-[0_0_24px_4px_rgba(56,189,248,0.65)] will-change-transform" />
+        {/* ATS Scan Beam & Line (Animates down on scroll) */}
+        <div className="scan-wrap pointer-events-none absolute inset-x-0 will-change-transform z-15">
+          {/* Cyan/sky scanner gradient trail */}
+          <div className="h-28 w-full bg-gradient-to-t from-sky-400/25 via-sky-400/10 to-transparent" />
+          {/* Glowing laser scan line */}
+          <div className="relative h-[2.5px] w-full bg-[#0284c7] shadow-[0_0_20px_3px_rgba(2,132,199,0.7)] flex items-center justify-end px-4 sm:px-8">
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider text-white bg-sky-600/90 shadow-xs -translate-y-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-ping" />
+              ATS SCANNER ACTIVE
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Story cards: solid backing so text stays legible over the line art */}
-      <div className="pointer-events-none absolute inset-x-0 top-[7%] z-20 flex justify-center px-4">
-        <div className="relative w-full max-w-3xl">
-          <Card className="beat beat-1 invisible">
-            <h2 className={`${HEADING} text-3xl font-semibold leading-[1.1] tracking-[-0.02em] md:text-5xl`}>
+      {/* Compact Story Card Overlay at Top */}
+      <div className="pointer-events-none absolute inset-x-0 top-6 sm:top-10 z-20 flex justify-center px-4 sm:px-6">
+        <div className="relative w-full max-w-xl sm:max-w-2xl min-h-[140px] flex items-center justify-center">
+
+          {/* Beat 1 */}
+          <div className="beat beat-1 absolute inset-0 flex flex-col items-center justify-center text-center bg-white/92 backdrop-blur-md border border-[#E4E0D8] rounded-2xl px-6 py-5 shadow-lg shadow-black/5">
+            <span className="text-[11px] font-sans font-semibold uppercase tracking-widest text-[#4F46E5] bg-indigo-50 border border-indigo-200/80 px-2.5 py-0.5 rounded-full mb-2">
+              THE APPLICANT POOL
+            </span>
+            <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-semibold tracking-[-0.02em] text-[#14161F] leading-tight">
               Every opening gets hundreds of applications.
             </h2>
-          </Card>
+            <p className="font-sans text-xs sm:text-sm text-[#5A5D6B] mt-1.5 font-normal">
+              A massive sea of candidates compete for every single position.
+            </p>
+          </div>
 
-          <Card className="beat beat-2 invisible">
-            <h2 className={`${HEADING} text-3xl font-semibold leading-[1.1] tracking-[-0.02em] md:text-5xl`}>
+          {/* Beat 2 */}
+          <div className="beat beat-2 absolute inset-0 flex flex-col items-center justify-center text-center bg-white/92 backdrop-blur-md border border-sky-200 rounded-2xl px-6 py-5 shadow-lg shadow-sky-500/10">
+            <span className="text-[11px] font-sans font-semibold uppercase tracking-widest text-sky-700 bg-sky-50 border border-sky-200 px-2.5 py-0.5 rounded-full mb-2">
+              AUTOMATED FILTERING
+            </span>
+            <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-semibold tracking-[-0.02em] text-[#14161F] leading-tight">
               Most are filtered out before a human reads a word.
             </h2>
-          </Card>
+            <p className="font-sans text-xs sm:text-sm text-[#5A5D6B] mt-1.5 font-normal">
+              75% of resumes are rejected by ATS algorithms before reaching a recruiter.
+            </p>
+          </div>
 
-          <Card className="beat beat-3 invisible">
-            <h2 className={`${HEADING} text-3xl font-semibold leading-[1.1] tracking-[-0.02em] md:text-5xl`}>
-              Be one of the few.
+          {/* Beat 3 */}
+          <div className="beat beat-3 absolute inset-0 flex flex-col items-center justify-center text-center bg-white/95 backdrop-blur-md border border-indigo-200 rounded-2xl px-6 py-5 shadow-xl shadow-indigo-500/10">
+            <span className="text-[11px] font-sans font-semibold uppercase tracking-widest text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full mb-1.5">
+              THE SOLUTION
+            </span>
+            <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-semibold tracking-[-0.02em] text-[#14161F] leading-tight">
+              Be one of the few who get shortlisted.
             </h2>
-            <button
-              type="button"
-              onClick={onCta}
-              className="pointer-events-auto mt-5 rounded-full bg-[#4F46E5] px-7 py-3 text-base font-medium text-white transition hover:shadow-[0_0_30px_rgba(79,70,229,0.5)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#4F46E5] dark:bg-[#818CF8] dark:text-[#0B0D17] dark:focus-visible:outline-[#818CF8] cursor-pointer"
-            >
-              Analyze my resume
-            </button>
-          </Card>
+            {onCta && (
+              <button
+                type="button"
+                onClick={onCta}
+                className="pointer-events-auto mt-3.5 inline-flex items-center justify-center px-6 py-2.5 text-xs sm:text-sm font-medium text-white bg-[#1e3fd8] hover:bg-[#2563eb] rounded-full transition-all hover:shadow-lg hover:shadow-blue-500/30 cursor-pointer shadow-md"
+              >
+                Analyze my resume
+              </button>
+            )}
+          </div>
+
         </div>
       </div>
     </section>
   );
 }
 
-function Card({ className = '', children }) {
-  return (
-    <div
-      className={`absolute inset-x-0 top-0 rounded-2xl border border-[#E4E0D8] bg-[#FAF8F4] px-6 py-6 text-center text-[#14161F] dark:border-[#1E233A] dark:bg-[#0B0D17] dark:text-[#F1F3F9] md:px-10 ${className}`}
-    >
-      {children}
-    </div>
-  );
-}
+export { CrowdCanvas, CrowdStory };
