@@ -14,7 +14,13 @@ const ATLAS_CELL_W = 60;
 const ATLAS_CELL_H = 100;
 const ATLAS_COLUMNS = 16;
 const FONT_SCALE = 0.78;
-const DEFAULT_COLORS = ['#1e3fd8', '#f6f8ff', '#a5d8ff', '#38bdf8'];
+
+// Ramp order: index 0 = dim edge of the field, last index = brightest core.
+// DARK: near-black base -> deep blue -> sky blue -> white at the top.
+const DARK_COLORS = ['#1e3fd8', '#2f6bff', '#38bdf8', '#a5d8ff', '#ffffff'];
+// LIGHT: glyphs are drawn as ink on paper, so the ramp goes light blue -> navy.
+const LIGHT_COLORS = ['#8fb4ff', '#4f7dff', '#1e3fd8', '#14289a', '#0b1668'];
+
 const DEFAULT_CHARACTERS = ' =+xX0S8#@';
 const DEFAULT_FONT = '"Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace';
 const SHAPES = { horizon: 0, pinch: 1, rise: 2, eclipse: 3 };
@@ -422,22 +428,30 @@ const buildAtlas = (gl, characters, fontFamily) => {
   return { texture, count: list.length, grid: [columns, rows] };
 };
 
+/**
+ * Props that are left undefined resolve per theme:
+ *   colors          dark: blue -> white ramp      light: light blue -> navy ramp
+ *   glow            dark: 0.25                    light: 0.08
+ *   gradientOpacity dark: 0.9                     light: 0.28
+ *   grain           dark: 0.10                    light: 0.05
+ * Pass lightMode={true} for the paper theme. Anything you pass explicitly wins.
+ */
 const GradientASCII = ({
-  colors = DEFAULT_COLORS,
+  colors,
   shape = 'horizon',
   characters = DEFAULT_CHARACTERS,
   cellSize = 18,
-  density = 0.8,
-  glyphOpacity = 0.85,
-  glow = 0.2,
+  density = 0.85,
+  glyphOpacity = 0.9,
+  glow,
   depthOfField = 0,
   flicker = 0.2,
   softness = 0.5,
   scale = 1,
   flow = 0.5,
   speed = 1,
-  gradientOpacity = 0.9,
-  grain = 0.08,
+  gradientOpacity,
+  grain,
   variation = 0,
   mouseInteraction = true,
   scrambleRadius = 0.1,
@@ -453,7 +467,8 @@ const GradientASCII = ({
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
   const wakeRef = useRef(null);
-  const palette = (Array.isArray(colors) && colors.length ? colors : DEFAULT_COLORS).slice(0, MAX_COLORS);
+  const fallbackColors = lightMode ? LIGHT_COLORS : DARK_COLORS;
+  const palette = (Array.isArray(colors) && colors.length ? colors : fallbackColors).slice(0, MAX_COLORS);
   const settings = {
     colors: palette.length > 1 ? palette : [palette[0], palette[0]],
     shape: SHAPES[shape] ?? 0,
@@ -461,15 +476,15 @@ const GradientASCII = ({
     cellSize: clamp(cellSize, 6, 64),
     density: clamp(density, 0, 1),
     glyphOpacity: clamp(glyphOpacity, 0, 1),
-    glow: clamp(glow, 0, 2),
+    glow: clamp(glow ?? (lightMode ? 0.08 : 0.25), 0, 2),
     depthOfField: clamp(depthOfField, 0, 1),
     flicker: clamp(flicker, 0, 1),
     softness: clamp(softness, 0, 1),
     scale: clamp(scale, 0.4, 2.5),
     flow: clamp(flow, 0, 2),
     speed: Math.max(0, speed),
-    gradientOpacity: clamp(gradientOpacity, 0, 1),
-    grain: clamp(grain, 0, 0.4),
+    gradientOpacity: clamp(gradientOpacity ?? (lightMode ? 0.28 : 0.9), 0, 1),
+    grain: clamp(grain ?? (lightMode ? 0.05 : 0.1), 0, 0.4),
     variation: Math.max(0, variation),
     mouseInteraction,
     scrambleRadius: clamp(scrambleRadius, 0.02, 0.4),
@@ -828,6 +843,7 @@ const GradientASCII = ({
     };
   }, []);
 
+  // Re-draw on every render so theme and prop changes show up even when the loop is idle.
   useEffect(() => {
     wakeRef.current?.();
   });
@@ -835,7 +851,7 @@ const GradientASCII = ({
   return (
     <div
       ref={containerRef}
-      className={`gradient-ascii-container${className ? ` ${className}` : ''}`}
+      className={`gradient-ascii-container${lightMode ? ' is-light' : ''}${className ? ` ${className}` : ''}`}
       style={style}
       {...rest}
     >

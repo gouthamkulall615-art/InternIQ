@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Geist+Mono:wght@300&family=Instrument+Sans:wght@400;500&display=swap');
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'Instrument Sans', system-ui, sans-serif;
+}
+
+.hero[data-theme='dark'] {
+  --bg: #14121a;
+  --ink: #f1ece2;
+  --ink-soft: #a5a9b3;
+  --btn-bg: #2f6bff;
+  --btn-ink: #ffffff;
+  --line: rgba(241, 236, 226, 0.35);
+  --focus: #a5d8ff;
+}
+
+.hero[data-theme='light'] {
+  --bg: #f4f1ea;
+  --ink: #15171c;
+  --ink-soft: #4a4e57;
+  --btn-bg: #1e3fd8;
+  --btn-ink: #ffffff;
+  --line: rgba(21, 23, 28, 0.4);
+  --focus: #1e3fd8;
+}
+
+.hero__bg {
+  position: absolute;
+  inset: 0;
+}
+
+/* full-bleed: drop the card radius and border from the component */
+.hero__bg .gradient-ascii-container {
+  border-radius: 0;
+  border: 0;
+}
+
+/* The bright part of the field is at the top, the calm part at the bottom,
+   so the copy sits at the bottom where it stays readable in both themes. */
+.hero__content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: clamp(24px, 5vw, 72px);
+  max-width: 880px;
+}
+
+.hero__title {
+  margin: 0 0 16px;
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  font-weight: 800;
+  font-size: clamp(3rem, 9vw, 7.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+}
+
+.hero__sub {
+  margin: 0 0 28px;
+  max-width: 56ch;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.hero__btn {
+  display: inline-block;
+  padding: 14px 22px;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.hero__btn:active {
+  transform: translateY(2px);
+}
+
+.hero__btn--solid {
+  background: var(--btn-bg);
+  color: var(--btn-ink);
+}
+
+.hero__btn--outline {
+  border: 1.5px solid var(--line);
+  color: var(--ink);
+}
+
+.hero__toggle {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 2;
+  padding: 10px 16px;
+  border: 1.5px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.hero__btn:focus-visible,
+.hero__toggle:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__btn {
+    transition: none;
+  }
+}
