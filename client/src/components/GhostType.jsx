@@ -111,10 +111,10 @@ export default function GhostType({
   return (
     <h1
       ref={containerRef}
-      className={`font-heading text-4xl sm:text-5xl md:text-6xl lg:text-[3.75rem] xl:text-[4.25rem] font-semibold tracking-[-0.02em] text-white leading-[1.14] sm:leading-[1.1] min-h-[2.8em] sm:min-h-[2.4em] lg:min-h-[2.3em] select-text ${className}`}
+      className={`font-heading text-4xl sm:text-5xl md:text-6xl lg:text-[3.75rem] xl:text-[4.25rem] font-semibold tracking-[-0.02em] text-[#0F172A] dark:text-white leading-[1.14] sm:leading-[1.1] min-h-[2.8em] sm:min-h-[2.4em] lg:min-h-[2.3em] select-text transition-colors duration-200 ${className}`}
     >
       {/* Base permanent text in Bricolage Grotesque */}
-      <span className="font-heading font-semibold tracking-[-0.02em] text-white pr-1">
+      <span className="font-heading font-semibold tracking-[-0.02em] text-[#0F172A] dark:text-white pr-1 transition-colors duration-200">
         {text}
       </span>
 
@@ -122,7 +122,7 @@ export default function GhostType({
       {!isAccepted && !isDeleting && (
         <span
           aria-hidden="true"
-          className="inline-block w-[3.5px] sm:w-[4px] h-[0.88em] bg-[#38BDF8] mx-1 align-baseline rounded-[1px] animate-pulse shadow-[0_0_12px_rgba(56,189,248,0.8)]"
+          className="inline-block w-[3.5px] sm:w-[4px] h-[0.88em] bg-[#1e3fd8] dark:bg-[#38BDF8] mx-1 align-baseline rounded-[1px] animate-pulse shadow-[0_0_8px_rgba(30,63,216,0.5)] dark:shadow-[0_0_12px_rgba(56,189,248,0.8)]"
         />
       )}
 
@@ -130,8 +130,8 @@ export default function GhostType({
       <span
         className={`whitespace-pre-wrap font-poppins font-medium transition-colors duration-200 ${
           isAccepted || isDeleting
-            ? 'text-white'
-            : 'text-slate-400 select-none'
+            ? 'text-[#0F172A] dark:text-white'
+            : 'text-slate-500 dark:text-slate-400 select-none'
         }`}
       >
         {displayedText}
@@ -141,7 +141,7 @@ export default function GhostType({
       {(isAccepted || isDeleting) && (
         <span
           aria-hidden="true"
-          className="inline-block w-[3.5px] sm:w-[4px] h-[0.88em] bg-[#4F46E5] dark:bg-[#38BDF8] ml-1 align-baseline rounded-[1px] animate-pulse shadow-[0_0_8px_rgba(79,70,229,0.5)] dark:shadow-[0_0_12px_rgba(56,189,248,0.8)]"
+          className="inline-block w-[3.5px] sm:w-[4px] h-[0.88em] bg-[#1e3fd8] dark:bg-[#38BDF8] ml-1 align-baseline rounded-[1px] animate-pulse shadow-[0_0_8px_rgba(30,63,216,0.5)] dark:shadow-[0_0_12px_rgba(56,189,248,0.8)]"
         />
       )}
 
@@ -151,7 +151,7 @@ export default function GhostType({
           type="button"
           onClick={handleAccept}
           title="Press Tab or click to complete"
-          className="inline-flex items-center justify-center ml-2.5 px-2.5 py-0.5 align-middle text-[11px] font-editorial-mono font-medium tracking-normal rounded-[4px] shadow-xs transition-all cursor-pointer select-none -translate-y-0.5 hover:scale-105 active:scale-95 text-slate-800 dark:text-sky-200 bg-slate-200/90 dark:bg-sky-500/20 border border-slate-300 dark:border-sky-400/30 hover:bg-[#4F46E5] hover:text-white dark:hover:bg-sky-500 dark:hover:text-white"
+          className="inline-flex items-center justify-center ml-2.5 px-2.5 py-0.5 align-middle text-[11px] font-editorial-mono font-medium tracking-normal rounded-[4px] shadow-xs transition-all cursor-pointer select-none -translate-y-0.5 hover:scale-105 active:scale-95 text-slate-800 dark:text-sky-200 bg-slate-200/90 dark:bg-sky-500/20 border border-slate-300 dark:border-sky-400/30 hover:bg-[#1e3fd8] hover:text-white dark:hover:bg-sky-500 dark:hover:text-white"
         >
           Tab
         </button>

@@ -144,7 +144,7 @@ export default function Landing() {
   return (
     <div className="landing font-editorial-sans antialiased min-h-screen selection:bg-[#4F46E5] selection:text-white relative bg-transparent transition-colors">
       {/* 1. TOP NAV */}
-      <header className="sticky top-0 z-40 bg-black/40 backdrop-blur-md border-b border-white/10 transition-colors">
+      <header className="sticky top-0 z-40 bg-[#f4f1ea]/85 dark:bg-black/40 backdrop-blur-md border-b border-[#14161F]/10 dark:border-white/10 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           {/* Wordmark in Fraunces serif */}
           <div className="flex items-center flex-shrink-0">
@@ -154,7 +154,7 @@ export default function Landing() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 setActiveNavIndex(0);
               }}
-              className="font-heading text-2xl font-semibold tracking-[-0.02em] text-white hover:opacity-90 transition-opacity"
+              className="font-heading text-2xl font-semibold tracking-[-0.02em] text-[#0F172A] dark:text-white hover:opacity-90 transition-opacity"
             >
               InternIQ
             </Link>
@@ -166,7 +166,7 @@ export default function Landing() {
               items={navItems}
               activeIndex={activeNavIndex}
               onChange={(index, item) => handleNavChange(index, item)}
-              theme="dark"
+              theme={theme === 'dark' ? 'dark' : 'light'}
               size="sm"
               frame={true}
               particleCount={15}
@@ -176,7 +176,7 @@ export default function Landing() {
               gooeyness={0.5}
               wobble={0.5}
               hoverEffect={true}
-              colors={['#818CF8', '#6366F1', '#38BDF8']}
+              colors={theme === 'dark' ? ['#818CF8', '#6366F1', '#38BDF8'] : ['#1e3fd8', '#4f7dff', '#8fb4ff']}
             />
           </div>
 
@@ -187,12 +187,12 @@ export default function Landing() {
               type="button"
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="p-2 text-slate-300 hover:text-white rounded-[4px] border border-white/15 bg-white/5 hover:bg-white/15 transition-colors flex items-center justify-center min-h-[40px] min-w-[40px] cursor-pointer"
+              className="p-2 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white rounded-[4px] border border-slate-300/80 dark:border-white/15 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/15 transition-colors flex items-center justify-center min-h-[40px] min-w-[40px] cursor-pointer"
             >
               {theme === 'dark' ? (
                 <Sun className="h-4.5 w-4.5 text-amber-400" strokeWidth={1.75} />
               ) : (
-                <Moon className="h-4.5 w-4.5 text-slate-300" strokeWidth={1.75} />
+                <Moon className="h-4.5 w-4.5 text-slate-700" strokeWidth={1.75} />
               )}
             </button>
 
@@ -207,7 +207,7 @@ export default function Landing() {
               <>
                 <Link
                   to="/login"
-                  className="inline-flex items-center justify-center px-3.5 py-2 text-sm font-medium text-slate-200 hover:text-white transition-colors min-h-[44px]"
+                  className="inline-flex items-center justify-center px-3.5 py-2 text-sm font-medium text-slate-700 hover:text-black dark:text-slate-200 dark:hover:text-white transition-colors min-h-[44px]"
                 >
                   Log in
                 </Link>
@@ -227,13 +227,13 @@ export default function Landing() {
               type="button"
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="p-2 text-slate-300 hover:text-white rounded-[4px] border border-white/15 bg-white/5 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+              className="p-2 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white rounded-[4px] border border-slate-300/80 dark:border-white/15 bg-black/5 dark:bg-white/5 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
             >
               {theme === 'dark' ? <Sun className="h-5 w-5 text-amber-400" strokeWidth={1.5} /> : <Moon className="h-5 w-5" strokeWidth={1.5} />}
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-slate-300 hover:text-white rounded-[4px] border border-white/15 bg-white/5 min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="p-2 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white rounded-[4px] border border-slate-300/80 dark:border-white/15 bg-black/5 dark:bg-white/5 min-h-[44px] min-w-[44px] flex items-center justify-center"
               aria-label="Toggle menu"
             >
               {mobileMenuOpen ? <X className="h-5 w-5" strokeWidth={1.5} /> : <Menu className="h-5 w-5" strokeWidth={1.5} />}
@@ -294,11 +294,11 @@ export default function Landing() {
       <section id="overview" className="scroll-mt-20 relative min-h-[560px] sm:min-h-[640px] flex items-center justify-center overflow-hidden transition-colors">
         {/* Centered Hero Content with GhostType - NO CARD */}
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center flex flex-col items-center justify-center">
-          <span className="font-sans text-xs uppercase tracking-widest text-[#818CF8] block font-semibold mb-6 px-3.5 py-1 rounded-full bg-indigo-950/70 border border-indigo-500/40 backdrop-blur-md shadow-xs">
+          <span className="font-sans text-xs uppercase tracking-widest text-indigo-700 dark:text-[#818CF8] block font-semibold mb-6 px-3.5 py-1 rounded-full bg-indigo-100/90 dark:bg-indigo-950/70 border border-indigo-300/80 dark:border-indigo-500/40 backdrop-blur-md shadow-xs">
             CAREER PREPARATION WORKSPACE
           </span>
 
-          <div className="w-full flex justify-center text-white">
+          <div className="w-full flex justify-center text-[#0F172A] dark:text-white">
             <GhostType
               text="Fix your resume"
               completions={[
@@ -309,7 +309,7 @@ export default function Landing() {
             />
           </div>
 
-          <p className="font-sans text-base sm:text-lg text-slate-200 leading-[1.6] max-w-2xl mt-4">
+          <p className="font-sans text-base sm:text-lg text-slate-700 dark:text-slate-200 leading-[1.6] max-w-2xl mt-4 font-normal">
             A straightforward ATS scanner, skill gap evaluator, and cover letter writer. Free for students and early-career job applicants.
           </p>
 
@@ -323,14 +323,14 @@ export default function Landing() {
             </Link>
             <a
               href="#how-it-works"
-              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-full backdrop-blur-md transition-all min-h-[44px] shadow-xs"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-slate-800 dark:text-white bg-slate-900/5 hover:bg-slate-900/10 dark:bg-white/10 dark:hover:bg-white/20 border border-slate-900/15 dark:border-white/20 rounded-full backdrop-blur-md transition-all min-h-[44px] shadow-xs"
             >
               See how it works
             </a>
           </div>
 
           {/* Small Note */}
-          <p className="font-sans text-xs text-slate-400 pt-3">
+          <p className="font-sans text-xs text-slate-600 dark:text-slate-400 pt-3">
             Free. PDF, DOCX or TXT up to 5MB.
           </p>
         </div>
