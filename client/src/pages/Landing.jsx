@@ -22,6 +22,7 @@ import CrowdStory from '../components/CrowdStory';
 import RibbonMarquee from '../components/RibbonMarquee';
 import ProblemStrip from '../components/ProblemStrip';
 import ToolsSection from '../components/ToolsSection';
+import Magnet from '../components/Magnet';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -315,18 +316,34 @@ export default function Landing() {
 
           {/* Action Buttons */}
           <div className="pt-7 flex flex-col sm:flex-row items-center justify-center gap-3.5 font-sans w-full sm:w-auto">
-            <Link
-              to={isAuthenticated ? "/resume-analyzer" : "/register"}
-              className="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3 text-sm font-medium text-white bg-[#1e3fd8] hover:bg-[#2563eb] rounded-full transition-all hover:shadow-lg hover:shadow-blue-500/30 min-h-[44px]"
+            <Magnet
+              padding={60}
+              magnetStrength={2.5}
+              tilt={8}
+              scale={1.04}
+              maxOffset={18}
             >
-              Analyze my resume
-            </Link>
-            <a
-              href="#how-it-works"
-              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-slate-800 dark:text-white bg-slate-900/5 hover:bg-slate-900/10 dark:bg-white/10 dark:hover:bg-white/20 border border-slate-900/15 dark:border-white/20 rounded-full backdrop-blur-md transition-all min-h-[44px] shadow-xs"
+              <Link
+                to={isAuthenticated ? "/resume-analyzer" : "/register"}
+                className="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3 text-sm font-medium text-white bg-[#1e3fd8] hover:bg-[#2563eb] rounded-full transition-all hover:shadow-lg hover:shadow-blue-500/30 min-h-[44px]"
+              >
+                Analyze my resume
+              </Link>
+            </Magnet>
+            <Magnet
+              padding={60}
+              magnetStrength={2.5}
+              tilt={8}
+              scale={1.04}
+              maxOffset={18}
             >
-              See how it works
-            </a>
+              <a
+                href="#how-it-works"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-slate-800 dark:text-white bg-slate-900/5 hover:bg-slate-900/10 dark:bg-white/10 dark:hover:bg-white/20 border border-slate-900/15 dark:border-white/20 rounded-full backdrop-blur-md transition-all min-h-[44px] shadow-xs"
+              >
+                See how it works
+              </a>
+            </Magnet>
           </div>
 
           {/* Small Note */}
@@ -681,12 +698,20 @@ export default function Landing() {
           </p>
           {/* Action Button: ONLY the blue button is rounded-full */}
           <div className="pt-2">
-            <Link
-              to={isAuthenticated ? "/resume-analyzer" : "/register"}
-              className="font-sans inline-flex items-center justify-center px-7 py-3.5 text-sm font-medium text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-full transition-all hover:shadow-md min-h-[44px]"
+            <Magnet
+              padding={60}
+              magnetStrength={2.5}
+              tilt={8}
+              scale={1.04}
+              maxOffset={18}
             >
-              Analyze my resume — it's free
-            </Link>
+              <Link
+                to={isAuthenticated ? "/resume-analyzer" : "/register"}
+                className="font-sans inline-flex items-center justify-center px-7 py-3.5 text-sm font-medium text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-full transition-all hover:shadow-md min-h-[44px]"
+              >
+                Analyze my resume — it's free
+              </Link>
+            </Magnet>
           </div>
         </div>
       </section>

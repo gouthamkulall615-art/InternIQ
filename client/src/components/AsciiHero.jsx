@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import GradientASCII from './GradientASCII';
+import Magnet from './Magnet';
 import { useTheme } from '../contexts/ThemeContext';
 import './AsciiHero.css';
 
@@ -68,12 +69,16 @@ export default function AsciiHero() {
           close it.
         </p>
         <div className="hero__actions">
-          <a className="hero__btn hero__btn--solid" href="#analyze">
-            Analyze my resume
-          </a>
-          <a className="hero__btn hero__btn--outline" href="#how-it-works">
-            See how it works
-          </a>
+          <Magnet padding={60} magnetStrength={2.5} tilt={8} scale={1.04} maxOffset={18}>
+            <a className="hero__btn hero__btn--solid" href="#analyze">
+              Analyze my resume
+            </a>
+          </Magnet>
+          <Magnet padding={60} magnetStrength={2.5} tilt={8} scale={1.04} maxOffset={18}>
+            <a className="hero__btn hero__btn--outline" href="#how-it-works">
+              See how it works
+            </a>
+          </Magnet>
         </div>
       </div>
     </section>
