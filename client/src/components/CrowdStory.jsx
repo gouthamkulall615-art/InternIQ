@@ -288,7 +288,7 @@ export default function CrowdStory({ onCta }) {
           const { mobile, reduce } = context.conditions;
 
           if (reduce) {
-            gsap.set('.beat-1, .beat-2', { display: 'none' });
+            gsap.set('.beat-1, .beat-2, .scroll-hint', { display: 'none' });
             gsap.set('.beat-3', { autoAlpha: 1, y: 0 });
             return;
           }
@@ -296,7 +296,8 @@ export default function CrowdStory({ onCta }) {
           // Initial state for scroll beats
           gsap.set('.beat', { autoAlpha: 0, y: 20 });
           gsap.set('.beat-1', { autoAlpha: 1, y: 0 });
-          gsap.set('.scan-wrap', { autoAlpha: 0, top: '2%' });
+          gsap.set('.scroll-hint', { autoAlpha: 1, y: 0 });
+          gsap.set('.scan-wrap', { autoAlpha: 0, top: '14%' });
 
           const tl = gsap.timeline({
             scrollTrigger: {
@@ -323,10 +324,11 @@ export default function CrowdStory({ onCta }) {
             // Pause on Beat 2
             .to({}, { duration: 0.8 })
 
-            // Scanner fades, Beat 2 fades out, Beat 3 (CTA) fades in
+            // Scanner fades, Beat 2 fades out, Beat 3 (CTA) fades in, scroll hints fade out
             .to('.scan-wrap', { autoAlpha: 0, duration: 0.4 })
             .to('.beat-2', { autoAlpha: 0, y: -20, duration: 0.6 }, '<')
             .to('.beat-3', { autoAlpha: 1, y: 0, duration: 0.8 }, '<0.2')
+            .to('.scroll-hint', { autoAlpha: 0, duration: 0.4 }, '<')
             .to({}, { duration: 0.8 });
         }
       );
@@ -341,11 +343,11 @@ export default function CrowdStory({ onCta }) {
     <section
       ref={root}
       aria-label="Most applicants never reach a human reader"
-      className="relative z-10 h-screen w-full overflow-hidden bg-[#FAF8F4] text-[#14161F] border-none select-none transition-colors"
+      className="relative z-10 h-screen w-full overflow-hidden bg-[#FAF8F4] dark:bg-[#0B0D17] text-[#14161F] dark:text-[#F1F3F9] border-none select-none transition-colors"
     >
       {/* Walking Crowd Canvas: spans full width and 85vh height */}
       <div className="absolute inset-x-0 bottom-0 h-[82vh] sm:h-[86vh] w-full overflow-hidden pointer-events-none">
-        <CrowdCanvas src="/images/peeps/all-peeps.png" rows={15} cols={7} />
+        <CrowdCanvas src="/images/peeps/all-peeps.png" rows={15} cols={7} className="dark:invert dark:opacity-85" />
 
         {/* ATS Scan Beam & Line (Animates down on scroll) */}
         <div className="scan-wrap pointer-events-none absolute inset-x-0 will-change-transform z-15">
@@ -361,42 +363,42 @@ export default function CrowdStory({ onCta }) {
         </div>
       </div>
 
-      {/* Compact Story Card Overlay at Top */}
-      <div className="pointer-events-none absolute inset-x-0 top-6 sm:top-10 z-20 flex justify-center px-4 sm:px-6">
-        <div className="relative w-full max-w-xl sm:max-w-2xl min-h-[140px] flex items-center justify-center">
+      {/* Story Card Overlay positioned safely below sticky navbar and horizontally centered */}
+      <div className="pointer-events-none absolute inset-x-0 top-24 sm:top-28 z-20 flex flex-col items-center px-4 sm:px-6">
+        <div className="relative w-full max-w-xl sm:max-w-2xl min-h-[160px] sm:min-h-[175px] flex items-center justify-center">
 
           {/* Beat 1 */}
-          <div className="beat beat-1 absolute inset-0 flex flex-col items-center justify-center text-center bg-white/92 backdrop-blur-md border border-[#E4E0D8] rounded-2xl px-6 py-5 shadow-lg shadow-black/5">
-            <span className="text-[11px] font-sans font-semibold uppercase tracking-widest text-[#4F46E5] bg-indigo-50 border border-indigo-200/80 px-2.5 py-0.5 rounded-full mb-2">
+          <div className="beat beat-1 absolute inset-0 flex flex-col items-center justify-center text-center bg-white/95 dark:bg-[#131626]/95 backdrop-blur-md border border-[#E4E0D8] dark:border-[#1E233A] rounded-2xl px-6 py-5 shadow-lg shadow-black/5 dark:shadow-black/20">
+            <span className="text-[11px] font-sans font-semibold uppercase tracking-widest text-[#4F46E5] dark:text-[#818CF8] bg-indigo-50 dark:bg-indigo-950/70 border border-indigo-200/80 dark:border-indigo-800/60 px-2.5 py-0.5 rounded-full mb-2">
               THE APPLICANT POOL
             </span>
-            <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-semibold tracking-[-0.02em] text-[#14161F] leading-tight">
+            <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] leading-tight">
               Every opening gets hundreds of applications.
             </h2>
-            <p className="font-sans text-xs sm:text-sm text-[#5A5D6B] mt-1.5 font-normal">
+            <p className="font-sans text-xs sm:text-sm text-[#5A5D6B] dark:text-[#9AA3BF] mt-1.5 font-normal">
               A massive sea of candidates compete for every single position.
             </p>
           </div>
 
           {/* Beat 2 */}
-          <div className="beat beat-2 absolute inset-0 flex flex-col items-center justify-center text-center bg-white/92 backdrop-blur-md border border-sky-200 rounded-2xl px-6 py-5 shadow-lg shadow-sky-500/10">
-            <span className="text-[11px] font-sans font-semibold uppercase tracking-widest text-sky-700 bg-sky-50 border border-sky-200 px-2.5 py-0.5 rounded-full mb-2">
+          <div className="beat beat-2 absolute inset-0 flex flex-col items-center justify-center text-center bg-white/95 dark:bg-[#131626]/95 backdrop-blur-md border border-sky-200 dark:border-sky-800/60 rounded-2xl px-6 py-5 shadow-lg shadow-sky-500/10 dark:shadow-sky-950/30">
+            <span className="text-[11px] font-sans font-semibold uppercase tracking-widest text-sky-700 dark:text-sky-300 bg-sky-50 dark:bg-sky-950/70 border border-sky-200 dark:border-sky-800/60 px-2.5 py-0.5 rounded-full mb-2">
               AUTOMATED FILTERING
             </span>
-            <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-semibold tracking-[-0.02em] text-[#14161F] leading-tight">
+            <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] leading-tight">
               Most are filtered out before a human reads a word.
             </h2>
-            <p className="font-sans text-xs sm:text-sm text-[#5A5D6B] mt-1.5 font-normal">
+            <p className="font-sans text-xs sm:text-sm text-[#5A5D6B] dark:text-[#9AA3BF] mt-1.5 font-normal">
               75% of resumes are rejected by ATS algorithms before reaching a recruiter.
             </p>
           </div>
 
           {/* Beat 3 */}
-          <div className="beat beat-3 absolute inset-0 flex flex-col items-center justify-center text-center bg-white/95 backdrop-blur-md border border-indigo-200 rounded-2xl px-6 py-5 shadow-xl shadow-indigo-500/10">
-            <span className="text-[11px] font-sans font-semibold uppercase tracking-widest text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full mb-1.5">
+          <div className="beat beat-3 absolute inset-0 flex flex-col items-center justify-center text-center bg-white/95 dark:bg-[#131626]/95 backdrop-blur-md border border-indigo-200 dark:border-indigo-800/60 rounded-2xl px-6 py-5 shadow-xl shadow-indigo-500/10 dark:shadow-indigo-950/30">
+            <span className="text-[11px] font-sans font-semibold uppercase tracking-widest text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/70 border border-emerald-200 dark:border-emerald-800/60 px-2.5 py-0.5 rounded-full mb-1.5">
               THE SOLUTION
             </span>
-            <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-semibold tracking-[-0.02em] text-[#14161F] leading-tight">
+            <h2 className="font-heading text-xl sm:text-2xl md:text-3xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] leading-tight">
               Be one of the few who get shortlisted.
             </h2>
             {onCta && (
@@ -410,6 +412,24 @@ export default function CrowdStory({ onCta }) {
             )}
           </div>
 
+        </div>
+
+        {/* Floating Scroll Indicator directly below the card */}
+        <div className="scroll-hint pointer-events-none mt-4 sm:mt-5 flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/95 dark:bg-[#131626]/95 backdrop-blur-md border border-[#E4E0D8] dark:border-[#1E233A] shadow-md text-xs font-medium text-[#14161F] dark:text-[#F1F3F9]">
+          <div className="w-3.5 h-5 rounded-full border border-indigo-600 dark:border-indigo-400 flex items-start justify-center p-0.5">
+            <div className="w-1 h-1.5 rounded-full bg-indigo-600 dark:bg-indigo-400 animate-bounce" />
+          </div>
+          <span>Scroll down to continue</span>
+          <span className="text-indigo-600 dark:text-indigo-400 font-bold animate-bounce text-sm">↓</span>
+        </div>
+      </div>
+
+      {/* Bottom subtle indicator across the walking crowd */}
+      <div className="scroll-hint pointer-events-none absolute bottom-6 inset-x-0 z-20 flex justify-center px-4">
+        <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/85 dark:bg-[#131626]/85 backdrop-blur-md border border-[#E4E0D8]/80 dark:border-white/10 shadow-xs text-xs text-[#5A5D6B] dark:text-[#9AA3BF]">
+          <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-ping" />
+          <span>Scroll to explore the applicant story</span>
+          <span className="text-indigo-600 dark:text-indigo-400 font-bold animate-bounce text-sm">↓</span>
         </div>
       </div>
     </section>
