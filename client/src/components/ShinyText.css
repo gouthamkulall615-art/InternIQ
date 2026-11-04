@@ -1,0 +1,42 @@
+/* ShinyText.css */
+.shiny-text {
+  color: var(--st-color, #818cf8);
+  background: linear-gradient(
+    120deg,
+    rgba(129, 140, 248, 0.75) 0%,
+    rgba(129, 140, 248, 0.75) 35%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(129, 140, 248, 0.75) 65%,
+    rgba(129, 140, 248, 0.75) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  animation: shiny-sweep 4s linear infinite;
+}
+
+@keyframes shiny-sweep {
+  0% {
+    background-position: 150% 0;
+  }
+  100% {
+    background-position: -150% 0;
+  }
+}
+
+.shiny-text.disabled {
+  animation: none;
+  background: none;
+  -webkit-text-fill-color: currentColor;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shiny-text {
+    animation: none;
+    background: none;
+    -webkit-text-fill-color: currentColor;
+  }
+}
+

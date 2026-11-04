@@ -1,0 +1,39 @@
+/* BlurText.css */
+.blur-text-wrap {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.blur-text-unit {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(10px);
+  will-change: transform, opacity, filter;
+  transition-property: opacity, filter, transform;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.blur-text-unit.dir-top {
+  transform: translateY(-24px);
+}
+
+.blur-text-unit.dir-bottom {
+  transform: translateY(24px);
+}
+
+.blur-text-unit.is-visible {
+  opacity: 1;
+  filter: blur(0px);
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blur-text-unit {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+

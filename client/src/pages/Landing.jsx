@@ -20,6 +20,7 @@ import CrowdStory from '../components/CrowdStory';
 import RibbonMarquee from '../components/RibbonMarquee';
 import ProblemCards from '../components/ProblemCards';
 import ToolsSection from '../components/ToolsSection';
+import HowItWorks from '../components/HowItWorks';
 import Magnet from '../components/Magnet';
 import StaggeredMenu from '../components/StaggeredMenu';
 import { useAuth } from '../contexts/AuthContext';
@@ -362,78 +363,8 @@ export default function Landing() {
       {/* 4. THE FOUR TOOLS */}
       <ToolsSection />
 
-      {/* 5. HOW IT WORKS (Three horizontal steps with large Fraunces numerals 1, 2, 3) */}
-      <section id="how-it-works" className="scroll-mt-20 py-16 sm:py-20 bg-[#F3EFE6] dark:bg-[#0F1220] transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 max-w-2xl">
-            <span className="font-sans font-medium text-xs uppercase tracking-wider text-[#6B7280] dark:text-[#818CF8] block">
-              PROCESS
-            </span>
-            <h2 className="font-heading text-3xl sm:text-4xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] mt-2">
-              How it works
-            </h2>
-            <p className="font-sans text-sm sm:text-base text-[#5A5D6B] dark:text-[#9AA3BF] mt-2 leading-[1.6]">
-              Three straightforward steps from raw resume to targeted application.
-            </p>
-          </div>
-
-          {/* Connected Steps Grid */}
-          <div className="relative">
-            {/* Thin straight connecting line across steps (desktop) */}
-            <div className="hidden lg:block absolute top-7 left-12 right-12 h-px bg-[#E4E0D8] dark:bg-[#1E233A] -z-0" />
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 lg:gap-8 relative z-10">
-              {/* Step 1 */}
-              <div className="space-y-3">
-                <div className="w-14 h-14 bg-white dark:bg-[#131626] border border-[#E4E0D8] dark:border-[#1E233A] rounded-[6px] flex items-center justify-center font-heading text-2xl font-semibold text-[#14161F] dark:text-white transition-colors">
-                  1
-                </div>
-                <span className="font-sans font-medium text-xs text-[#6B7280] dark:text-[#7E88A8] block">
-                  Step 1
-                </span>
-                <h3 className="font-heading text-lg font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9]">
-                  Upload your resume
-                </h3>
-                <p className="font-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6]">
-                  Drop your PDF, Word document, or plain text file. Text is parsed directly in your browser with zero manual re-typing required.
-                </p>
-              </div>
-
-              {/* Step 2 */}
-              <div className="space-y-3">
-                <div className="w-14 h-14 bg-white dark:bg-[#131626] border border-[#E4E0D8] dark:border-[#1E233A] rounded-[6px] flex items-center justify-center font-heading text-2xl font-semibold text-[#14161F] dark:text-white transition-colors">
-                  2
-                </div>
-                <span className="font-sans font-medium text-xs text-[#6B7280] dark:text-[#7E88A8] block">
-                  Step 2
-                </span>
-                <h3 className="font-heading text-lg font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9]">
-                  See your score and skills
-                </h3>
-                <p className="font-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6]">
-                  Get your ATS rating broken down across the five rubric dimensions. Review line-level recommendations and catalog your extracted skillset.
-                </p>
-              </div>
-
-              {/* Step 3 */}
-              <div className="space-y-3">
-                <div className="w-14 h-14 bg-white dark:bg-[#131626] border border-[#E4E0D8] dark:border-[#1E233A] rounded-[6px] flex items-center justify-center font-heading text-2xl font-semibold text-[#14161F] dark:text-white transition-colors">
-                  3
-                </div>
-                <span className="font-sans font-medium text-xs text-[#6B7280] dark:text-[#7E88A8] block">
-                  Step 3
-                </span>
-                <h3 className="font-heading text-lg font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9]">
-                  Close the gap and apply
-                </h3>
-                <p className="font-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6]">
-                  Check missing requirements against your target role, generate a tailored cover letter, and download an ATS-compliant resume template.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 5. HOW IT WORKS (React Bits Bento with SpotlightCard, Magnet, CountUp, BlurText, ShinyText, ClickSpark) */}
+      <HowItWorks />
 
       {/* 6. DARK SECTION (#0F111A) FOR SKILL GAP IN DETAIL */}
       <section id="skill-benchmark" className="scroll-mt-20 py-16 sm:py-20 bg-[#0F111A] text-white relative z-10">
