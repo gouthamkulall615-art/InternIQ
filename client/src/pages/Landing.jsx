@@ -23,6 +23,7 @@ import RibbonMarquee from '../components/RibbonMarquee';
 import ProblemCards from '../components/ProblemCards';
 import ToolsSection from '../components/ToolsSection';
 import Magnet from '../components/Magnet';
+import StaggeredMenu from '../components/StaggeredMenu';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -242,53 +243,63 @@ export default function Landing() {
           </div>
         </div>
 
-        {/* Mobile Navigation Drawer */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-b border-[#E4E0D8] dark:border-[#1E233A] bg-[#F3EFE6]/90 dark:bg-[#0F1220]/90 backdrop-blur-md px-4 py-4 space-y-2 transition-colors">
-            {navItems.map((item, idx) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  handleNavChange(idx, item);
-                }}
-                className={`block text-sm font-medium py-2 transition-colors ${
-                  activeNavIndex === idx
-                    ? 'text-[#4F46E5] dark:text-[#818CF8] font-semibold'
-                    : 'text-[#5A5D6B] dark:text-[#9AA3BF] hover:text-[#14161F] dark:hover:text-white'
-                }`}
+        {/* Mobile Navigation Drawer replaced by StaggeredMenu from React Bits */}
+        <StaggeredMenu
+          isOpen={mobileMenuOpen}
+          onMenuClose={() => setMobileMenuOpen(false)}
+          position="left"
+          isFixed={true}
+          hideToggle={true}
+          colors={['#1e3fd8', '#4F46E5', '#818CF8']}
+          accentColor="#1e3fd8"
+          displaySocials={true}
+          displayItemNumbering={true}
+          theme={theme}
+          onToggleTheme={toggleTheme}
+          items={navItems.map((item, idx) => ({
+            label: item.label,
+            link: item.href,
+            active: activeNavIndex === idx,
+            onClick: (e) => {
+              e.preventDefault();
+              setMobileMenuOpen(false);
+              handleNavChange(idx, item);
+            }
+          }))}
+          socialItems={[
+            { label: 'GitHub', link: 'https://github.com' },
+            { label: 'LinkedIn', link: 'https://linkedin.com' },
+            { label: 'PathForge', link: 'https://github.com' }
+          ]}
+          authSection={
+            isAuthenticated ? (
+              <Link
+                to="/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white bg-[#1e3fd8] hover:bg-[#2563eb] rounded-xl shadow-lg shadow-blue-600/30 transition-all min-h-[44px]"
               >
-                {item.label}
-              </a>
-            ))}
-            <div className="pt-3 border-t border-[#E4E0D8] dark:border-[#1E233A] flex flex-col gap-2">
-              {isAuthenticated ? (
+                Open Dashboard
+              </Link>
+            ) : (
+              <div className="flex flex-col gap-2.5 w-full">
                 <Link
-                  to="/dashboard"
-                  className="w-full inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-full min-h-[44px] shadow-xs"
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium text-slate-800 dark:text-white border border-slate-300/80 dark:border-white/15 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 rounded-xl transition-all min-h-[44px]"
                 >
-                  Open Dashboard
+                  Log in
                 </Link>
-              ) : (
-                <>
-                  <Link
-                    to="/login"
-                    className="w-full inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium text-[#14161F] dark:text-white border border-[#E4E0D8] dark:border-[#1E233A] bg-white dark:bg-[#131626] rounded-[4px] min-h-[44px]"
-                  >
-                    Log in
-                  </Link>
-                  <Link
-                    to="/register"
-                    className="w-full inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-full min-h-[44px] shadow-xs"
-                  >
-                    Get started
-                  </Link>
-                </>
-              )}
-            </div>
-          </div>
-        )}
+                <Link
+                  to="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1e3fd8] hover:bg-[#2563eb] rounded-xl shadow-lg shadow-blue-600/30 transition-all min-h-[44px]"
+                >
+                  Get started
+                </Link>
+              </div>
+            )
+          }
+        />
       </header>
 
       {/* 2. HERO SECTION */}
