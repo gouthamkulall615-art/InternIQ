@@ -406,8 +406,8 @@ export default function CrowdStory({ onCta }) {
           {/* Cyan/sky scanner gradient trail */}
           <div className="h-28 w-full bg-gradient-to-t from-sky-400/25 via-sky-400/10 to-transparent" />
           {/* Glowing laser scan line */}
-          <div className="relative h-[2.5px] w-full bg-[#0284c7] shadow-[0_0_20px_3px_rgba(2,132,199,0.7)] flex items-center justify-end px-4 sm:px-8">
-            <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-mono font-bold tracking-wider text-white bg-sky-600/90 shadow-xs -translate-y-4">
+          <div className="relative h-[2.5px] w-full bg-[#0284c7] shadow-[0_0_20px_3px_rgba(2,132,199,0.7)] flex items-center justify-end px-3 sm:px-8">
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-mono font-bold tracking-wider text-white bg-sky-600/90 shadow-xs -translate-y-3.5 sm:-translate-y-4 select-none">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-300 animate-ping" />
               ATS SCANNER ACTIVE
             </span>

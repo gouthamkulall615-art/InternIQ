@@ -218,7 +218,11 @@ export default function Footer() {
             <linearGradient id="footer-sweep-grad" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor="transparent" />
               <stop offset="42%" stopColor="transparent" />
-              <stop offset="50%" stopColor="rgba(129, 140, 248, 0.45)" />
+              <stop
+                className="wm-sweep-stop"
+                offset="50%"
+                stopColor="var(--footer-wm-sweep, rgba(129, 140, 248, 0.45))"
+              />
               <stop offset="58%" stopColor="transparent" />
               <stop offset="100%" stopColor="transparent" />
             </linearGradient>
@@ -360,7 +364,8 @@ export default function Footer() {
                   cy="30"
                   r="29"
                   fill="none"
-                  stroke="rgba(255, 255, 255, 0.08)"
+                  className="scroll-top-track"
+                  stroke="var(--footer-ring-track, rgba(255, 255, 255, 0.08))"
                   strokeWidth="2"
                 />
                 {/* Dynamic animated progress circle */}
@@ -369,7 +374,8 @@ export default function Footer() {
                   cy="30"
                   r="29"
                   fill="none"
-                  stroke="#818cf8"
+                  className="scroll-top-progress"
+                  stroke="var(--footer-ring-progress, #818cf8)"
                   strokeWidth="2"
                   strokeDasharray={CIRCLE_CIRCUMFERENCE}
                   style={{ strokeDashoffset }}

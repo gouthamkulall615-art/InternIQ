@@ -1,15 +1,123 @@
 /* Footer.css */
 
 .footer-section {
+  /* =========================================================================
+     LIGHT THEME (Default)
+     ========================================================================= */
+  --footer-bg: #FAF8F4;
+  --footer-border: #E4E0D8;
+  --footer-color: #5A5D6B;
+  --footer-glow: radial-gradient(600px 220px at 50% 0%, rgba(99, 102, 241, 0.08), transparent 70%);
+  --footer-grid-color: rgba(20, 22, 31, 0.04);
+  --footer-grid-spotlight-color: rgba(79, 70, 229, 0.12);
+  --footer-tagline-color: #5A5D6B;
+
+  /* Nav Pills */
+  --footer-pill-bg: rgba(255, 255, 255, 0.85);
+  --footer-pill-border: rgba(20, 22, 31, 0.10);
+  --footer-pill-color: #374151;
+  --footer-pill-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --footer-pill-hover-bg: #ffffff;
+  --footer-pill-hover-border: rgba(79, 70, 229, 0.45);
+  --footer-pill-hover-color: #4F46E5;
+  --footer-pill-hover-shadow: 0 8px 20px -6px rgba(79, 70, 229, 0.18);
+
+  /* Watermark */
+  --footer-wm-stroke: rgba(20, 22, 31, 0.08);
+  --footer-wm-fill: rgba(20, 22, 31, 0.025);
+  --footer-wm-sweep: rgba(79, 70, 229, 0.35);
+  --footer-wm-spotlight-stroke: rgba(79, 70, 229, 0.45);
+  --footer-wm-spotlight-fill: rgba(79, 70, 229, 0.04);
+
+  /* Bottom Bar */
+  --footer-copyright-color: #6B7280;
+
+  /* Crafted Pill */
+  --footer-crafted-bg: rgba(255, 255, 255, 0.85);
+  --footer-crafted-border: rgba(20, 22, 31, 0.12);
+  --footer-crafted-color: #4B5563;
+  --footer-crafted-name: #111827;
+  --footer-crafted-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --footer-crafted-hover-border: rgba(79, 70, 229, 0.4);
+  --footer-crafted-hover-bg: #ffffff;
+  --footer-crafted-beam-color: #6366f1;
+
+  /* Scroll-To-Top Button */
+  --footer-scroll-btn-bg: rgba(255, 255, 255, 0.90);
+  --footer-scroll-btn-border: rgba(20, 22, 31, 0.12);
+  --footer-scroll-btn-color: #1F2937;
+  --footer-scroll-btn-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --footer-scroll-btn-hover-border: #6366f1;
+  --footer-scroll-btn-hover-bg: #ffffff;
+  --footer-scroll-btn-hover-color: #4F46E5;
+  --footer-ring-track: rgba(20, 22, 31, 0.08);
+  --footer-ring-progress: #4F46E5;
+
   position: relative;
   overflow: hidden;
   min-height: 420px;
   padding: 28px 0 44px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  background-color: #07090f;
-  color: #8b92a8;
+  border-top: 1px solid var(--footer-border);
+  background-color: var(--footer-bg);
+  color: var(--footer-color);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   box-sizing: border-box;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* =========================================================================
+   DARK THEME
+   ========================================================================= */
+.dark .footer-section,
+[data-theme='dark'] .footer-section {
+  --footer-bg: #07090f;
+  --footer-border: rgba(255, 255, 255, 0.06);
+  --footer-color: #8b92a8;
+  --footer-glow: radial-gradient(600px 220px at 50% 0%, rgba(99, 102, 241, 0.12), transparent 70%);
+  --footer-grid-color: rgba(255, 255, 255, 0.035);
+  --footer-grid-spotlight-color: rgba(129, 140, 248, 0.14);
+  --footer-tagline-color: #8b92a8;
+
+  /* Nav Pills */
+  --footer-pill-bg: rgba(255, 255, 255, 0.03);
+  --footer-pill-border: rgba(255, 255, 255, 0.10);
+  --footer-pill-color: #c9ccd8;
+  --footer-pill-shadow: none;
+  --footer-pill-hover-bg: rgba(99, 102, 241, 0.12);
+  --footer-pill-hover-border: rgba(129, 140, 248, 0.5);
+  --footer-pill-hover-color: #ffffff;
+  --footer-pill-hover-shadow: 0 8px 20px -6px rgba(99, 102, 241, 0.25);
+
+  /* Watermark */
+  --footer-wm-stroke: rgba(255, 255, 255, 0.09);
+  --footer-wm-fill: rgba(255, 255, 255, 0.025);
+  --footer-wm-sweep: rgba(129, 140, 248, 0.45);
+  --footer-wm-spotlight-stroke: rgba(165, 180, 252, 0.55);
+  --footer-wm-spotlight-fill: rgba(129, 140, 248, 0.06);
+
+  /* Bottom Bar */
+  --footer-copyright-color: #9ca0b0;
+
+  /* Crafted Pill */
+  --footer-crafted-bg: rgba(255, 255, 255, 0.02);
+  --footer-crafted-border: rgba(255, 255, 255, 0.12);
+  --footer-crafted-color: #b8bccb;
+  --footer-crafted-name: #ffffff;
+  --footer-crafted-shadow: none;
+  --footer-crafted-hover-border: rgba(129, 140, 248, 0.4);
+  --footer-crafted-hover-bg: rgba(255, 255, 255, 0.04);
+  --footer-crafted-beam-color: #818cf8;
+
+  /* Scroll-To-Top Button */
+  --footer-scroll-btn-bg: rgba(255, 255, 255, 0.03);
+  --footer-scroll-btn-border: rgba(255, 255, 255, 0.14);
+  --footer-scroll-btn-color: #e5e7eb;
+  --footer-scroll-btn-shadow: none;
+  --footer-scroll-btn-hover-border: #a5b4fc;
+  --footer-scroll-btn-hover-bg: rgba(99, 102, 241, 0.12);
+  --footer-scroll-btn-hover-color: #ffffff;
+  --footer-ring-track: rgba(255, 255, 255, 0.08);
+  --footer-ring-progress: #818cf8;
 }
 
 /* 1. Indigo Glow at Top Center */
@@ -20,7 +128,7 @@
   transform: translateX(-50%);
   width: 100%;
   height: 260px;
-  background: radial-gradient(600px 220px at 50% 0%, rgba(99, 102, 241, 0.12), transparent 70%);
+  background: var(--footer-glow);
   pointer-events: none;
   z-index: 0;
   opacity: 0;
@@ -32,8 +140,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    linear-gradient(var(--footer-grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--footer-grid-color) 1px, transparent 1px);
   background-size: 80px 80px;
   mask-image: radial-gradient(ellipse at center, #000 30%, transparent 85%);
   -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 85%);
@@ -48,8 +156,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(129, 140, 248, 0.14) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(129, 140, 248, 0.14) 1px, transparent 1px);
+    linear-gradient(var(--footer-grid-spotlight-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--footer-grid-spotlight-color) 1px, transparent 1px);
   background-size: 80px 80px;
   pointer-events: none;
   z-index: 0;
@@ -82,13 +190,14 @@
 /* Tagline */
 .footer-tagline {
   font-size: 14px;
-  color: #8b92a8;
+  color: var(--footer-tagline-color);
   margin: 0 0 20px 0;
   text-align: center;
   opacity: 0;
   transform: translateY(12px);
   transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s,
-              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s,
+              color 0.3s ease;
 }
 
 .footer-section.is-active .footer-tagline {
@@ -123,15 +232,18 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: var(--footer-pill-bg);
+  border: 1px solid var(--footer-pill-border);
+  box-shadow: var(--footer-pill-shadow);
   border-radius: 999px;
   padding: 12px 28px;
-  color: #c9ccd8;
+  color: var(--footer-pill-color);
   font-size: 16px;
   font-weight: 500;
   text-decoration: none;
   cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   transition: background-color 0.25s ease,
               border-color 0.25s ease,
               color 0.25s ease,
@@ -141,11 +253,11 @@
 }
 
 .footer-pill:hover {
-  background: rgba(99, 102, 241, 0.12);
-  border-color: rgba(129, 140, 248, 0.5);
-  color: #ffffff;
+  background: var(--footer-pill-hover-bg);
+  border-color: var(--footer-pill-hover-border);
+  color: var(--footer-pill-hover-color);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px -6px rgba(99, 102, 241, 0.25);
+  box-shadow: var(--footer-pill-hover-shadow);
 }
 
 .footer-pill:focus-visible {
@@ -182,13 +294,14 @@
 
 /* Watermark Text Styling */
 .wm-text-base {
-  fill: rgba(255, 255, 255, 0.025);
+  fill: var(--footer-wm-fill);
   fill-opacity: 0;
-  stroke: rgba(255, 255, 255, 0.09);
+  stroke: var(--footer-wm-stroke);
   stroke-width: 2;
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-weight: 800;
   letter-spacing: -0.03em;
+  transition: stroke 0.3s ease, fill 0.3s ease;
 }
 
 .wm-char {
@@ -229,6 +342,11 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+}
+
+.wm-sweep-stop {
+  stop-color: var(--footer-wm-sweep);
+  transition: stop-color 0.3s ease;
 }
 
 .wm-text-sweep {
@@ -286,12 +404,13 @@
 }
 
 .wm-text-spotlight {
-  fill: rgba(129, 140, 248, 0.06);
-  stroke: rgba(165, 180, 252, 0.55);
+  fill: var(--footer-wm-spotlight-fill);
+  stroke: var(--footer-wm-spotlight-stroke);
   stroke-width: 2;
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-weight: 800;
   letter-spacing: -0.03em;
+  transition: stroke 0.3s ease, fill 0.3s ease;
 }
 
 /* Bottom Bar */
@@ -312,9 +431,10 @@
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-weight: 500;
-  color: #9ca0b0;
+  color: var(--footer-copyright-color);
   opacity: 0;
-  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.8s;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.8s,
+              color 0.3s ease;
   user-select: none;
 }
 
@@ -346,22 +466,25 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--footer-crafted-border);
+  background: var(--footer-crafted-bg);
+  box-shadow: var(--footer-crafted-shadow);
   border-radius: 999px;
   padding: 14px 30px;
-  background: rgba(255, 255, 255, 0.02);
   cursor: default;
   user-select: none;
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: #b8bccb;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
+  color: var(--footer-crafted-color);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .crafted-pill:hover {
-  border-color: rgba(129, 140, 248, 0.4);
-  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--footer-crafted-hover-border);
+  background: var(--footer-crafted-hover-bg);
 }
 
 .crafted-pill-beam {
@@ -369,7 +492,7 @@
   inset: -1px;
   border-radius: 999px;
   padding: 1px;
-  background: conic-gradient(from var(--angle), transparent 0 70%, #818cf8 85%, transparent 100%);
+  background: conic-gradient(from var(--angle), transparent 0 70%, var(--footer-crafted-beam-color) 85%, transparent 100%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -409,9 +532,10 @@
 .crafted-name {
   font-size: 18px;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--footer-crafted-name);
   text-transform: none;
   letter-spacing: 0;
+  transition: color 0.3s ease;
 }
 
 /* Scroll-To-Top Button */
@@ -432,20 +556,28 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--footer-scroll-btn-border);
+  background: var(--footer-scroll-btn-bg);
+  box-shadow: var(--footer-scroll-btn-shadow);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #e5e7eb;
-  transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  color: var(--footer-scroll-btn-color);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background-color 0.25s ease,
+              border-color 0.25s ease,
+              color 0.25s ease,
+              box-shadow 0.25s ease,
+              transform 0.25s ease;
   padding: 0;
 }
 
 .scroll-top-btn:hover {
-  background: rgba(99, 102, 241, 0.12);
-  border-color: #a5b4fc;
+  background: var(--footer-scroll-btn-hover-bg);
+  border-color: var(--footer-scroll-btn-hover-border);
+  color: var(--footer-scroll-btn-hover-color);
 }
 
 .scroll-top-btn:focus-visible {
@@ -460,6 +592,16 @@
   height: 100%;
   pointer-events: none;
   transform: rotate(-90deg);
+}
+
+.scroll-top-track {
+  stroke: var(--footer-ring-track);
+  transition: stroke 0.3s ease;
+}
+
+.scroll-top-progress {
+  stroke: var(--footer-ring-progress);
+  transition: stroke 0.3s ease;
 }
 
 .scroll-top-arrow {
@@ -572,4 +714,3 @@
     transform: none !important;
   }
 }
-
