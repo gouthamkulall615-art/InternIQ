@@ -18,8 +18,10 @@
 .problem-cards-blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(110px);
-  -webkit-filter: blur(110px);
+  filter: blur(60px);
+  -webkit-filter: blur(60px);
+  will-change: transform;
+  transform: translateZ(0);
   pointer-events: none;
   z-index: 0;
 }
@@ -27,7 +29,7 @@
 .problem-cards-blob--a {
   width: 380px;
   height: 380px;
-  background-color: #6366f1;
+  background: radial-gradient(circle, #6366f1 0%, rgba(99, 102, 241, 0) 70%);
   opacity: 0.35;
   left: 22%;
   top: 15%;
@@ -36,7 +38,7 @@
 .problem-cards-blob--b {
   width: 340px;
   height: 340px;
-  background-color: #8b5cf6;
+  background: radial-gradient(circle, #8b5cf6 0%, rgba(139, 92, 246, 0) 70%);
   opacity: 0.30;
   right: 20%;
   bottom: 10%;
@@ -45,11 +47,11 @@
 .problem-cards-blob--c {
   width: 240px;
   height: 240px;
-  background-color: #3b82f6;
+  background: radial-gradient(circle, #3b82f6 0%, rgba(59, 130, 246, 0) 70%);
   opacity: 0.20;
   left: 50%;
   top: 40%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) translateZ(0);
 }
 
 /* Desktop stage (min-width: 900px default) */

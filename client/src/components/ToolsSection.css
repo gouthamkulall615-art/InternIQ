@@ -19,8 +19,10 @@
 .tools-blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(110px);
-  -webkit-filter: blur(110px);
+  filter: blur(60px);
+  -webkit-filter: blur(60px);
+  will-change: transform;
+  transform: translateZ(0);
   pointer-events: none;
   z-index: 0;
 }
@@ -28,8 +30,8 @@
 .tools-blob--a {
   width: 380px;
   height: 380px;
-  background-color: #6366f1;
-  opacity: calc(0.30 * var(--glow));
+  background: radial-gradient(circle, #6366f1 0%, rgba(99, 102, 241, 0) 70%);
+  opacity: calc(0.35 * var(--glow));
   left: 5%;
   top: 15%;
   animation: blobDriftA 18s ease-in-out infinite;
@@ -38,8 +40,8 @@
 .tools-blob--b {
   width: 340px;
   height: 340px;
-  background-color: #8b5cf6;
-  opacity: calc(0.25 * var(--glow));
+  background: radial-gradient(circle, #8b5cf6 0%, rgba(139, 92, 246, 0) 70%);
+  opacity: calc(0.30 * var(--glow));
   right: 8%;
   top: 50%;
   animation: blobDriftB 22s ease-in-out infinite;
@@ -48,8 +50,8 @@
 .tools-blob--c {
   width: 260px;
   height: 260px;
-  background-color: #3b82f6;
-  opacity: calc(0.18 * var(--glow));
+  background: radial-gradient(circle, #3b82f6 0%, rgba(59, 130, 246, 0) 70%);
+  opacity: calc(0.22 * var(--glow));
   left: 45%;
   bottom: 5%;
   animation: blobDriftC 26s ease-in-out infinite;

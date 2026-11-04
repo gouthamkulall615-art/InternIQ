@@ -205,7 +205,7 @@ export default function RibbonMarquee({
       uInk: { value: new THREE.Color(ink) },
     };
 
-    const geometry = new THREE.PlaneGeometry(1, 1, 700, 10);
+    const geometry = new THREE.PlaneGeometry(1, 1, 200, 8);
     const material = new THREE.ShaderMaterial({
       uniforms,
       vertexShader: VERT,
@@ -289,7 +289,6 @@ export default function RibbonMarquee({
     // Loop
     const clock = new THREE.Clock();
     const tick = () => {
-      raf = requestAnimationFrame(tick);
       if (!visible) return;
       const dt = Math.min(clock.getDelta(), 0.05);
       uniforms.uTime.value += dt;
@@ -302,16 +301,24 @@ export default function RibbonMarquee({
       uniforms.uShine.value = 0.55 + 0.7 * spiral;
       uniforms.uScroll.value += (dt * speed) / repeatLen;
       renderer.render(scene, camera);
+      raf = requestAnimationFrame(tick);
     };
 
     let io;
     if (!reduce) {
       io = new IntersectionObserver(([entry]) => {
-        visible = entry.isIntersecting;
-        if (visible) clock.getDelta(); // drop the time spent off-screen
-      });
+        const nowVisible = entry.isIntersecting;
+        if (nowVisible && !visible) {
+          visible = true;
+          clock.getDelta(); // drop the time spent off-screen
+          cancelAnimationFrame(raf);
+          raf = requestAnimationFrame(tick);
+        } else if (!nowVisible && visible) {
+          visible = false;
+          cancelAnimationFrame(raf);
+        }
+      }, { threshold: 0.05 });
       io.observe(el);
-      tick();
     }
 
     return () => {

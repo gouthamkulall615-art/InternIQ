@@ -30,7 +30,7 @@ const CrowdCanvas = ({ src = '/images/peeps/all-peeps.png', rows = 15, cols = 7,
       cols,
     };
 
-    const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
+    const dpr = typeof window !== 'undefined' ? Math.min(window.devicePixelRatio || 1, 1.5) : 1;
 
     // UTILS
     const randomRange = (min, max) => min + Math.random() * (max - min);
@@ -176,13 +176,24 @@ const CrowdCanvas = ({ src = '/images/peeps/all-peeps.png', rows = 15, cols = 7,
       }
     };
 
+    const getMaxActiveCrowd = (width) => {
+      if (width < 640) return 22;   // Mobile: clean and lightweight
+      if (width < 1024) return 40;  // Tablet
+      if (width < 1440) return 65;  // Laptop: dense crowd with no gaps
+      return 82;                    // Desktop / PC: full lively crowd
+    };
+
+    let maxActiveCrowd = 65;
+
     const initCrowd = () => {
-      while (availablePeeps.length) {
-        addPeepToCrowd().walk.progress(Math.random());
+      while (crowd.length < maxActiveCrowd && availablePeeps.length) {
+        const p = addPeepToCrowd();
+        if (p?.walk) p.walk.progress(Math.random());
       }
     };
 
     const addPeepToCrowd = () => {
+      if (!availablePeeps.length) return null;
       const peep = removeRandomFromArray(availablePeeps);
       const walk = getRandomFromArray(walks)({
         peep,
@@ -192,7 +203,9 @@ const CrowdCanvas = ({ src = '/images/peeps/all-peeps.png', rows = 15, cols = 7,
         }),
       }).eventCallback('onComplete', () => {
         removePeepFromCrowd(peep);
-        addPeepToCrowd();
+        if (crowd.length < maxActiveCrowd) {
+          addPeepToCrowd();
+        }
       });
 
       peep.walk = walk;
@@ -228,6 +241,8 @@ const CrowdCanvas = ({ src = '/images/peeps/all-peeps.png', rows = 15, cols = 7,
       canvas.width = stage.width * dpr;
       canvas.height = stage.height * dpr;
 
+      maxActiveCrowd = getMaxActiveCrowd(stage.width);
+
       crowd.forEach((peep) => {
         if (peep.walk) peep.walk.kill();
       });
@@ -239,10 +254,46 @@ const CrowdCanvas = ({ src = '/images/peeps/all-peeps.png', rows = 15, cols = 7,
       initCrowd();
     };
 
+    let isTickerActive = false;
+    const startTicker = () => {
+      if (!isTickerActive) {
+        isTickerActive = true;
+        gsap.ticker.add(render);
+        crowd.forEach((peep) => {
+          peep.walk?.resume();
+        });
+      }
+    };
+
+    const stopTicker = () => {
+      if (isTickerActive) {
+        isTickerActive = false;
+        gsap.ticker.remove(render);
+        crowd.forEach((peep) => {
+          peep.walk?.pause();
+        });
+      }
+    };
+
+    let observer = null;
     const init = () => {
       createPeeps();
       resize();
-      gsap.ticker.add(render);
+      startTicker();
+
+      if (typeof IntersectionObserver !== 'undefined' && canvas) {
+        observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting) {
+              startTicker();
+            } else {
+              stopTicker();
+            }
+          },
+          { threshold: 0.05 }
+        );
+        observer.observe(canvas);
+      }
     };
 
     img.onload = init;
@@ -256,7 +307,8 @@ const CrowdCanvas = ({ src = '/images/peeps/all-peeps.png', rows = 15, cols = 7,
 
     return () => {
       window.removeEventListener('resize', handleResize);
-      gsap.ticker.remove(render);
+      observer?.disconnect();
+      stopTicker();
       crowd.forEach((peep) => {
         if (peep.walk) peep.walk.kill();
       });

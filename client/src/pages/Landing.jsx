@@ -4,8 +4,6 @@ import {
   Upload,
   Check,
   CircleAlert,
-  ChevronDown,
-  ChevronUp,
   Menu,
   X,
   Sun,
@@ -32,7 +30,6 @@ export default function Landing() {
   const { isAuthenticated } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [openFaq, setOpenFaq] = useState(null);
   const [selectedRoleIndex, setSelectedRoleIndex] = useState(0);
   const [activeNavIndex, setActiveNavIndex] = useState(0);
   const isClickScrollingRef = useRef(false);
@@ -43,7 +40,6 @@ export default function Landing() {
     { label: 'Tools', href: '#tools' },
     { label: 'How it works', href: '#how-it-works' },
     { label: 'Skill benchmark', href: '#skill-benchmark' },
-    { label: 'FAQ', href: '#faq' },
   ];
 
   const handleNavChange = (index, item) => {
@@ -65,24 +61,31 @@ export default function Landing() {
   };
 
   useEffect(() => {
-    const sectionIds = ['overview', 'tools', 'how-it-works', 'skill-benchmark', 'faq'];
+    const sectionIds = ['overview', 'tools', 'how-it-works', 'skill-benchmark'];
+    let ticking = false;
 
     const handleScroll = () => {
       if (isClickScrollingRef.current) return;
-      const scrollPosition = window.scrollY + 160;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollPosition = window.scrollY + 160;
 
-      let currentSectionIndex = 0;
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sectionIds[i]);
-        if (el) {
-          const top = el.offsetTop;
-          if (scrollPosition >= top) {
-            currentSectionIndex = i;
-            break;
+          let currentSectionIndex = 0;
+          for (let i = sectionIds.length - 1; i >= 0; i--) {
+            const el = document.getElementById(sectionIds[i]);
+            if (el) {
+              const top = el.offsetTop;
+              if (scrollPosition >= top) {
+                currentSectionIndex = i;
+                break;
+              }
+            }
           }
-        }
+          setActiveNavIndex(currentSectionIndex);
+          ticking = false;
+        });
+        ticking = true;
       }
-      setActiveNavIndex(currentSectionIndex);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -117,29 +120,6 @@ export default function Landing() {
       matched: ['Excel', 'SQL', 'Python', 'Pandas', 'Data Visualization', 'Communication'],
       missing: ['Power BI / Tableau', 'Statistics', 'A/B Testing', 'Data Cleaning Pipeline'],
       readiness: 60,
-    },
-  ];
-
-  const faqs = [
-    {
-      q: 'Is InternIQ free to use?',
-      a: 'Yes. InternIQ is completely free for students and early-career job seekers. There are no fees, paywalls, or credit card requirements.',
-    },
-    {
-      q: 'Which file types are supported?',
-      a: 'You can upload PDF (.pdf), Microsoft Word (.docx), or plain text (.txt) files up to 5MB in size. Text is extracted directly in your browser.',
-    },
-    {
-      q: 'Is my resume stored or used for model training?',
-      a: 'When signed in, your analysis history is saved to your private account for tracking your progress over time. Your resume text is processed through Google Gemini API calls with strict privacy controls and is never sold or used for public training data.',
-    },
-    {
-      q: 'How is the score calculated?',
-      a: 'The ATS score is evaluated against a 5-part rubric: Formatting and ATS-readability (0-2 pts), Keyword relevance (0-2 pts), Experience quality and metrics (0-2 pts), Structure and completeness (0-2 pts), and Clarity and professional tone (0-2 pts). The sum forms your final score out of 10.',
-    },
-    {
-      q: 'Which career roles are supported in the Skill Gap Analyzer?',
-      a: 'We currently support eight primary career roles: Frontend Developer, Backend Developer, Full Stack Developer, Data Analyst, AI/ML Engineer, Mobile Developer, Product Manager, and Business Analyst.',
     },
   ];
 
@@ -648,54 +628,7 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* 8. FAQ SECTION (Accessible Accordion) */}
-      <section id="faq" className="scroll-mt-20 py-16 sm:py-20 bg-[#FFFFFF] dark:bg-[#0B0D17] border-t border-[#E4E0D8] dark:border-[#1E233A] transition-colors">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-10 text-left">
-            <span className="font-sans font-medium text-xs uppercase tracking-wider text-[#6B7280] dark:text-[#818CF8] block">
-              DETAILS
-            </span>
-            <h2 className="font-heading text-3xl sm:text-4xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] mt-2">
-              Frequently asked questions
-            </h2>
-          </div>
-
-          <div className="border-t border-[#E4E0D8] dark:border-[#1E233A] divide-y divide-[#E4E0D8] dark:divide-[#1E233A]">
-            {faqs.map((faq, idx) => {
-              const isOpen = openFaq === idx;
-              return (
-                <div key={idx} className="py-5">
-                  <button
-                    type="button"
-                    onClick={() => setOpenFaq(isOpen ? null : idx)}
-                    aria-expanded={isOpen}
-                    aria-controls={`faq-answer-${idx}`}
-                    className="w-full flex items-center justify-between text-left group min-h-[44px] cursor-pointer"
-                  >
-                    <span className="font-sans text-base sm:text-lg font-medium text-[#14161F] dark:text-[#F1F3F9] group-hover:text-[#4F46E5] dark:group-hover:text-[#818CF8] transition-colors pr-4">
-                      {faq.q}
-                    </span>
-                    <span className="text-[#5A5D6B] dark:text-[#9AA3BF] flex-shrink-0">
-                      {isOpen ? (
-                        <ChevronUp className="h-5 w-5" strokeWidth={1.5} />
-                      ) : (
-                        <ChevronDown className="h-5 w-5" strokeWidth={1.5} />
-                      )}
-                    </span>
-                  </button>
-                  {isOpen && (
-                    <div id={`faq-answer-${idx}`} className="pt-3 pr-6 font-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6]">
-                      {faq.a}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* 9. FINAL CTA BAND */}
+      {/* 8. FINAL CTA BAND */}
       <section className="py-16 sm:py-20 bg-[#EEF0FB] dark:bg-[#12162B] border-t border-[#E4E0D8] dark:border-[#1E233A] transition-colors">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-left space-y-4">
           <span className="font-sans font-medium text-xs uppercase tracking-wider text-[#6B7280] dark:text-[#818CF8] block">
@@ -743,7 +676,6 @@ export default function Landing() {
             <div className="flex flex-wrap gap-6 text-xs font-sans text-[#5A5D6B] dark:text-[#9AA3BF]">
               <a href="#tools" className="hover:text-[#14161F] dark:hover:text-white transition-colors py-2">Tools</a>
               <a href="#how-it-works" className="hover:text-[#14161F] dark:hover:text-white transition-colors py-2">How it works</a>
-              <a href="#faq" className="hover:text-[#14161F] dark:hover:text-white transition-colors py-2">FAQ</a>
               <Link to="/login" className="hover:text-[#14161F] dark:hover:text-white transition-colors py-2">Log in</Link>
               <Link to="/register" className="hover:text-[#14161F] dark:hover:text-white transition-colors py-2">Register</Link>
             </div>

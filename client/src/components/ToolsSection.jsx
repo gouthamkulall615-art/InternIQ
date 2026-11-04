@@ -159,42 +159,66 @@ function useMagnetic(ref, radius = 90) {
   const prefersReducedMotion = useReducedMotion();
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [arrowRot, setArrowRot] = useState(0);
+  const rafRef = useRef(null);
 
   useEffect(() => {
     if (prefersReducedMotion || typeof window === 'undefined') return;
     const el = ref.current;
     if (!el) return;
 
+    let rect = null;
+    const updateRect = () => {
+      if (el) rect = el.getBoundingClientRect();
+    };
+
+    const handlePointerEnter = () => {
+      updateRect();
+    };
+
     const handlePointerMove = (e) => {
       if (window.matchMedia('(pointer: coarse)').matches) return;
-      const rect = el.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      const d = Math.hypot(e.clientX - cx, e.clientY - cy);
+      if (!rect) updateRect();
+      if (!rect) return;
 
-      if (d < radius) {
-        const s = 1 - d / radius;
-        const ox = Math.min(Math.max((e.clientX - cx) * 0.35 * s, -10), 10);
-        const oy = Math.min(Math.max((e.clientY - cy) * 0.35 * s, -10), 10);
-        setOffset({ x: ox, y: oy });
-        setArrowRot(d < radius / 2 ? 45 : 0);
-      } else {
-        setOffset({ x: 0, y: 0 });
-        setArrowRot(0);
-      }
+      if (rafRef.current) return;
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = null;
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const d = Math.hypot(e.clientX - cx, e.clientY - cy);
+
+        if (d < radius) {
+          const s = 1 - d / radius;
+          const ox = Math.min(Math.max((e.clientX - cx) * 0.35 * s, -10), 10);
+          const oy = Math.min(Math.max((e.clientY - cy) * 0.35 * s, -10), 10);
+          setOffset({ x: ox, y: oy });
+          setArrowRot(d < radius / 2 ? 45 : 0);
+        } else {
+          setOffset({ x: 0, y: 0 });
+          setArrowRot(0);
+        }
+      });
     };
 
     const handlePointerLeave = () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+      rect = null;
       setOffset({ x: 0, y: 0 });
       setArrowRot(0);
     };
 
-    window.addEventListener('pointermove', handlePointerMove, { passive: true });
-    document.addEventListener('pointerleave', handlePointerLeave);
+    el.addEventListener('pointerenter', handlePointerEnter, { passive: true });
+    el.addEventListener('pointermove', handlePointerMove, { passive: true });
+    el.addEventListener('pointerleave', handlePointerLeave, { passive: true });
 
     return () => {
-      window.removeEventListener('pointermove', handlePointerMove);
-      document.removeEventListener('pointerleave', handlePointerLeave);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      el.removeEventListener('pointerenter', handlePointerEnter);
+      el.removeEventListener('pointermove', handlePointerMove);
+      el.removeEventListener('pointerleave', handlePointerLeave);
     };
   }, [ref, radius, prefersReducedMotion]);
 
@@ -306,24 +330,36 @@ function GlassCard({
     return () => unsubscribe();
   }, [scrollYProgress, prefersReducedMotion]);
 
+  const cardMouseMoveRaf = useRef(null);
   const handleMouseMove = (e) => {
     if (prefersReducedMotion || !cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width;
-    const py = (e.clientY - rect.top) / rect.height;
+    if (cardMouseMoveRaf.current) return;
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+    cardMouseMoveRaf.current = requestAnimationFrame(() => {
+      cardMouseMoveRaf.current = null;
+      if (!cardRef.current) return;
+      const rect = cardRef.current.getBoundingClientRect();
+      const px = (clientX - rect.left) / rect.width;
+      const py = (clientY - rect.top) / rect.height;
 
-    // Tilt (max 6deg)
-    const rotY = (px - 0.5) * 2 * 6;
-    const rotX = -(py - 0.5) * 2 * 6;
-    x.set(rotY);
-    y.set(rotX);
+      // Tilt (max 6deg)
+      const rotY = (px - 0.5) * 2 * 6;
+      const rotX = -(py - 0.5) * 2 * 6;
+      x.set(rotY);
+      y.set(rotX);
 
-    // Cursor Glow vars
-    cardRef.current.style.setProperty('--mx', `${e.clientX - rect.left}px`);
-    cardRef.current.style.setProperty('--my', `${e.clientY - rect.top}px`);
+      // Cursor Glow vars
+      cardRef.current.style.setProperty('--mx', `${clientX - rect.left}px`);
+      cardRef.current.style.setProperty('--my', `${clientY - rect.top}px`);
+    });
   };
 
   const handleMouseLeave = () => {
+    if (cardMouseMoveRaf.current) {
+      cancelAnimationFrame(cardMouseMoveRaf.current);
+      cardMouseMoveRaf.current = null;
+    }
     x.set(0);
     y.set(0);
     if (onCardHoverChange) onCardHoverChange(false);

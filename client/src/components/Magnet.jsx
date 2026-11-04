@@ -12,6 +12,7 @@ const smoothstep = (edge0, edge1, value) => {
 const registry = new Set();
 const field = { pointer: null, owner: null };
 let detach = null;
+let rafId = null;
 
 const reach = (rect, pointer) => {
   const dx = pointer.x - (rect.left + rect.width / 2);
@@ -49,23 +50,39 @@ const arbitrate = () => {
   if (winner) winner.wake();
 };
 
+const scheduleArbitrate = () => {
+  if (rafId !== null) return;
+  rafId = requestAnimationFrame(() => {
+    rafId = null;
+    arbitrate();
+  });
+};
+
 const attach = () => {
   const onPointerMove = event => {
     if (event.pointerType === 'touch') return;
     field.pointer = { x: event.clientX, y: event.clientY };
-    arbitrate();
+    scheduleArbitrate();
+  };
+  const onScroll = () => {
+    if (!field.pointer) return;
+    scheduleArbitrate();
   };
   const onLeave = () => {
     field.pointer = null;
-    arbitrate();
+    scheduleArbitrate();
   };
   window.addEventListener('pointermove', onPointerMove, { passive: true });
-  window.addEventListener('scroll', arbitrate, { passive: true, capture: true });
+  window.addEventListener('scroll', onScroll, { passive: true, capture: true });
   document.documentElement.addEventListener('pointerleave', onLeave);
   window.addEventListener('blur', onLeave);
   return () => {
+    if (rafId !== null) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
     window.removeEventListener('pointermove', onPointerMove);
-    window.removeEventListener('scroll', arbitrate, { capture: true });
+    window.removeEventListener('scroll', onScroll, { capture: true });
     document.documentElement.removeEventListener('pointerleave', onLeave);
     window.removeEventListener('blur', onLeave);
   };
@@ -221,7 +238,7 @@ const Magnet = ({
 
   useEffect(() => {
     wakeRef.current?.();
-  });
+  }, [disabled, padding, magnetStrength]);
 
   return (
     <div
