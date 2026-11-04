@@ -1,0 +1,575 @@
+/* Footer.css */
+
+.footer-section {
+  position: relative;
+  overflow: hidden;
+  min-height: 420px;
+  padding: 28px 0 44px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background-color: #07090f;
+  color: #8b92a8;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+/* 1. Indigo Glow at Top Center */
+.footer-top-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 260px;
+  background: radial-gradient(600px 220px at 50% 0%, rgba(99, 102, 241, 0.12), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 2. Base Grid Layer */
+.footer-grid-base {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 85%);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* 3. Grid Spotlight Layer (Cursor-Reactive) */
+.footer-grid-spotlight {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(129, 140, 248, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(129, 140, 248, 0.14) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  mask-image: radial-gradient(260px circle at var(--mx, -500px) var(--my, -500px), #000 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(260px circle at var(--mx, -500px) var(--my, -500px), #000 0%, transparent 70%);
+}
+
+.footer-section.has-hover .footer-grid-spotlight {
+  opacity: 1;
+}
+
+/* Active State for Background Layers */
+.footer-section.is-active .footer-top-glow,
+.footer-section.is-active .footer-grid-base {
+  opacity: 1;
+}
+
+/* Container */
+.footer-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+/* Tagline */
+.footer-tagline {
+  font-size: 14px;
+  color: #8b92a8;
+  margin: 0 0 20px 0;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s,
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.1s;
+}
+
+.footer-section.is-active .footer-tagline {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Nav Pills Row */
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 56px;
+  z-index: 3;
+}
+
+.footer-pill-wrap {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.footer-section.is-active .footer-pill-wrap {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footer-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 999px;
+  padding: 12px 28px;
+  color: #c9ccd8;
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.25s ease,
+              border-color 0.25s ease,
+              color 0.25s ease,
+              transform 0.25s ease,
+              box-shadow 0.25s ease;
+  user-select: none;
+}
+
+.footer-pill:hover {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: rgba(129, 140, 248, 0.5);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -6px rgba(99, 102, 241, 0.25);
+}
+
+.footer-pill:focus-visible {
+  outline: 2px solid #818cf8;
+  outline-offset: 3px;
+}
+
+.footer-pill-arrow {
+  display: inline-block;
+  transition: transform 0.25s ease;
+}
+
+.footer-pill:hover .footer-pill-arrow {
+  transform: translate(2px, -2px);
+}
+
+/* Watermark Layer (Behind Everything) */
+.footer-watermark-layer {
+  position: absolute;
+  width: min(68vw, 1400px);
+  bottom: 92px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 1;
+  user-select: none;
+}
+
+.footer-watermark-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Watermark Text Styling */
+.wm-text-base {
+  fill: rgba(255, 255, 255, 0.025);
+  fill-opacity: 0;
+  stroke: rgba(255, 255, 255, 0.09);
+  stroke-width: 2;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.wm-char {
+  stroke-dasharray: 2400;
+  stroke-dashoffset: 2400;
+}
+
+.footer-section.is-active .wm-char.draw {
+  animation: wmStrokeDraw 1.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes wmStrokeDraw {
+  0% {
+    stroke-dashoffset: 2400;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.footer-section.is-active .wm-text-base {
+  animation: wmFillIn 0.8s cubic-bezier(0.22, 1, 0.36, 1) 2.0s forwards;
+}
+
+@keyframes wmFillIn {
+  0% {
+    fill-opacity: 0;
+  }
+  100% {
+    fill-opacity: 1;
+  }
+}
+
+/* Watermark Shine Sweep (Duplicate Layer) */
+.footer-watermark-sweep {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.wm-text-sweep {
+  fill: none;
+  stroke: url(#footer-sweep-grad);
+  stroke-width: 2.2;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  opacity: 0;
+}
+
+.footer-section.is-active .wm-text-sweep {
+  animation: sweepCycle 9s ease-in-out 3.2s infinite;
+}
+
+@keyframes sweepCycle {
+  0% {
+    transform: translateX(-35%);
+    opacity: 0;
+  }
+  4% {
+    opacity: 1;
+  }
+  26.6% {
+    transform: translateX(135%);
+    opacity: 1;
+  }
+  27% {
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(135%);
+    opacity: 0;
+  }
+}
+
+/* Watermark Spotlight Overlay (Cursor Reactive) */
+.footer-watermark-overlay {
+  position: absolute;
+  width: min(68vw, 1400px);
+  bottom: 92px;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  mask-image: radial-gradient(240px circle at var(--mx, -500px) var(--my, -500px), #000 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(240px circle at var(--mx, -500px) var(--my, -500px), #000 0%, transparent 70%);
+}
+
+.footer-section.has-hover .footer-watermark-overlay {
+  opacity: 1;
+}
+
+.wm-text-spotlight {
+  fill: rgba(129, 140, 248, 0.06);
+  stroke: rgba(165, 180, 252, 0.55);
+  stroke-width: 2;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+/* Bottom Bar */
+.footer-bottom-bar {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 60px;
+  box-sizing: border-box;
+  margin-top: auto;
+  z-index: 3;
+}
+
+/* Copyright Text */
+.footer-copyright {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 500;
+  color: #9ca0b0;
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.8s;
+  user-select: none;
+}
+
+.footer-section.is-active .footer-copyright {
+  opacity: 1;
+}
+
+/* Crafted Pill */
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.crafted-pill-wrap {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.9s,
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.9s;
+}
+
+.footer-section.is-active .crafted-pill-wrap {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.crafted-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  padding: 14px 30px;
+  background: rgba(255, 255, 255, 0.02);
+  cursor: default;
+  user-select: none;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #b8bccb;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.crafted-pill:hover {
+  border-color: rgba(129, 140, 248, 0.4);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.crafted-pill-beam {
+  position: absolute;
+  inset: -1px;
+  border-radius: 999px;
+  padding: 1px;
+  background: conic-gradient(from var(--angle), transparent 0 70%, #818cf8 85%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.crafted-pill:hover .crafted-pill-beam {
+  opacity: 1;
+  animation: rotateBeam 3s linear infinite;
+}
+
+@keyframes rotateBeam {
+  to {
+    --angle: 360deg;
+  }
+}
+
+.crafted-heart {
+  color: #e5383b;
+  display: inline-block;
+  animation: heartbeat 1.6s infinite;
+  transform-origin: center;
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.25); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.18); }
+  70% { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+.crafted-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Scroll-To-Top Button */
+.scroll-top-wrap {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1) 1.0s,
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1) 1.0s;
+}
+
+.footer-section.is-active .scroll-top-wrap {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.scroll-top-btn {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #e5e7eb;
+  transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+  padding: 0;
+}
+
+.scroll-top-btn:hover {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: #a5b4fc;
+}
+
+.scroll-top-btn:focus-visible {
+  outline: 2px solid #818cf8;
+  outline-offset: 3px;
+}
+
+.scroll-top-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  transform: rotate(-90deg);
+}
+
+.scroll-top-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 1;
+}
+
+.scroll-top-btn:hover .scroll-top-arrow {
+  transform: translateY(-3px);
+}
+
+/* Responsive: Mobile & Tablet (< 900px) */
+@media (max-width: 899px) {
+  .footer-section {
+    min-height: auto;
+    padding: 32px 0 40px;
+  }
+
+  .footer-tagline {
+    padding: 0 20px;
+  }
+
+  .footer-nav {
+    padding: 0 16px;
+    margin-bottom: 40px;
+    gap: 12px;
+  }
+
+  .footer-pill {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+
+  .footer-watermark-layer {
+    width: 88vw;
+    bottom: 140px;
+  }
+
+  .footer-watermark-overlay {
+    display: none;
+  }
+
+  .footer-grid-spotlight {
+    display: none;
+  }
+
+  .footer-bottom-bar {
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 24px;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Order on mobile: crafted pill, copyright (12px), button */
+  .crafted-pill-wrap {
+    order: 1;
+  }
+
+  .footer-copyright {
+    order: 2;
+    font-size: 12px;
+  }
+
+  .scroll-top-wrap {
+    order: 3;
+  }
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  .footer-top-glow,
+  .footer-grid-base,
+  .footer-tagline,
+  .footer-pill-wrap,
+  .footer-copyright,
+  .crafted-pill-wrap,
+  .scroll-top-wrap {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .wm-char {
+    stroke-dashoffset: 0 !important;
+    animation: none !important;
+  }
+
+  .wm-text-base {
+    fill-opacity: 1 !important;
+    animation: none !important;
+  }
+
+  .wm-text-sweep {
+    display: none !important;
+  }
+
+  .crafted-heart {
+    animation: none !important;
+  }
+
+  .crafted-pill-beam {
+    display: none !important;
+  }
+
+  .scroll-top-arrow {
+    transform: none !important;
+  }
+}
+

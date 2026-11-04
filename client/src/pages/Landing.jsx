@@ -23,6 +23,7 @@ import ToolsSection from '../components/ToolsSection';
 import HowItWorks from '../components/HowItWorks';
 import Magnet from '../components/Magnet';
 import StaggeredMenu from '../components/StaggeredMenu';
+import Footer from '../components/Footer';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 
@@ -591,47 +592,8 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* 10. MINIMAL FOOTER */}
-      <footer className="py-12 bg-[#F3EFE6] dark:bg-[#0F1220] border-t border-[#E4E0D8] dark:border-[#1E233A] transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 pb-8 border-b border-[#E4E0D8] dark:border-[#1E233A]">
-            <div>
-              <span className="font-heading text-2xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-white">
-                InternIQ
-              </span>
-              <p className="font-sans text-xs text-[#5A5D6B] dark:text-[#9AA3BF] mt-1 leading-[1.6]">
-                Practical career preparation for students and early-career applicants.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-6 text-xs font-sans text-[#5A5D6B] dark:text-[#9AA3BF]">
-              <a href="#tools" className="hover:text-[#14161F] dark:hover:text-white transition-colors py-2">Tools</a>
-              <a href="#how-it-works" className="hover:text-[#14161F] dark:hover:text-white transition-colors py-2">How it works</a>
-              <Link to="/login" className="hover:text-[#14161F] dark:hover:text-white transition-colors py-2">Log in</Link>
-              <Link to="/register" className="hover:text-[#14161F] dark:hover:text-white transition-colors py-2">Register</Link>
-            </div>
-          </div>
-
-          <div className="pt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-sans text-[#6B7280] dark:text-[#7E88A8]">
-            <div>
-              Built by a student at UVCE, Bengaluru.
-            </div>
-            <div className="flex items-center gap-4">
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[#14161F] dark:hover:text-white transition-colors inline-flex items-center gap-1 py-1"
-              >
-                <span>GitHub</span>
-                <ArrowUpRight size={14} weight="bold" />
-              </a>
-              <span>·</span>
-              <span>© {new Date().getFullYear()} InternIQ</span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      {/* 10. REBUILT FOOTER */}
+      <Footer />
     </div>
   );
 }
