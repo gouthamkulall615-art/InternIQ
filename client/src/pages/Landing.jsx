@@ -20,7 +20,7 @@ import GhostType from '../components/GhostType';
 import GooeyNav from '../components/GooeyNav';
 import CrowdStory from '../components/CrowdStory';
 import RibbonMarquee from '../components/RibbonMarquee';
-import ProblemStrip from '../components/ProblemStrip';
+import ProblemCards from '../components/ProblemCards';
 import ToolsSection from '../components/ToolsSection';
 import Magnet from '../components/Magnet';
 import { useAuth } from '../contexts/AuthContext';
@@ -365,8 +365,8 @@ export default function Landing() {
         ]}
       />
 
-      {/* 3. PROBLEM STRIP */}
-      <ProblemStrip />
+      {/* 3. PROBLEM CARDS */}
+      <ProblemCards />
 
       {/* 4. THE FOUR TOOLS */}
       <ToolsSection />

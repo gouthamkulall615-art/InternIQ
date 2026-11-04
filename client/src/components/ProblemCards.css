@@ -1,0 +1,232 @@
+/* ProblemCards.css */
+
+.problem-cards-section {
+  --card-w: 360px;
+  --card-h: 430px;
+  --offset: 290px;
+  --overlap: 65px;
+  --tilt: 0deg;
+
+  position: relative;
+  background-color: #0a0d17;
+  padding: 80px 24px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Background glow blobs */
+.problem-cards-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(110px);
+  -webkit-filter: blur(110px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.problem-cards-blob--a {
+  width: 380px;
+  height: 380px;
+  background-color: #6366f1;
+  opacity: 0.35;
+  left: 22%;
+  top: 15%;
+}
+
+.problem-cards-blob--b {
+  width: 340px;
+  height: 340px;
+  background-color: #8b5cf6;
+  opacity: 0.30;
+  right: 20%;
+  bottom: 10%;
+}
+
+.problem-cards-blob--c {
+  width: 240px;
+  height: 240px;
+  background-color: #3b82f6;
+  opacity: 0.20;
+  left: 50%;
+  top: 40%;
+  transform: translateX(-50%);
+}
+
+/* Desktop stage (min-width: 900px default) */
+.problem-cards-stage {
+  position: relative;
+  max-width: 960px;
+  height: 520px;
+  margin: 0 auto;
+  overflow: visible;
+  z-index: 1;
+}
+
+/* Base card styling (glassmorphism) */
+.problem-card,
+.card {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--card-w);
+  height: var(--card-h);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s, filter 0.3s, box-shadow 0.3s;
+}
+
+/* Side cards base overrides */
+.card--left,
+.card--right {
+  opacity: 0.7;
+  filter: brightness(0.85);
+}
+
+/* Left card layout */
+.card--left {
+  z-index: 1;
+  padding: 32px 93px 32px 28px;
+  transform: translate(-50%, -50%) translateX(calc(var(--offset) * -1)) scale(0.92) rotate(calc(var(--tilt) * -1));
+}
+
+.card--left:hover {
+  z-index: 4;
+  opacity: 1;
+  filter: brightness(1);
+  transform: translate(-50%, -50%) translateX(calc(var(--offset) * -1)) translateY(-8px) scale(0.92) rotate(calc(var(--tilt) * -1));
+}
+
+/* Right card layout */
+.card--right {
+  z-index: 1;
+  padding: 32px 28px 32px 93px;
+  transform: translate(-50%, -50%) translateX(var(--offset)) scale(0.92) rotate(var(--tilt));
+}
+
+.card--right:hover {
+  z-index: 4;
+  opacity: 1;
+  filter: brightness(1);
+  transform: translate(-50%, -50%) translateX(var(--offset)) translateY(-8px) scale(0.92) rotate(var(--tilt));
+}
+
+/* Center card overrides & layout */
+.card--center {
+  z-index: 3;
+  padding: 32px 28px;
+  transform: translate(-50%, -50%) scale(1.06);
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(129, 140, 248, 0.35);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55), 0 0 60px rgba(99, 102, 241, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.card--center:hover {
+  transform: translate(-50%, -50%) translateY(-6px) scale(1.06);
+}
+
+/* Header & Badge */
+.problem-card__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.problem-card__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: #1a1d3a;
+  border: 1px solid #2d3160;
+  color: #818cf8;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.problem-card__label {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #9ca3b8;
+  line-height: 1.4;
+}
+
+/* Headings & Body */
+.problem-card__heading {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  font-size: 26px;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #f5f6fa;
+  margin: 20px 0 12px 0;
+}
+
+.problem-card__body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  font-weight: 400;
+  color: #8b92a8;
+  margin: 0;
+}
+
+/* Accessibility: respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .problem-card,
+  .card {
+    transition: none;
+  }
+}
+
+/* Responsive layout (max-width: 899px) */
+@media (max-width: 899px) {
+  .problem-cards-section {
+    padding: 48px 16px;
+  }
+
+  .problem-cards-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: auto;
+    max-width: 100%;
+  }
+
+  .problem-card,
+  .card,
+  .card--left,
+  .card--right,
+  .card--center {
+    position: static;
+    width: 100%;
+    height: auto;
+    transform: none;
+    opacity: 1;
+    filter: none;
+    padding: 24px;
+  }
+
+  .card--left:hover,
+  .card--right:hover,
+  .card--center:hover {
+    transform: none;
+  }
+
+  .problem-cards-blob--c {
+    display: none;
+  }
+}
+
