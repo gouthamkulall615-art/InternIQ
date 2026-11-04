@@ -1,607 +1,1369 @@
-import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+// ToolsSection.jsx
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useLayoutEffect,
+  useCallback,
+  useMemo
+} from 'react';
 import {
-  FileText,
-  Target,
-  NotePencil,
-  Compass,
-  ArrowUpRight,
-  Copy,
-  Check,
-  FileArrowDown
-} from '@phosphor-icons/react';
-import SpotlightCard from './SpotlightCard';
-import CountUp from './CountUp';
-import TextType from './TextType';
-import Magnet from './Magnet';
-import AnimatedContent from './AnimatedContent';
-import { useTheme } from '../contexts/ThemeContext';
+  motion,
+  useInView,
+  useScroll,
+  useSpring,
+  useMotionValue,
+  AnimatePresence,
+  useReducedMotion
+} from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import './ToolsSection.css';
 
-/**
- * @typedef {Object} ToolCardData
- * @property {string} id
- * @property {string} number
- * @property {string} title
- * @property {string} headline
- * @property {string} description
- * @property {string} footerNote
- * @property {string} actionText
- * @property {string} actionHref
- * @property {boolean} [isExternal]
- */
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
-/** @type {ToolCardData[]} */
-export const TOOLS_DATA = [
+// ==========================================
+// DATA DEFINITIONS
+// ==========================================
+
+const RUBRIC_ROWS = [
+  '1. Formatting & Readability',
+  '2. Keyword Relevance',
+  '3. Experience & Metrics',
+  '4. Structure & Order',
+  '5. Clarity & Professional Tone'
+];
+
+const ROLES_DATA = [
   {
-    id: 'resume-analyzer',
-    number: '1',
-    title: 'Resume Analyzer',
-    headline: 'ATS scoring on a strict five-part rubric.',
-    description:
-      'Upload your resume in PDF, DOCX, or TXT. An evaluation rubric scores five specific dimensions out of two points each, summing to a transparent score out of 10.',
-    footerNote: 'Immediate scoring · Line-by-line feedback',
-    actionText: 'Open tool',
-    actionHref: '/resume-analyzer'
+    role: 'Frontend Developer',
+    match: 67,
+    have: ['React', 'Git'],
+    missing: ['TypeScript', 'Jest']
   },
   {
-    id: 'skill-gap',
-    number: '2',
-    title: 'Skill Gap Analyzer',
-    headline: 'Target role comparison and readiness index.',
-    description:
-      'Select your target role. Compare your extracted resume skills against expected requirements to see what you match and what you need to learn next.',
-    footerNote: '8 technical & product tracks',
-    actionText: 'Compare skills',
-    actionHref: '/skill-gap'
+    role: 'Backend Developer',
+    match: 50,
+    have: ['Node.js', 'Git'],
+    missing: ['Docker', 'Redis']
   },
   {
-    id: 'cover-letter',
-    number: '3',
-    title: 'Cover Letter Generator',
-    headline: 'Grounded in your actual work history.',
-    description:
-      'Provide a target company, role title, and job description. InternIQ produces a concise 250 to 400 word letter referencing your verified background, ready to edit, copy, or export to PDF.',
-    footerNote: 'Factually tailored · No fluff',
-    actionText: 'Draft letter',
-    actionHref: '/cover-letter'
-  },
-  {
-    id: 'roadmap-provider',
-    number: '4',
-    title: 'Roadmap Provider',
-    headline: 'Curated learning paths on PathForge.',
-    description:
-      'When you identify a skill gap, jump directly to structured, community-tested roadmaps across modern engineering and data disciplines without searching blindly.',
-    footerNote: 'External learning companion',
-    actionText: 'Explore PathForge',
-    actionHref: 'https://path-forge-amber.vercel.app/',
-    isExternal: true
+    role: 'Data Analyst',
+    match: 75,
+    have: ['SQL', 'Excel', 'Python'],
+    missing: ['Tableau']
   }
 ];
 
-const RUBRIC_ITEMS = [
-  { label: '1. Formatting & Readability', maxPts: 2 },
-  { label: '2. Keyword Relevance', maxPts: 2 },
-  { label: '3. Experience & Metrics', maxPts: 2 },
-  { label: '4. Structure & Order', maxPts: 2 },
-  { label: '5. Clarity & Professional Tone', maxPts: 2 }
+const LETTERS_DATA = [
+  {
+    company: 'Stripe',
+    role: 'Intern',
+    words: 312,
+    text: 'Dear Hiring Team, I am writing to express my enthusiasm for the Software Engineering Internship at Stripe. My background in building responsive web applications and REST APIs directly aligns with your focus on reliable, well-documented payment systems.'
+  },
+  {
+    company: 'Razorpay',
+    role: 'SDE Intern',
+    words: 287,
+    text: 'Dear Hiring Team, I am excited to apply for the SDE Internship at Razorpay. Building full-stack projects with React and Node.js, and solving data structures problems regularly, has prepared me to contribute to fast-moving, high-reliability payment products.'
+  },
+  {
+    company: 'Atlassian',
+    role: 'Frontend Intern',
+    words: 301,
+    text: 'Dear Hiring Team, I am writing to apply for the Frontend Internship at Atlassian. I have shipped collaborative, real-time interfaces in React, and I care about accessible, polished UI, which matches the way your teams build tools for other teams.'
+  }
 ];
 
 const PATHWAYS = ['Frontend Dev', 'Backend Dev', 'Data Analyst', 'Machine Learning'];
 
-const SAMPLE_LETTER_TEXT =
-  "Dear Hiring Team, I am writing to express my enthusiasm for the Software Engineering Internship at Stripe. My background in building responsive web applications and REST APIs directly aligns with Stripe's developer-first infrastructure.";
+const S_CURVE_PATH = 'M 30 90 C 150 90, 150 30, 220 30 S 380 90, 450 90 S 540 30, 570 30';
 
-export default function ToolsSection() {
-  const { theme } = useTheme();
-  const cardTheme = theme === 'dark' ? 'dark' : 'light';
+const PATH_NODES = [
+  { label: 'Basics', f: 0, x: 30, y: 90 },
+  { label: 'Projects', f: 0.33, x: 200, y: 35 },
+  { label: 'Advanced', f: 0.66, x: 400, y: 85 },
+  { label: 'Job-ready', f: 1, x: 570, y: 30 }
+];
 
-  // Card 02 Scroll-in trigger for progress bar
-  const [card2InView, setCard2InView] = useState(false);
-  const card2Ref = useRef(null);
+const SCRAMBLE_CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#%&';
 
-  // Card 03 TextType cursor state
-  const [typingComplete, setTypingComplete] = useState(false);
-  const [copied, setCopied] = useState(false);
+// ==========================================
+// SUBCOMPONENTS & HOOKS
+// ==========================================
+
+// Text Scramble Component
+function ScrambleHeading({ text, start = false }) {
+  const spanRef = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    const el = card2Ref.current;
-    if (!el) return;
-
-    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-      setCard2InView(true);
+    if (!spanRef.current) return;
+    if (prefersReducedMotion || !start) {
+      spanRef.current.textContent = text;
       return;
     }
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setCard2InView(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.25 }
-    );
+    let frameId;
+    const startTime = performance.now();
+    const chars = text.split('');
+    const totalDuration = 0.25 + (chars.length - 1) * 0.022; // in seconds
 
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
+    const update = (now) => {
+      const elapsed = (now - startTime) / 1000;
+      let allSettled = true;
 
-  const handleCopySample = () => {
-    navigator.clipboard?.writeText(SAMPLE_LETTER_TEXT);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+      const output = chars
+        .map((char, i) => {
+          if (char === ' ' || /^[.,/#!$%^&*;:{}=\-_`~()]$/.test(char)) {
+            return char;
+          }
+          const settleTime = 0.25 + i * 0.022;
+          if (elapsed >= settleTime) {
+            return char;
+          }
+          allSettled = false;
+          return SCRAMBLE_CHARSET[Math.floor(Math.random() * SCRAMBLE_CHARSET.length)];
+        })
+        .join('');
+
+      if (spanRef.current) {
+        spanRef.current.textContent = output;
+      }
+
+      if (!allSettled && elapsed < totalDuration + 0.1) {
+        frameId = setTimeout(() => requestAnimationFrame(update), 40);
+      } else if (spanRef.current) {
+        spanRef.current.textContent = text;
+      }
+    };
+
+    frameId = requestAnimationFrame(update);
+    return () => clearTimeout(frameId);
+  }, [text, start, prefersReducedMotion]);
+
+  return (
+    <h3 className="tools-card-heading" aria-label={text}>
+      <span ref={spanRef} aria-hidden="true">
+        {text}
+      </span>
+    </h3>
+  );
+}
+
+// Magnetic Button / Chip Hook
+function useMagnetic(ref, radius = 90) {
+  const prefersReducedMotion = useReducedMotion();
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [arrowRot, setArrowRot] = useState(0);
+
+  useEffect(() => {
+    if (prefersReducedMotion || typeof window === 'undefined') return;
+    const el = ref.current;
+    if (!el) return;
+
+    const handlePointerMove = (e) => {
+      if (window.matchMedia('(pointer: coarse)').matches) return;
+      const rect = el.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const d = Math.hypot(e.clientX - cx, e.clientY - cy);
+
+      if (d < radius) {
+        const s = 1 - d / radius;
+        const ox = Math.min(Math.max((e.clientX - cx) * 0.35 * s, -10), 10);
+        const oy = Math.min(Math.max((e.clientY - cy) * 0.35 * s, -10), 10);
+        setOffset({ x: ox, y: oy });
+        setArrowRot(d < radius / 2 ? 45 : 0);
+      } else {
+        setOffset({ x: 0, y: 0 });
+        setArrowRot(0);
+      }
+    };
+
+    const handlePointerLeave = () => {
+      setOffset({ x: 0, y: 0 });
+      setArrowRot(0);
+    };
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true });
+    document.addEventListener('pointerleave', handlePointerLeave);
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      document.removeEventListener('pointerleave', handlePointerLeave);
+    };
+  }, [ref, radius, prefersReducedMotion]);
+
+  return { offset, arrowRot };
+}
+
+// Magnetic CTA Anchor
+function MagneticCTA({ href, text, isExternal }) {
+  const btnRef = useRef(null);
+  const { offset, arrowRot } = useMagnetic(btnRef, 90);
+
+  return (
+    <motion.a
+      ref={btnRef}
+      href={href}
+      target={isExternal ? '_blank' : '_self'}
+      rel={isExternal ? 'noopener noreferrer' : ''}
+      className="tools-cta-btn"
+      animate={{ x: offset.x, y: offset.y }}
+      transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+    >
+      <span>{text}</span>
+      <motion.span
+        className="tools-cta-arrow"
+        animate={{ rotate: arrowRot }}
+        transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+      >
+        ↗
+      </motion.span>
+    </motion.a>
+  );
+}
+
+// Magnetic Pathway Chip
+function MagneticPathwayChip({ pathway, onHoverStart, onHoverEnd }) {
+  const chipRef = useRef(null);
+  const { offset, arrowRot } = useMagnetic(chipRef, 90);
+
+  return (
+    <motion.a
+      ref={chipRef}
+      href="https://path-forge-amber.vercel.app/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="tools-pathway-chip"
+      animate={{ x: offset.x, y: offset.y }}
+      transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+      onMouseEnter={onHoverStart}
+      onMouseLeave={onHoverEnd}
+    >
+      <span>{pathway}</span>
+      <motion.span
+        style={{ display: 'inline-block' }}
+        animate={{ rotate: arrowRot }}
+        transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+      >
+        ↗
+      </motion.span>
+    </motion.a>
+  );
+}
+
+// ==========================================
+// SHARED GLASS CARD WRAPPER
+// ==========================================
+
+function GlassCard({
+  badgeNumber,
+  badgeLabel,
+  icon,
+  heading,
+  body,
+  footerNote,
+  actionText,
+  actionHref,
+  isExternal = false,
+  spanClass = 'card-span-7',
+  delay = 0,
+  isLeft = true,
+  children,
+  onCardHoverChange
+}) {
+  const cardRef = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
+  const isInView = useInView(cardRef, { once: true, amount: 0.3 });
+
+  // 3D Tilt Values
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 150, damping: 15, mass: 0.1 });
+  const springY = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
+
+  // Scroll Progress for Badge Ring
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ['start 0.85', 'center 0.5']
+  });
+
+  useEffect(() => {
+    if (prefersReducedMotion) {
+      if (cardRef.current) cardRef.current.style.setProperty('--p', '1');
+      return;
+    }
+    const unsubscribe = scrollYProgress.on('change', (v) => {
+      if (cardRef.current) {
+        cardRef.current.style.setProperty('--p', String(Math.min(Math.max(v, 0), 1)));
+      }
+    });
+    return () => unsubscribe();
+  }, [scrollYProgress, prefersReducedMotion]);
+
+  const handleMouseMove = (e) => {
+    if (prefersReducedMotion || !cardRef.current) return;
+    const rect = cardRef.current.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+
+    // Tilt (max 6deg)
+    const rotY = (px - 0.5) * 2 * 6;
+    const rotX = -(py - 0.5) * 2 * 6;
+    x.set(rotY);
+    y.set(rotX);
+
+    // Cursor Glow vars
+    cardRef.current.style.setProperty('--mx', `${e.clientX - rect.left}px`);
+    cardRef.current.style.setProperty('--my', `${e.clientY - rect.top}px`);
   };
 
-  const handleExportDummy = () => {
-    const blob = new Blob([SAMPLE_LETTER_TEXT], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'stripe-intern-cover-letter.txt';
-    a.click();
-    URL.revokeObjectURL(url);
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+    if (onCardHoverChange) onCardHoverChange(false);
+  };
+
+  const handleMouseEnter = () => {
+    if (onCardHoverChange) onCardHoverChange(true);
   };
 
   return (
-    <section
-      id="tools"
-      className="scroll-mt-20 py-16 sm:py-20 bg-[#FFFFFF] dark:bg-[#07090E] border-b border-[#E4E0D8] dark:border-[#1E233A] transition-colors"
-    >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Header: Bricolage Grotesque (600-700), tight letter-spacing (-0.02em), no serif */}
-        <div className="mb-12 max-w-2xl">
-          <span className="font-sans font-medium text-xs uppercase tracking-wider text-[#6B7280] dark:text-[#818CF8] block">
-            THE FOUR TOOLS
-          </span>
-          <h2 className="font-heading text-3xl sm:text-4xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] mt-2">
-            Four focused tools. One transparent workflow.
-          </h2>
-          <p className="font-sans text-sm sm:text-base text-[#5A5D6B] dark:text-[#9AA3BF] mt-2 leading-[1.6]">
-            Every tool operates on real text, concrete rubrics, and zero artificial hype.
-          </p>
+    <div className={`tools-card-wrapper ${spanClass}`}>
+      <motion.div
+        ref={cardRef}
+        className="tools-card"
+        initial={
+          prefersReducedMotion
+            ? { opacity: 1, y: 0, x: 0, filter: 'blur(0px)' }
+            : {
+                opacity: 0,
+                y: 40,
+                x: isLeft ? -30 : 30,
+                filter: 'blur(8px)'
+              }
+        }
+        animate={
+          isInView || prefersReducedMotion
+            ? {
+                opacity: 1,
+                y: 0,
+                x: 0,
+                filter: 'blur(0px)'
+              }
+            : {}
+        }
+        transition={{
+          duration: 0.8,
+          delay: prefersReducedMotion ? 0 : delay,
+          ease: [0.22, 1, 0.36, 1]
+        }}
+        style={{
+          rotateX: springY,
+          rotateY: springX
+        }}
+        whileHover={prefersReducedMotion ? {} : { scale: 1.01 }}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div className="tools-card-content">
+          <div>
+            {/* Header */}
+            <div className="tools-card-top">
+              <div className="tools-badge-group">
+                <div className="tools-badge-container">
+                  <div className="tools-badge-ring" />
+                  <motion.div
+                    className="tools-badge"
+                    initial={prefersReducedMotion ? { scale: 1 } : { scale: 0 }}
+                    animate={isInView || prefersReducedMotion ? { scale: 1 } : {}}
+                    transition={{
+                      type: 'spring',
+                      stiffness: 500,
+                      damping: 18,
+                      delay: prefersReducedMotion ? 0 : delay + 0.15
+                    }}
+                  >
+                    {badgeNumber}
+                  </motion.div>
+                </div>
+                <span className="tools-card-label">{badgeLabel}</span>
+              </div>
+              <div className="tools-icon-box">{icon}</div>
+            </div>
+
+            {/* Heading & Body */}
+            <ScrambleHeading text={heading} start={isInView} />
+            <p className="tools-card-body">{body}</p>
+
+            {/* Custom Interactive Internals */}
+            {children}
+          </div>
+
+          {/* Footer & CTA */}
+          <div className="tools-card-bottom">
+            <span className="tools-footer-note">{footerNote}</span>
+            <MagneticCTA href={actionHref} text={actionText} isExternal={isExternal} />
+          </div>
         </div>
+      </motion.div>
+    </div>
+  );
+}
 
-        {/* 2x2 Bento Grid: Row 1 is 1.2fr / 1fr (7/5), Row 2 is 1fr / 1.2fr (5/7) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          {/* ============================================================== */}
-          {/* Card 01: Resume Analyzer (Row 1: 1.2fr -> 7 cols on lg)        */}
-          {/* ============================================================== */}
-          <div className="lg:col-span-7">
-            <AnimatedContent
-              distance={20}
-              direction="vertical"
-              duration={0.7}
+// ==========================================
+// CARD 1 INTERNALS: Resume Analyzer
+// ==========================================
+
+function Card1Internals({ inView, delay }) {
+  const prefersReducedMotion = useReducedMotion();
+  const [score, setScore] = useState(prefersReducedMotion ? 8 : 0);
+  const [scanTop, setScanTop] = useState(0);
+  const [scanOpacity, setScanOpacity] = useState(0);
+  const boxRef = useRef(null);
+
+  // Score Count-up
+  useEffect(() => {
+    if (prefersReducedMotion || !inView) return;
+    const timer = setTimeout(() => {
+      const startTime = performance.now();
+      const duration = 1200; // 1.2s
+
+      const step = (now) => {
+        const t = Math.min((now - startTime) / duration, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        setScore(Math.round(8 * ease));
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }, (delay + 0.6) * 1000);
+
+    return () => clearTimeout(timer);
+  }, [inView, delay, prefersReducedMotion]);
+
+  // Scan line animation
+  useEffect(() => {
+    if (prefersReducedMotion || !inView || !boxRef.current) return;
+    const boxHeight = boxRef.current.offsetHeight || 180;
+    const timer = setTimeout(() => {
+      const startTime = performance.now();
+      const duration = 1100; // 1.1s
+
+      const step = (now) => {
+        const p = Math.min((now - startTime) / duration, 1);
+        setScanTop(p * boxHeight);
+
+        // Opacity 0 -> 1 in first 15%, 1 -> 0 in last 15%
+        if (p < 0.15) setScanOpacity(p / 0.15);
+        else if (p > 0.85) setScanOpacity((1 - p) / 0.15);
+        else setScanOpacity(1);
+
+        if (p < 1) requestAnimationFrame(step);
+        else setScanOpacity(0);
+      };
+      requestAnimationFrame(step);
+    }, (delay + 0.5) * 1000);
+
+    return () => clearTimeout(timer);
+  }, [inView, delay, prefersReducedMotion]);
+
+  return (
+    <div ref={boxRef} className="tools-inner-box">
+      {/* Scan Line */}
+      {!prefersReducedMotion && (
+        <div
+          className="tools-scan-line"
+          style={{ top: `${scanTop}px`, opacity: scanOpacity }}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Box Header */}
+      <div className="tools-rubric-header">
+        <span className="tools-rubric-title">SCORING RUBRIC (5 DIMENSIONS)</span>
+        <span className="tools-rubric-score" aria-live="off">
+          Score: {score} / 10
+        </span>
+      </div>
+
+      {/* Rubric Rows */}
+      <div className="tools-rubric-list">
+        {RUBRIC_ROWS.map((rowLabel, idx) => (
+          <RubricRow
+            key={rowLabel}
+            label={rowLabel}
+            index={idx}
+            inView={inView}
+            cardDelay={delay}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RubricRow({ label, index, inView, cardDelay }) {
+  const prefersReducedMotion = useReducedMotion();
+  const [flickerText, setFlickerText] = useState('0 - 2 pts');
+
+  useEffect(() => {
+    if (prefersReducedMotion || !inView) return;
+    const startDelay = (cardDelay + 0.6 + 0.1 * index) * 1000;
+    let ticks = 0;
+    let intervalId;
+
+    const timer = setTimeout(() => {
+      intervalId = setInterval(() => {
+        ticks++;
+        if (ticks >= 10) {
+          clearInterval(intervalId);
+          setFlickerText('0 - 2 pts');
+        } else {
+          const r1 = Math.floor(Math.random() * 10);
+          const r2 = Math.floor(Math.random() * 10);
+          setFlickerText(`${r1} - ${r2} pts`);
+        }
+      }, 60);
+    }, startDelay);
+
+    return () => {
+      clearTimeout(timer);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [inView, index, cardDelay, prefersReducedMotion]);
+
+  return (
+    <motion.div
+      className="tools-rubric-row"
+      initial={prefersReducedMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: -16 }}
+      animate={inView || prefersReducedMotion ? { opacity: 1, x: 0 } : {}}
+      transition={{
+        duration: 0.45,
+        delay: prefersReducedMotion ? 0 : cardDelay + 0.4 + index * 0.1,
+        ease: [0.22, 1, 0.36, 1]
+      }}
+    >
+      <span>{label}</span>
+      <span className="tools-rubric-pts" aria-live="off">
+        {flickerText}
+      </span>
+    </motion.div>
+  );
+}
+
+// ==========================================
+// CARD 2 INTERNALS: Skill Gap Analyzer
+// ==========================================
+
+function Card2Internals({ inView, delay, isHovered }) {
+  const prefersReducedMotion = useReducedMotion();
+  const [roleIndex, setRoleIndex] = useState(0);
+  const [displayedMatch, setDisplayedMatch] = useState(prefersReducedMotion ? 67 : 0);
+  const [barScale, setBarScale] = useState(prefersReducedMotion ? 0.67 : 0);
+  const [contentVisible, setContentVisible] = useState(true);
+
+  const currentRole = ROLES_DATA[roleIndex];
+
+  // Initial count-up and bar scale
+  useEffect(() => {
+    if (prefersReducedMotion || !inView) return;
+    const timer = setTimeout(() => {
+      const startTime = performance.now();
+      const targetMatch = ROLES_DATA[0].match;
+
+      const step = (now) => {
+        const t = Math.min((now - startTime) / 1200, 1);
+        const ease = 1 - Math.pow(1 - t, 3);
+        setDisplayedMatch(Math.round(targetMatch * ease));
+        setBarScale((targetMatch / 100) * ease);
+        if (t < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }, (delay + 0.6) * 1000);
+
+    return () => clearTimeout(timer);
+  }, [inView, delay, prefersReducedMotion]);
+
+  // 5s Cycling
+  useEffect(() => {
+    if (prefersReducedMotion || !inView) return;
+
+    let intervalId;
+    const startCycleTimeout = setTimeout(() => {
+      intervalId = setInterval(() => {
+        if (isHovered || document.hidden) return;
+
+        // Fade out
+        setContentVisible(false);
+
+        setTimeout(() => {
+          setRoleIndex((prev) => {
+            const nextIdx = (prev + 1) % ROLES_DATA.length;
+            const nextMatch = ROLES_DATA[nextIdx].match;
+
+            // Animate bar and count to new value
+            const startVal = ROLES_DATA[prev].match;
+            const startTime = performance.now();
+            const step = (now) => {
+              const t = Math.min((now - startTime) / 900, 1);
+              const val = Math.round(startVal + (nextMatch - startVal) * t);
+              setDisplayedMatch(val);
+              setBarScale(val / 100);
+              if (t < 1) requestAnimationFrame(step);
+            };
+            requestAnimationFrame(step);
+
+            return nextIdx;
+          });
+
+          // Fade back in
+          setContentVisible(true);
+        }, 300);
+      }, 5000);
+    }, (delay + 2.4) * 1000);
+
+    return () => {
+      clearTimeout(startCycleTimeout);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [inView, delay, isHovered, prefersReducedMotion]);
+
+  return (
+    <div className="tools-inner-box">
+      <div className="tools-role-top">
+        <motion.span
+          className="tools-role-name"
+          animate={{ opacity: contentVisible ? 1 : 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          {currentRole.role}
+        </motion.span>
+        <span className="tools-role-match" aria-live="off">
+          {displayedMatch}% Match
+        </span>
+      </div>
+
+      {/* Progress Track */}
+      <div className="tools-progress-track">
+        <div
+          className="tools-progress-fill"
+          style={{ transform: `scaleX(${barScale})` }}
+        />
+      </div>
+
+      {/* Chips */}
+      <motion.div
+        className="tools-chips-group"
+        animate={{ opacity: contentVisible ? 1 : 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        {currentRole.have.map((skill, i) => (
+          <motion.span
+            key={`have-${skill}-${roleIndex}`}
+            className="tools-chip tools-chip--have"
+            initial={prefersReducedMotion ? { scale: 1, opacity: 1 } : { scale: 0.6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{
+              type: 'spring',
+              stiffness: 420,
+              damping: 22,
+              delay: prefersReducedMotion ? 0 : i * 0.1
+            }}
+          >
+            + {skill}
+          </motion.span>
+        ))}
+
+        {currentRole.missing.map((skill, i) => (
+          <motion.span
+            key={`missing-${skill}-${roleIndex}`}
+            className="tools-chip tools-chip--missing"
+            initial={prefersReducedMotion ? { scale: 1, opacity: 1 } : { scale: 0.6, opacity: 0 }}
+            animate={
+              prefersReducedMotion
+                ? { scale: 1, opacity: 1 }
+                : {
+                    scale: 1,
+                    opacity: 1,
+                    x: [0, -3, 3, -2, 2, 0]
+                  }
+            }
+            transition={{
+              scale: { type: 'spring', stiffness: 420, damping: 22, delay: currentRole.have.length * 0.1 + i * 0.1 },
+              x: { duration: 0.4, delay: currentRole.have.length * 0.1 + i * 0.1 + 0.2 }
+            }}
+          >
+            - {skill}
+          </motion.span>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+// ==========================================
+// CARD 3 INTERNALS: Cover Letter Generator
+// ==========================================
+
+function Card3Internals({ inView, delay, onTypingStatusChange }) {
+  const prefersReducedMotion = useReducedMotion();
+  const [letterIdx, setLetterIdx] = useState(0);
+  const [typedChars, setTypedChars] = useState(prefersReducedMotion ? LETTERS_DATA[0].text.length : 0);
+  const [isTyping, setIsTyping] = useState(false);
+  const [isBoxHovered, setIsBoxHovered] = useState(false);
+
+  // Copy state & burst
+  const [copied, setCopied] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [saveFillWidth, setSaveFillWidth] = useState(0);
+
+  const currentLetter = LETTERS_DATA[letterIdx];
+  const textRef = useRef(null);
+
+  // Live word count
+  const displayedWords = useMemo(() => {
+    if (prefersReducedMotion) return currentLetter.words;
+    const ratio = currentLetter.text.length > 0 ? typedChars / currentLetter.text.length : 0;
+    return Math.round(currentLetter.words * ratio);
+  }, [typedChars, currentLetter, prefersReducedMotion]);
+
+  // Typewriter Loop
+  useEffect(() => {
+    if (prefersReducedMotion || !inView) {
+      if (textRef.current) textRef.current.textContent = LETTERS_DATA[0].text;
+      return;
+    }
+
+    let active = true;
+    let timeoutId;
+
+    const runTypewriter = () => {
+      const fullText = LETTERS_DATA[letterIdx].text;
+      let charPos = 0;
+      setIsTyping(true);
+      if (onTypingStatusChange) onTypingStatusChange(true);
+
+      const typeNextChar = () => {
+        if (!active) return;
+        if (isBoxHovered || document.hidden) {
+          timeoutId = setTimeout(typeNextChar, 200);
+          return;
+        }
+
+        if (charPos <= fullText.length) {
+          const currentSlice = fullText.slice(0, charPos);
+          if (textRef.current) textRef.current.textContent = currentSlice;
+          setTypedChars(charPos);
+
+          const lastChar = fullText[charPos - 1];
+          let wait = 24 + (Math.random() * 16 - 8); // 24ms +/- 8ms
+          if (lastChar === '.') wait += 120;
+          if (lastChar === ',') wait += 60;
+
+          charPos++;
+          timeoutId = setTimeout(typeNextChar, wait);
+        } else {
+          // Finished typing -> hold 2.5s -> backspace
+          setIsTyping(false);
+          if (onTypingStatusChange) onTypingStatusChange(false);
+
+          timeoutId = setTimeout(() => {
+            let backPos = fullText.length;
+            const backspace = () => {
+              if (!active) return;
+              if (isBoxHovered || document.hidden) {
+                timeoutId = setTimeout(backspace, 200);
+                return;
+              }
+
+              if (backPos >= 0) {
+                if (textRef.current) textRef.current.textContent = fullText.slice(0, backPos);
+                setTypedChars(backPos);
+                backPos -= 2; // quick backspace at ~6ms/char
+                timeoutId = setTimeout(backspace, 12);
+              } else {
+                setLetterIdx((prev) => (prev + 1) % LETTERS_DATA.length);
+              }
+            };
+            backspace();
+          }, 2500);
+        }
+      };
+
+      typeNextChar();
+    };
+
+    const initialDelay = setTimeout(runTypewriter, (delay + 0.8) * 1000);
+
+    return () => {
+      active = false;
+      clearTimeout(initialDelay);
+      clearTimeout(timeoutId);
+      if (onTypingStatusChange) onTypingStatusChange(false);
+    };
+  }, [inView, delay, letterIdx, isBoxHovered, prefersReducedMotion, onTypingStatusChange]);
+
+  // Copy button handler
+  const handleCopy = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(currentLetter.text);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1600);
+  };
+
+  // Export PDF handler
+  const handleExport = () => {
+    setSaveFillWidth(1);
+    setSaved(true);
+    setTimeout(() => {
+      setSaved(false);
+      setSaveFillWidth(0);
+    }, 1600);
+  };
+
+  return (
+    <div
+      className="tools-inner-box"
+      onMouseEnter={() => setIsBoxHovered(true)}
+      onMouseLeave={() => setIsBoxHovered(false)}
+    >
+      {/* Letter Header */}
+      <div className="tools-letter-header">
+        <motion.span
+          key={currentLetter.company}
+          className="tools-letter-target"
+          initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3 }}
+        >
+          Target: {currentLetter.company} · {currentLetter.role}
+        </motion.span>
+        <span className="tools-letter-words" aria-live="off">
+          {displayedWords} words
+        </span>
+      </div>
+
+      {/* Typed Text Box */}
+      <div className="tools-letter-text-box">
+        <span ref={textRef}>
+          {prefersReducedMotion ? currentLetter.text : ''}
+        </span>
+        <span className={`tools-letter-caret ${isTyping ? 'typing' : 'idle'}`} />
+      </div>
+
+      {/* Buttons Footer */}
+      <div className="tools-letter-footer">
+        {/* Copy Button */}
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="tools-btn-small"
+          aria-label="Copy letter text"
+        >
+          <AnimatePresence mode="wait">
+            {copied ? (
+              <motion.span
+                key="check"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0 }}
+                transition={{ type: 'spring', stiffness: 500, damping: 20 }}
+                style={{ display: 'inline-flex' }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              </motion.span>
+            ) : (
+              <motion.span key="copy" style={{ display: 'inline-flex' }}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                </svg>
+              </motion.span>
+            )}
+          </AnimatePresence>
+          <span>{copied ? 'Copied!' : 'Copy text'}</span>
+
+          {/* Burst Dots */}
+          {copied && !prefersReducedMotion && (
+            <>
+              {[0, 60, 120, 180, 240, 300].map((deg, i) => (
+                <motion.span
+                  key={deg}
+                  className="tools-burst-dot"
+                  initial={{ x: 0, y: 0, opacity: 1 }}
+                  animate={{
+                    x: Math.cos((deg * Math.PI) / 180) * 24,
+                    y: Math.sin((deg * Math.PI) / 180) * 24,
+                    opacity: 0
+                  }}
+                  transition={{ duration: 0.5, ease: 'easeOut' }}
+                />
+              ))}
+            </>
+          )}
+        </button>
+
+        {/* Export PDF Button */}
+        <button
+          type="button"
+          onClick={handleExport}
+          className="tools-btn-small"
+          aria-label="Export to PDF"
+        >
+          <motion.div
+            className="tools-btn-fill"
+            animate={{ scaleX: saveFillWidth }}
+            transition={{ duration: 0.9, ease: 'easeInOut' }}
+          />
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          <span style={{ position: 'relative', zIndex: 1 }}>
+            {saved ? 'Saved ✓' : 'Export PDF'}
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// ==========================================
+// CARD 4 INTERNALS: Roadmap Provider
+// ==========================================
+
+function Card4Internals({ inView, delay, isChipHovered, setIsChipHovered }) {
+  const prefersReducedMotion = useReducedMotion();
+  const pathRef = useRef(null);
+  const [pathLength, setPathLength] = useState(600);
+  const [pathDrawn, setPathDrawn] = useState(prefersReducedMotion);
+  const [activeTraveler, setActiveTraveler] = useState(false);
+
+  useEffect(() => {
+    if (pathRef.current) {
+      const len = pathRef.current.getTotalLength();
+      if (len > 0) setPathLength(len);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (prefersReducedMotion || !inView) return;
+    const drawTimer = setTimeout(() => {
+      setPathDrawn(true);
+    }, (delay + 0.8) * 1000);
+
+    const travelerTimer = setTimeout(() => {
+      setActiveTraveler(true);
+    }, (delay + 2.4) * 1000);
+
+    return () => {
+      clearTimeout(drawTimer);
+      clearTimeout(travelerTimer);
+    };
+  }, [inView, delay, prefersReducedMotion]);
+
+  return (
+    <div>
+      {/* Available Pathways Panel */}
+      <div className="tools-pathways-panel">
+        <span className="tools-pathways-label">AVAILABLE PATHWAYS ON PATHFORGE:</span>
+        <div className="tools-pathways-list">
+          {PATHWAYS.map((p) => (
+            <MagneticPathwayChip
+              key={p}
+              pathway={p}
+              onHoverStart={() => setIsChipHovered(true)}
+              onHoverEnd={() => setIsChipHovered(false)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Learning Path S-Curve SVG */}
+      <svg
+        className="tools-learning-path-svg"
+        viewBox="0 0 600 120"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
+      >
+        {/* Dashed background track */}
+        <path
+          d={S_CURVE_PATH}
+          stroke="#818cf8"
+          strokeWidth="2"
+          strokeDasharray="4 4"
+          opacity="0.2"
+        />
+
+        {/* Animated drawing path */}
+        <motion.path
+          ref={pathRef}
+          d={S_CURVE_PATH}
+          className={`tools-path-line ${isChipHovered ? 'bright' : ''}`}
+          stroke="#818cf8"
+          strokeWidth="2"
+          initial={
+            prefersReducedMotion
+              ? { strokeDashoffset: 0 }
+              : { strokeDasharray: pathLength, strokeDashoffset: pathLength }
+          }
+          animate={
+            pathDrawn || prefersReducedMotion
+              ? { strokeDashoffset: 0 }
+              : { strokeDashoffset: pathLength }
+          }
+          transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
+        />
+
+        {/* 4 Nodes */}
+        {PATH_NODES.map((node) => (
+          <g key={node.label}>
+            <motion.circle
+              cx={node.x}
+              cy={node.y}
+              r="6"
+              fill="#0a0d17"
+              stroke="#818cf8"
+              strokeWidth="2"
+              initial={prefersReducedMotion ? { scale: 1 } : { scale: 0 }}
+              animate={
+                pathDrawn || prefersReducedMotion
+                  ? { scale: [1, 1.4, 1] }
+                  : { scale: 0 }
+              }
+              transition={{
+                delay: prefersReducedMotion ? 0 : delay + 0.8 + node.f * 1.6,
+                duration: 0.6
+              }}
+            />
+            <motion.text
+              x={node.x}
+              y={node.y > 60 ? node.y + 20 : node.y - 12}
+              textAnchor="middle"
+              fill="#9ca3b8"
+              fontSize="11"
+              fontFamily="JetBrains Mono, monospace"
+              initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
+              animate={pathDrawn || prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
+              transition={{
+                delay: prefersReducedMotion ? 0 : delay + 0.8 + node.f * 1.6 + 0.2,
+                duration: 0.4
+              }}
+            >
+              {node.label}
+            </motion.text>
+          </g>
+        ))}
+
+        {/* Traveler dot along the S-curve */}
+        {activeTraveler && !prefersReducedMotion && (
+          <motion.circle
+            r="4"
+            fill="#c4b5fd"
+            style={{
+              offsetPath: `path("${S_CURVE_PATH}")`,
+              filter: 'drop-shadow(0 0 6px #818cf8)'
+            }}
+            animate={{ offsetDistance: ['0%', '100%'] }}
+            transition={{
+              duration: 3,
+              ease: 'easeInOut',
+              repeat: Infinity,
+              repeatDelay: 1
+            }}
+          />
+        )}
+      </svg>
+    </div>
+  );
+}
+
+// ==========================================
+// MAIN TOOLS SECTION COMPONENT
+// ==========================================
+
+export default function ToolsSection() {
+  const sectionRef = useRef(null);
+  const row2Ref = useRef(null);
+  const prefersReducedMotion = useReducedMotion();
+
+  // Header entrance in-view trigger (starts when 25% in view)
+  const headerRef = useRef(null);
+  const isHeaderInView = useInView(headerRef, { once: true, amount: 0.25 });
+
+  // Hover states for inter-card animations
+  const [card2Hovered, setCard2Hovered] = useState(false);
+  const [isTypingActive, setIsTypingActive] = useState(false);
+  const [card4Hovered, setCard4Hovered] = useState(false);
+  const [isChipHovered, setIsChipHovered] = useState(false);
+
+  // Parallax with GSAP ScrollTrigger
+  useLayoutEffect(() => {
+    if (prefersReducedMotion || typeof window === 'undefined') return;
+
+    const ctx = gsap.context(() => {
+      // Background blobs parallax
+      gsap.to('.tools-blob--a', {
+        y: -60,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+
+      gsap.to('.tools-blob--b', {
+        y: 40,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+
+      gsap.to('.tools-blob--c', {
+        y: -30,
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+
+      // Row 2 Depth Parallax
+      if (row2Ref.current) {
+        gsap.fromTo(
+          row2Ref.current,
+          { y: 40 },
+          {
+            y: -10,
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: true
+            }
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, [prefersReducedMotion]);
+
+  // Words for heading reveal
+  const headingWords = ['Four', 'focused', 'tools.', 'One', 'transparent', 'workflow.'];
+
+  return (
+    <section id="tools" ref={sectionRef} className="tools-section">
+      {/* Background glow blobs */}
+      <div className="tools-blob tools-blob--a" aria-hidden="true" />
+      <div className="tools-blob tools-blob--b" aria-hidden="true" />
+      <div className="tools-blob tools-blob--c" aria-hidden="true" />
+
+      <div className="tools-container">
+        {/* Header */}
+        <header ref={headerRef} className="tools-header">
+          {/* Eyebrow */}
+          <motion.span
+            className="tools-eyebrow"
+            initial={prefersReducedMotion ? { opacity: 1, letterSpacing: '0.08em' } : { opacity: 0, letterSpacing: '0.35em' }}
+            animate={isHeaderInView || prefersReducedMotion ? { opacity: 1, letterSpacing: '0.08em' } : {}}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          >
+            THE FOUR TOOLS
+          </motion.span>
+
+          {/* Heading */}
+          <h2 className="tools-heading">
+            {headingWords.map((word, i) => {
+              const isHighlight = i >= 3;
+              return (
+                <span key={word} className="tools-heading-word-wrap">
+                  <motion.span
+                    className={`tools-heading-word ${isHighlight ? 'tools-highlight-text' : ''}`}
+                    initial={prefersReducedMotion ? { y: 0 } : { y: '110%' }}
+                    animate={isHeaderInView || prefersReducedMotion ? { y: '0%' } : {}}
+                    transition={{
+                      duration: 0.6,
+                      delay: prefersReducedMotion ? 0 : 0.15 + i * 0.07,
+                      ease: [0.22, 1, 0.36, 1]
+                    }}
+                  >
+                    {word}
+                  </motion.span>
+                </span>
+              );
+            })}
+          </h2>
+
+          {/* Subtitle */}
+          <motion.p
+            className="tools-subtitle"
+            initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+            animate={isHeaderInView || prefersReducedMotion ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: prefersReducedMotion ? 0 : 1.0, ease: [0.22, 1, 0.36, 1] }}
+          >
+            Every tool operates on real text, concrete rubrics, and zero artificial hype.
+          </motion.p>
+        </header>
+
+        {/* Bento Grid */}
+        <div className="tools-grid">
+          {/* ROW 1: Card 1 (span 7) & Card 2 (span 5) */}
+          <GlassCard
+            badgeNumber="1"
+            badgeLabel="Resume Analyzer"
+            icon={
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <motion.line
+                  x1="16" y1="13" x2="8" y2="13"
+                  initial={prefersReducedMotion ? { pathLength: 1 } : { pathLength: 0 }}
+                  animate={isHeaderInView || prefersReducedMotion ? { pathLength: 1 } : {}}
+                  transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : 1.2 + 0.4 }}
+                />
+                <motion.line
+                  x1="16" y1="17" x2="8" y2="17"
+                  initial={prefersReducedMotion ? { pathLength: 1 } : { pathLength: 0 }}
+                  animate={isHeaderInView || prefersReducedMotion ? { pathLength: 1 } : {}}
+                  transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : 1.2 + 0.52 }}
+                />
+                <motion.line
+                  x1="10" y1="9" x2="8" y2="9"
+                  initial={prefersReducedMotion ? { pathLength: 1 } : { pathLength: 0 }}
+                  animate={isHeaderInView || prefersReducedMotion ? { pathLength: 1 } : {}}
+                  transition={{ duration: 0.5, delay: prefersReducedMotion ? 0 : 1.2 + 0.64 }}
+                />
+              </svg>
+            }
+            heading="ATS scoring on a strict five-part rubric."
+            body="Upload your resume in PDF, DOCX, or TXT. An evaluation rubric scores five specific dimensions out of two points each, summing to a transparent score out of 10."
+            footerNote="Immediate scoring · Line-by-line feedback"
+            actionText="Open tool"
+            actionHref="/resume-analyzer"
+            spanClass="card-span-7"
+            delay={1.20}
+            isLeft={true}
+          >
+            <Card1Internals inView={isHeaderInView} delay={1.20} />
+          </GlassCard>
+
+          <GlassCard
+            badgeNumber="2"
+            badgeLabel="Skill Gap Analyzer"
+            icon={
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" />
+                <motion.circle
+                  cx="12" cy="12" r="6"
+                  animate={prefersReducedMotion ? {} : { scale: [1, 1.15, 1] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+                />
+                <circle cx="12" cy="12" r="2" />
+              </svg>
+            }
+            heading="Target role comparison and readiness index."
+            body="Select your target role. Compare your extracted resume skills against expected requirements to see what you match and what you need to learn next."
+            footerNote="8 technical & product tracks"
+            actionText="Compare skills"
+            actionHref="/skill-gap"
+            spanClass="card-span-5"
+            delay={1.35}
+            isLeft={false}
+            onCardHoverChange={setCard2Hovered}
+          >
+            <Card2Internals inView={isHeaderInView} delay={1.35} isHovered={card2Hovered} />
+          </GlassCard>
+
+          {/* ROW 2: Card 3 (span 5) & Card 4 (span 7) wrapped for GSAP Parallax */}
+          <div ref={row2Ref} className="tools-row-2-wrapper">
+            <GlassCard
+              badgeNumber="3"
+              badgeLabel="Cover Letter Generator"
+              icon={
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                  <motion.g
+                    animate={isTypingActive && !prefersReducedMotion ? { rotate: [-8, 8, -8] } : { rotate: 0 }}
+                    transition={{ duration: 0.15, repeat: Infinity }}
+                    style={{ transformOrigin: '18px 2px' }}
+                  >
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                  </motion.g>
+                </svg>
+              }
+              heading="Grounded in your actual work history."
+              body="Provide a target company, role title, and job description. InternIQ produces a concise 250 to 400 word letter referencing your verified background, ready to edit, copy, or export to PDF."
+              footerNote="Factually tailored · No fluff"
+              actionText="Draft letter"
+              actionHref="/cover-letter"
+              spanClass="card-span-5"
               delay={0}
-              trigger="scroll"
-              once={true}
-              className="h-full"
+              isLeft={true}
             >
-              <SpotlightCard
-                theme={cardTheme}
-                spotlightColor={cardTheme === 'dark' ? '#818CF8' : '#4F46E5'}
-                intensity={cardTheme === 'dark' ? 0.16 : 0.22}
-                spotlightSize={280}
-                softness={0.7}
-                borderGlow={cardTheme === 'dark' ? 0.7 : 0.85}
-                proximity={80}
-                className="h-full rounded-[12px] bg-[#F9F8F4] dark:bg-[#121524] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/5 hover:-translate-y-0.5 cursor-default"
-                style={{
-                  borderRadius: '12px',
-                  '--spotlight-card-surface': cardTheme === 'dark' ? '#121524' : '#F9F8F4',
-                  '--spotlight-card-border': cardTheme === 'dark' ? '#1E233A' : '#E4E0D8',
-                  '--spotlight-card-shadow': cardTheme === 'dark' ? '0 10px 30px -10px rgba(0,0,0,0.5)' : '0 1px 3px rgba(0,0,0,0.03)'
-                }}
-              >
-                <div className="relative z-10">
-                  {/* Top: 28px rounded-md number badge + sentence-case label, 40px rounded-lg duotone icon */}
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="flex items-center gap-2.5">
-                      <span className="w-7 h-7 rounded-md bg-[#EEF2FF] dark:bg-[#1C2035] text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center text-xs font-semibold border border-[#E0E7FF] dark:border-[#282F4E] flex-shrink-0">
-                        {TOOLS_DATA[0].number}
-                      </span>
-                      <span className="font-sans font-medium text-[13px] text-[#475569] dark:text-[#94A3B8]">
-                        {TOOLS_DATA[0].title}
-                      </span>
-                    </div>
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#F1F3F9] dark:bg-[#1C2035] border border-[#E2E6F0] dark:border-[#282F4E] text-[#4F46E5] dark:text-[#818CF8] flex-shrink-0">
-                      <FileText size={22} weight="duotone" />
-                    </div>
-                  </div>
+              <Card3Internals inView={isHeaderInView} delay={0} onTypingStatusChange={setIsTypingActive} />
+            </GlassCard>
 
-                  <h3 className="font-heading text-xl sm:text-2xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] mb-2">
-                    {TOOLS_DATA[0].headline}
-                  </h3>
-
-                  <p className="font-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6] mb-6">
-                    {TOOLS_DATA[0].description}
-                  </p>
-
-                  {/* Preview Panel: Rubric List with JetBrains Mono numbers */}
-                  <div className="bg-white dark:bg-[#191D32] border border-[#E4E0D8] dark:border-[#252A45] rounded-[6px] p-4 space-y-2 mb-6">
-                    <div className="flex items-center justify-between pb-2 border-b border-[#E4E0D8] dark:border-[#252A45]">
-                      <span className="font-sans text-[11px] font-medium text-[#6B7280] dark:text-[#7E88A8] uppercase tracking-wider">
-                        Scoring Rubric (5 Dimensions)
-                      </span>
-                      {/* Monospace score only */}
-                      <span className="font-mono text-xs font-semibold text-[#4F46E5] dark:text-[#818CF8]">
-                        Score: <CountUp to={8} from={0} duration={1.2} /> / 10
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs pt-1">
-                      {RUBRIC_ITEMS.slice(0, 4).map((item) => (
-                        <div
-                          key={item.label}
-                          className="flex items-center justify-between border-b border-[#E4E0D8]/60 dark:border-[#252A45]/60 pb-1"
-                        >
-                          <span className="text-[#14161F] dark:text-[#E8EAF6] font-sans">
-                            {item.label}
-                          </span>
-                          <span className="font-mono text-[#6B7280] dark:text-[#7E88A8]">
-                            0 - <CountUp to={item.maxPts} from={0} duration={1} /> pts
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="flex items-center justify-between pt-1 text-xs">
-                      <span className="text-[#14161F] dark:text-[#E8EAF6] font-sans">
-                        {RUBRIC_ITEMS[4].label}
-                      </span>
-                      <span className="font-mono text-[#6B7280] dark:text-[#7E88A8]">
-                        0 - <CountUp to={RUBRIC_ITEMS[4].maxPts} from={0} duration={1} /> pts
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="relative z-10 pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
-                  <span className="font-sans text-xs text-[#6B7280] dark:text-[#7E88A8]">
-                    {TOOLS_DATA[0].footerNote}
-                  </span>
-                  <Link
-                    to={TOOLS_DATA[0].actionHref}
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-[#4F46E5] dark:text-[#818CF8] hover:text-[#4338CA] dark:hover:text-[#A5B4FC] transition-colors min-h-[36px]"
+            <GlassCard
+              badgeNumber="4"
+              badgeLabel="Roadmap Provider"
+              icon={
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <motion.g
+                    initial={prefersReducedMotion ? { rotate: 45 } : { rotate: 0 }}
+                    animate={
+                      prefersReducedMotion
+                        ? { rotate: 45 }
+                        : card4Hovered
+                        ? { rotate: [45, 33, 57, 45] }
+                        : { rotate: 45 }
+                    }
+                    transition={
+                      card4Hovered
+                        ? { duration: 0.8, ease: 'easeInOut' }
+                        : { type: 'spring', stiffness: 60, damping: 8, delay: 0.3 }
+                    }
+                    style={{ transformOrigin: '12px 12px' }}
                   >
-                    <span className="font-sans">{TOOLS_DATA[0].actionText}</span>
-                    <ArrowUpRight size={16} weight="bold" />
-                  </Link>
-                </div>
-              </SpotlightCard>
-            </AnimatedContent>
-          </div>
-
-          {/* ============================================================== */}
-          {/* Card 02: Skill Gap Analyzer (Row 1: 1fr -> 5 cols on lg)       */}
-          {/* ============================================================== */}
-          <div className="lg:col-span-5" ref={card2Ref}>
-            <AnimatedContent
-              distance={20}
-              direction="vertical"
-              duration={0.7}
-              delay={0.1}
-              trigger="scroll"
-              once={true}
-              className="h-full"
+                    <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+                  </motion.g>
+                </svg>
+              }
+              heading="Curated learning paths on PathForge."
+              body="When you identify a skill gap, jump directly to structured, community-tested roadmaps across modern engineering and data disciplines without searching blindly."
+              footerNote="External learning companion"
+              actionText="Explore PathForge"
+              actionHref="https://path-forge-amber.vercel.app/"
+              isExternal={true}
+              spanClass="card-span-7"
+              delay={0.15}
+              isLeft={false}
+              onCardHoverChange={setCard4Hovered}
             >
-              <SpotlightCard
-                theme={cardTheme}
-                spotlightColor={cardTheme === 'dark' ? '#818CF8' : '#4F46E5'}
-                intensity={cardTheme === 'dark' ? 0.16 : 0.22}
-                spotlightSize={280}
-                softness={0.7}
-                borderGlow={cardTheme === 'dark' ? 0.7 : 0.85}
-                proximity={80}
-                className="h-full rounded-[12px] bg-[#F9F8F4] dark:bg-[#121524] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/5 hover:-translate-y-0.5 cursor-default"
-                style={{
-                  borderRadius: '12px',
-                  '--spotlight-card-surface': cardTheme === 'dark' ? '#121524' : '#F9F8F4',
-                  '--spotlight-card-border': cardTheme === 'dark' ? '#1E233A' : '#E4E0D8',
-                  '--spotlight-card-shadow': cardTheme === 'dark' ? '0 10px 30px -10px rgba(0,0,0,0.5)' : '0 1px 3px rgba(0,0,0,0.03)'
-                }}
-              >
-                <div className="relative z-10">
-                  {/* Top: 28px rounded-md number badge + sentence-case label, 40px rounded-lg duotone icon */}
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="flex items-center gap-2.5">
-                      <span className="w-7 h-7 rounded-md bg-[#EEF2FF] dark:bg-[#1C2035] text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center text-xs font-semibold border border-[#E0E7FF] dark:border-[#282F4E] flex-shrink-0">
-                        {TOOLS_DATA[1].number}
-                      </span>
-                      <span className="font-sans font-medium text-[13px] text-[#475569] dark:text-[#94A3B8]">
-                        {TOOLS_DATA[1].title}
-                      </span>
-                    </div>
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#F1F3F9] dark:bg-[#1C2035] border border-[#E2E6F0] dark:border-[#282F4E] text-[#4F46E5] dark:text-[#818CF8] flex-shrink-0">
-                      <Target size={22} weight="duotone" />
-                    </div>
-                  </div>
-
-                  <h3 className="font-heading text-xl sm:text-2xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] mb-2">
-                    {TOOLS_DATA[1].headline}
-                  </h3>
-
-                  <p className="font-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6] mb-6">
-                    {TOOLS_DATA[1].description}
-                  </p>
-
-                  {/* Preview Panel: Role Benchmark + Progress Bar + Chips */}
-                  <div className="bg-white dark:bg-[#191D32] border border-[#E4E0D8] dark:border-[#252A45] rounded-[6px] p-4 mb-6 space-y-3">
-                    <div className="flex justify-between items-center text-xs">
-                      <span className="font-medium text-[#14161F] dark:text-[#E8EAF6] font-sans">
-                        Frontend Developer
-                      </span>
-                      <span className="font-mono text-[#4F46E5] dark:text-[#818CF8] font-semibold">
-                        <CountUp to={67} from={0} duration={1.2} suffix="%" /> Match
-                      </span>
-                    </div>
-
-                    {/* Progress bar: 0 -> 67% on scroll-in, 900ms ease-out */}
-                    <div className="w-full bg-[#FAF8F4] dark:bg-[#0D101C] h-2 rounded-[2px] border border-[#E4E0D8] dark:border-[#252A45] overflow-hidden">
-                      <div
-                        className="bg-[#4F46E5] dark:bg-[#818CF8] h-full"
-                        style={{
-                          width: card2InView ? '67%' : '0%',
-                          transition: 'width 900ms cubic-bezier(0.16, 1, 0.3, 1)'
-                        }}
-                      />
-                    </div>
-
-                    {/* Monospace Skill Chips (JetBrains Mono) */}
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      <span className="font-mono text-[10px] text-[#15803D] dark:text-[#4ADE80] bg-[#F0FDF4] dark:bg-[#0B2816] border border-[#DCFCE7] dark:border-[#1E502B] px-1.5 py-0.5 rounded-[3px]">
-                        + React
-                      </span>
-                      <span className="font-mono text-[10px] text-[#15803D] dark:text-[#4ADE80] bg-[#F0FDF4] dark:bg-[#0B2816] border border-[#DCFCE7] dark:border-[#1E502B] px-1.5 py-0.5 rounded-[3px]">
-                        + Git
-                      </span>
-                      <span className="font-mono text-[10px] text-[#B45309] dark:text-[#FBBF24] bg-[#FFFBEB] dark:bg-[#2D1807] border border-[#FEF3C7] dark:border-[#572F0E] px-1.5 py-0.5 rounded-[3px]">
-                        - TypeScript
-                      </span>
-                      <span className="font-mono text-[10px] text-[#B45309] dark:text-[#FBBF24] bg-[#FFFBEB] dark:bg-[#2D1807] border border-[#FEF3C7] dark:border-[#572F0E] px-1.5 py-0.5 rounded-[3px]">
-                        - Jest
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="relative z-10 pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
-                  <span className="font-sans text-xs text-[#6B7280] dark:text-[#7E88A8]">
-                    {TOOLS_DATA[1].footerNote}
-                  </span>
-                  <Link
-                    to={TOOLS_DATA[1].actionHref}
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-[#4F46E5] dark:text-[#818CF8] hover:text-[#4338CA] dark:hover:text-[#A5B4FC] transition-colors min-h-[36px]"
-                  >
-                    <span className="font-sans">{TOOLS_DATA[1].actionText}</span>
-                    <ArrowUpRight size={16} weight="bold" />
-                  </Link>
-                </div>
-              </SpotlightCard>
-            </AnimatedContent>
-          </div>
-
-          {/* ============================================================== */}
-          {/* Card 03: Cover Letter Generator (Row 2: 1fr -> 5 cols on lg)   */}
-          {/* ============================================================== */}
-          <div className="lg:col-span-5">
-            <AnimatedContent
-              distance={20}
-              direction="vertical"
-              duration={0.7}
-              delay={0.2}
-              trigger="scroll"
-              once={true}
-              className="h-full"
-            >
-              <SpotlightCard
-                theme={cardTheme}
-                spotlightColor={cardTheme === 'dark' ? '#818CF8' : '#4F46E5'}
-                intensity={cardTheme === 'dark' ? 0.16 : 0.22}
-                spotlightSize={280}
-                softness={0.7}
-                borderGlow={cardTheme === 'dark' ? 0.7 : 0.85}
-                proximity={80}
-                className="h-full rounded-[12px] bg-[#F9F8F4] dark:bg-[#121524] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/5 hover:-translate-y-0.5 cursor-default"
-                style={{
-                  borderRadius: '12px',
-                  '--spotlight-card-surface': cardTheme === 'dark' ? '#121524' : '#F9F8F4',
-                  '--spotlight-card-border': cardTheme === 'dark' ? '#1E233A' : '#E4E0D8',
-                  '--spotlight-card-shadow': cardTheme === 'dark' ? '0 10px 30px -10px rgba(0,0,0,0.5)' : '0 1px 3px rgba(0,0,0,0.03)'
-                }}
-              >
-                <div className="relative z-10">
-                  {/* Top: 28px rounded-md number badge + sentence-case label, 40px rounded-lg duotone icon */}
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="flex items-center gap-2.5">
-                      <span className="w-7 h-7 rounded-md bg-[#EEF2FF] dark:bg-[#1C2035] text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center text-xs font-semibold border border-[#E0E7FF] dark:border-[#282F4E] flex-shrink-0">
-                        {TOOLS_DATA[2].number}
-                      </span>
-                      <span className="font-sans font-medium text-[13px] text-[#475569] dark:text-[#94A3B8]">
-                        {TOOLS_DATA[2].title}
-                      </span>
-                    </div>
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#F1F3F9] dark:bg-[#1C2035] border border-[#E2E6F0] dark:border-[#282F4E] text-[#4F46E5] dark:text-[#818CF8] flex-shrink-0">
-                      <NotePencil size={22} weight="duotone" />
-                    </div>
-                  </div>
-
-                  <h3 className="font-heading text-xl sm:text-2xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] mb-2">
-                    {TOOLS_DATA[2].headline}
-                  </h3>
-
-                  <p className="font-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6] mb-6">
-                    {TOOLS_DATA[2].description}
-                  </p>
-
-                  {/* Preview Panel: Target header + TextType typed excerpt + Action buttons */}
-                  <div className="bg-white dark:bg-[#191D32] border border-[#E4E0D8] dark:border-[#252A45] rounded-[6px] p-4 mb-6 space-y-3">
-                    <div className="flex justify-between items-center text-xs pb-2 border-b border-[#E4E0D8]/60 dark:border-[#252A45]/60">
-                      <span className="font-sans text-[#14161F] dark:text-[#E8EAF6] font-medium">
-                        Target: Stripe · Intern
-                      </span>
-                      <span className="font-sans text-[#6B7280] dark:text-[#7E88A8]">
-                        312 words
-                      </span>
-                    </div>
-
-                    {/* Italic Sample Letter Excerpt with TextType typing animation */}
-                    <div className="text-xs italic text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6] min-h-[56px] font-sans">
-                      <TextType
-                        text={SAMPLE_LETTER_TEXT}
-                        typingSpeed={25}
-                        loop={false}
-                        startOnVisible={true}
-                        cursorStyle="bar"
-                        showCursor={!typingComplete}
-                        cursorBlinkDuration={0.4}
-                        onSentenceComplete={() => setTypingComplete(true)}
-                        className="text-xs italic"
-                      />
-                    </div>
-
-                    {/* Action buttons: Copy text and Export PDF with Phosphor icons */}
-                    <div className="flex items-center gap-2 pt-1 border-t border-[#E4E0D8]/60 dark:border-[#252A45]/60">
-                      <button
-                        type="button"
-                        onClick={handleCopySample}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-sans font-medium rounded-[4px] border border-[#E4E0D8] dark:border-[#252A45] bg-[#FAF8F4] dark:bg-[#121524] text-[#14161F] dark:text-[#E8EAF6] hover:border-[#4F46E5] dark:hover:border-[#818CF8] transition-colors cursor-pointer"
-                      >
-                        {copied ? (
-                          <>
-                            <Check size={13} weight="bold" className="text-emerald-600" />
-                            <span>Copied</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy size={13} weight="duotone" />
-                            <span>Copy text</span>
-                          </>
-                        )}
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={handleExportDummy}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-sans font-medium rounded-[4px] border border-[#E4E0D8] dark:border-[#252A45] bg-[#FAF8F4] dark:bg-[#121524] text-[#14161F] dark:text-[#E8EAF6] hover:border-[#4F46E5] dark:hover:border-[#818CF8] transition-colors cursor-pointer"
-                      >
-                        <FileArrowDown size={13} weight="duotone" />
-                        <span>Export PDF</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="relative z-10 pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
-                  <span className="font-sans text-xs text-[#6B7280] dark:text-[#7E88A8]">
-                    {TOOLS_DATA[2].footerNote}
-                  </span>
-                  <Link
-                    to={TOOLS_DATA[2].actionHref}
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-[#4F46E5] dark:text-[#818CF8] hover:text-[#4338CA] dark:hover:text-[#A5B4FC] transition-colors min-h-[36px]"
-                  >
-                    <span className="font-sans">{TOOLS_DATA[2].actionText}</span>
-                    <ArrowUpRight size={16} weight="bold" />
-                  </Link>
-                </div>
-              </SpotlightCard>
-            </AnimatedContent>
-          </div>
-
-          {/* ============================================================== */}
-          {/* Card 04: Roadmap Provider (Row 2: 1.2fr -> 7 cols on lg)       */}
-          {/* ============================================================== */}
-          <div className="lg:col-span-7">
-            <AnimatedContent
-              distance={20}
-              direction="vertical"
-              duration={0.7}
-              delay={0.3}
-              trigger="scroll"
-              once={true}
-              className="h-full"
-            >
-              <SpotlightCard
-                theme={cardTheme}
-                spotlightColor={cardTheme === 'dark' ? '#818CF8' : '#4F46E5'}
-                intensity={cardTheme === 'dark' ? 0.16 : 0.22}
-                spotlightSize={280}
-                softness={0.7}
-                borderGlow={cardTheme === 'dark' ? 0.7 : 0.85}
-                proximity={80}
-                className="h-full rounded-[12px] bg-[#F9F8F4] dark:bg-[#121524] p-6 sm:p-8 flex flex-col justify-between transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/5 hover:-translate-y-0.5 cursor-default"
-                style={{
-                  borderRadius: '12px',
-                  '--spotlight-card-surface': cardTheme === 'dark' ? '#121524' : '#F9F8F4',
-                  '--spotlight-card-border': cardTheme === 'dark' ? '#1E233A' : '#E4E0D8',
-                  '--spotlight-card-shadow': cardTheme === 'dark' ? '0 10px 30px -10px rgba(0,0,0,0.5)' : '0 1px 3px rgba(0,0,0,0.03)'
-                }}
-              >
-                <div className="relative z-10">
-                  {/* Top: 28px rounded-md number badge + sentence-case label, 40px rounded-lg duotone icon */}
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="flex items-center gap-2.5">
-                      <span className="w-7 h-7 rounded-md bg-[#EEF2FF] dark:bg-[#1C2035] text-[#4F46E5] dark:text-[#818CF8] flex items-center justify-center text-xs font-semibold border border-[#E0E7FF] dark:border-[#282F4E] flex-shrink-0">
-                        {TOOLS_DATA[3].number}
-                      </span>
-                      <span className="font-sans font-medium text-[13px] text-[#475569] dark:text-[#94A3B8]">
-                        {TOOLS_DATA[3].title}
-                      </span>
-                    </div>
-                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#F1F3F9] dark:bg-[#1C2035] border border-[#E2E6F0] dark:border-[#282F4E] text-[#4F46E5] dark:text-[#818CF8] flex-shrink-0">
-                      <Compass size={22} weight="duotone" />
-                    </div>
-                  </div>
-
-                  <h3 className="font-heading text-xl sm:text-2xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] mb-2">
-                    {TOOLS_DATA[3].headline}
-                  </h3>
-
-                  <p className="font-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6] mb-6">
-                    {TOOLS_DATA[3].description}
-                  </p>
-
-                  {/* Preview Panel: 4 Pathway Buttons with Magnet */}
-                  <div className="bg-white dark:bg-[#191D32] border border-[#E4E0D8] dark:border-[#252A45] rounded-[6px] p-4 mb-6 space-y-3">
-                    <span className="font-sans text-[11px] font-medium text-[#6B7280] dark:text-[#7E88A8] uppercase tracking-wider block">
-                      AVAILABLE PATHWAYS ON PATHFORGE:
-                    </span>
-
-                    {/* Pathway buttons with Magnet effect (padding 30, magnetStrength 4) */}
-                    <div className="flex flex-wrap gap-2 pt-1">
-                      {PATHWAYS.map((pathway) => (
-                        <Magnet key={pathway} padding={30} magnetStrength={4}>
-                          <a
-                            href="https://path-forge-amber.vercel.app/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-sans font-medium rounded-[4px] border border-[#E4E0D8] dark:border-[#252A45] bg-[#FAF8F4] dark:bg-[#121524] text-[#14161F] dark:text-[#E8EAF6] hover:border-[#4F46E5] dark:hover:border-[#818CF8] hover:text-[#4F46E5] dark:hover:text-[#818CF8] transition-colors"
-                          >
-                            <span>{pathway}</span>
-                            <ArrowUpRight size={13} weight="bold" className="opacity-60" />
-                          </a>
-                        </Magnet>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="relative z-10 pt-4 border-t border-[#E4E0D8] dark:border-[#1E233A] flex items-center justify-between">
-                  <span className="font-sans text-xs text-[#6B7280] dark:text-[#7E88A8]">
-                    {TOOLS_DATA[3].footerNote}
-                  </span>
-                  <a
-                    href={TOOLS_DATA[3].actionHref}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-[#4F46E5] dark:text-[#818CF8] hover:text-[#4338CA] dark:hover:text-[#A5B4FC] transition-colors min-h-[36px]"
-                  >
-                    <span className="font-sans">{TOOLS_DATA[3].actionText}</span>
-                    <ArrowUpRight size={16} weight="bold" />
-                  </a>
-                </div>
-              </SpotlightCard>
-            </AnimatedContent>
+              <Card4Internals
+                inView={isHeaderInView}
+                delay={0.15}
+                isChipHovered={isChipHovered}
+                setIsChipHovered={setIsChipHovered}
+              />
+            </GlassCard>
           </div>
         </div>
       </div>
