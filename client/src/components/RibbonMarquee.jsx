@@ -159,7 +159,7 @@ export default function RibbonMarquee({
   speed = 0.9,                 // world units per second the text travels
   color = "#4F46E5",           // ribbon colour (InternIQ indigo)
   ink = "#F4F5FB",             // printed text colour
-  background = "#0F111A",
+  background = "transparent",
   height = "clamp(280px, 38vw, 460px)",
   fontFamily = "'Bricolage Grotesque', 'Inter', system-ui, sans-serif",
   className = "",

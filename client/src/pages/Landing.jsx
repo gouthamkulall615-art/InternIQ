@@ -351,6 +351,7 @@ export default function Landing() {
 
       {/* 3D SATIN RIBBON MARQUEE */}
       <RibbonMarquee
+        className="bg-[#FAF8F4] dark:bg-[#0B0D17] transition-colors"
         items={[
           "Fix your resume before they see it",
           "Beat the ATS",
@@ -367,27 +368,27 @@ export default function Landing() {
       {/* 5. HOW IT WORKS (React Bits Bento with SpotlightCard, Magnet, CountUp, BlurText, ShinyText, ClickSpark) */}
       <HowItWorks />
 
-      {/* 6. DARK SECTION (#0F111A) FOR SKILL GAP IN DETAIL */}
-      <section id="skill-benchmark" className="scroll-mt-20 py-16 sm:py-20 bg-[#0F111A] text-white relative z-10">
+      {/* 6. SKILL GAP BENCHMARK SECTION */}
+      <section id="skill-benchmark" className="scroll-mt-20 py-16 sm:py-20 bg-[#FAF8F4] dark:bg-[#0F111A] text-[#14161F] dark:text-white transition-colors relative z-10 border-t border-[#E4E0D8] dark:border-[#262938]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
             {/* Left Side: Context */}
             <div className="lg:col-span-5 space-y-6">
-              <span className="font-sans font-medium text-xs uppercase tracking-wider text-[#9CA3AF] block">
+              <span className="font-sans font-medium text-xs uppercase tracking-wider text-[#6B7280] dark:text-[#9CA3AF] block">
                 SKILL GAP BENCHMARK
               </span>
 
-              <h2 className="font-heading text-3xl sm:text-4xl font-semibold tracking-[-0.02em] text-white leading-tight">
+              <h2 className="font-heading text-3xl sm:text-4xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-white leading-tight">
                 Know exactly what to study before your interview.
               </h2>
 
-              <p className="font-sans text-sm sm:text-base text-[#9CA3AF] leading-[1.6]">
+              <p className="font-sans text-sm sm:text-base text-[#5A5D6B] dark:text-[#9CA3AF] leading-[1.6]">
                 Instead of guessing what hiring managers look for, compare your profile against standardized industry criteria across eight technical and product tracks. No vague advice—only clear matched competencies and missing skills.
               </p>
 
               {/* Interactive Role Switcher */}
               <div className="pt-2 space-y-2">
-                <span className="font-sans text-xs text-[#9CA3AF] block">
+                <span className="font-sans text-xs text-[#6B7280] dark:text-[#9CA3AF] block">
                   Select a role to preview benchmarks:
                 </span>
                 <div className="grid grid-cols-2 gap-2">
@@ -396,10 +397,10 @@ export default function Landing() {
                       key={r.title}
                       type="button"
                       onClick={() => setSelectedRoleIndex(idx)}
-                      className={`text-left text-xs font-sans px-3 py-2.5 rounded-[4px] border transition-colors min-h-[44px] cursor-pointer ${
+                      className={`text-left text-xs font-sans px-3 py-2.5 rounded-[6px] border transition-colors min-h-[44px] cursor-pointer ${
                         selectedRoleIndex === idx
-                          ? 'border-[#4F46E5] bg-[#4F46E5]/15 text-white font-medium'
-                          : 'border-[#262938] bg-[#171926] text-[#9CA3AF] hover:text-white'
+                          ? 'border-[#4F46E5] bg-[#4F46E5]/10 text-[#4F46E5] dark:text-white dark:bg-[#4F46E5]/20 font-semibold'
+                          : 'border-[#E4E0D8] dark:border-[#262938] bg-white dark:bg-[#171926] text-[#5A5D6B] dark:text-[#9CA3AF] hover:text-[#14161F] dark:hover:text-white'
                       }`}
                     >
                       {r.title}
@@ -408,10 +409,10 @@ export default function Landing() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-[#262938]">
+              <div className="pt-4 border-t border-[#E4E0D8] dark:border-[#262938]">
                 <Link
                   to="/skill-gap"
-                  className="inline-flex items-center gap-2 text-sm font-sans font-medium text-[#818CF8] hover:text-white transition-colors min-h-[44px]"
+                  className="inline-flex items-center gap-2 text-sm font-sans font-medium text-[#4F46E5] dark:text-[#818CF8] hover:text-[#4338CA] dark:hover:text-white transition-colors min-h-[44px]"
                 >
                   <span>Open full Skill Gap Analyzer</span>
                   <ArrowUpRight size={16} weight="bold" />
@@ -420,22 +421,22 @@ export default function Landing() {
             </div>
 
             {/* Right Side: Detailed Sample Card */}
-            <div className="lg:col-span-7 bg-[#171926] border border-[#262938] rounded-[6px] p-6 sm:p-8 space-y-6">
+            <div className="lg:col-span-7 bg-white dark:bg-[#171926] border border-[#E4E0D8] dark:border-[#262938] rounded-[12px] p-6 sm:p-8 space-y-6 shadow-sm dark:shadow-none transition-colors">
               {/* Card Header */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#262938]">
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#E4E0D8] dark:border-[#262938]">
                 <div>
-                  <span className="font-sans text-[11px] font-medium text-[#9CA3AF] uppercase">
+                  <span className="font-sans text-[11px] font-medium text-[#6B7280] dark:text-[#9CA3AF] uppercase">
                     Target Role
                   </span>
-                  <h3 className="font-heading text-xl font-semibold tracking-[-0.02em] text-white mt-0.5">
+                  <h3 className="font-heading text-xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-white mt-0.5">
                     {roles[selectedRoleIndex].title}
                   </h3>
                 </div>
                 <div className="text-right">
-                  <span className="font-sans text-xs text-[#9CA3AF] block">
+                  <span className="font-sans text-xs text-[#6B7280] dark:text-[#9CA3AF] block">
                     Readiness Score
                   </span>
-                  <span className="font-mono text-2xl font-bold text-[#818CF8]">
+                  <span className="font-mono text-2xl font-bold text-[#4F46E5] dark:text-[#818CF8]">
                     {roles[selectedRoleIndex].readiness}%
                   </span>
                 </div>
@@ -443,13 +444,13 @@ export default function Landing() {
 
               {/* Readiness Progress Bar */}
               <div className="space-y-1.5">
-                <div className="flex justify-between text-xs font-mono text-[#9CA3AF]">
+                <div className="flex justify-between text-xs font-mono text-[#6B7280] dark:text-[#9CA3AF]">
                   <span>
                     {roles[selectedRoleIndex].matched.length} of {roles[selectedRoleIndex].matched.length + roles[selectedRoleIndex].missing.length} competencies verified
                   </span>
                   <span>{roles[selectedRoleIndex].readiness}%</span>
                 </div>
-                <div className="w-full bg-[#0F111A] h-2 rounded-[2px] border border-[#262938] overflow-hidden">
+                <div className="w-full bg-[#F1F3F9] dark:bg-[#0F111A] h-2 rounded-[2px] border border-[#E4E0D8] dark:border-[#262938] overflow-hidden">
                   <div
                     className="bg-[#4F46E5] h-full transition-all duration-300"
                     style={{ width: `${roles[selectedRoleIndex].readiness}%` }}
@@ -457,9 +458,9 @@ export default function Landing() {
                 </div>
               </div>
 
-              {/* Matched Skills (Green #15803D) */}
+              {/* Matched Skills */}
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-sans font-medium text-[#4ADE80]">
+                <div className="flex items-center gap-2 text-xs font-sans font-medium text-[#16A34A] dark:text-[#4ADE80]">
                   <Check className="h-4 w-4" strokeWidth={2} />
                   <span>Matched Skills ({roles[selectedRoleIndex].matched.length})</span>
                 </div>
@@ -467,7 +468,7 @@ export default function Landing() {
                   {roles[selectedRoleIndex].matched.map((s) => (
                     <span
                       key={s}
-                      className="font-mono text-xs bg-[#0B2816] text-[#4ADE80] border border-[#1E502B] px-2.5 py-1 rounded-[4px]"
+                      className="font-mono text-xs bg-[#DCFCE7] dark:bg-[#0B2816] text-[#15803D] dark:text-[#4ADE80] border border-[#86EFAC] dark:border-[#1E502B] px-2.5 py-1 rounded-[4px]"
                     >
                       {s}
                     </span>
@@ -475,9 +476,9 @@ export default function Landing() {
                 </div>
               </div>
 
-              {/* Missing Skills (Amber #B45309) */}
-              <div className="space-y-2 pt-2 border-t border-[#262938]">
-                <div className="flex items-center gap-2 text-xs font-sans font-medium text-[#FBBF24]">
+              {/* Missing Skills */}
+              <div className="space-y-2 pt-2 border-t border-[#E4E0D8] dark:border-[#262938]">
+                <div className="flex items-center gap-2 text-xs font-sans font-medium text-[#D97706] dark:text-[#FBBF24]">
                   <CircleAlert className="h-4 w-4" strokeWidth={2} />
                   <span>Missing Skills ({roles[selectedRoleIndex].missing.length})</span>
                 </div>
@@ -485,7 +486,7 @@ export default function Landing() {
                   {roles[selectedRoleIndex].missing.map((s) => (
                     <span
                       key={s}
-                      className="font-mono text-xs bg-[#2D1807] text-[#FBBF24] border border-[#572F0E] px-2.5 py-1 rounded-[4px]"
+                      className="font-mono text-xs bg-[#FEF3C7] dark:bg-[#2D1807] text-[#B45309] dark:text-[#FBBF24] border border-[#FDE68A] dark:border-[#572F0E] px-2.5 py-1 rounded-[4px]"
                     >
                       {s}
                     </span>
@@ -494,9 +495,9 @@ export default function Landing() {
               </div>
 
               {/* Note */}
-              <div className="pt-2 text-xs font-sans text-[#9CA3AF] border-t border-[#262938] flex items-center justify-between">
+              <div className="pt-2 text-xs font-sans text-[#6B7280] dark:text-[#9CA3AF] border-t border-[#E4E0D8] dark:border-[#262938] flex items-center justify-between">
                 <span>Directly syncs with your uploaded resume</span>
-                <span className="font-mono text-[11px] text-[#818CF8]">
+                <span className="font-mono text-[11px] text-[#4F46E5] dark:text-[#818CF8]">
                   {roles[selectedRoleIndex].missing.length} learning targets
                 </span>
               </div>

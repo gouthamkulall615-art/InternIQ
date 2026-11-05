@@ -1,13 +1,49 @@
 /* HowItWorks.css */
 
 .how-it-works-section {
+  /* LIGHT THEME (Default) */
+  --how-bg: #FAF8F4;
+  --how-heading: #14161F;
+  --how-subtitle: #5A5D6B;
+  --how-eyebrow: #4F46E5;
+  --how-card-bg: rgba(255, 255, 255, 0.92);
+  --how-card-border: rgba(20, 22, 31, 0.08);
+  --how-badge-bg: #EEF0FF;
+  --how-badge-border: #C7D2FE;
+  --how-badge-color: #14161F;
+  --how-step-label: #6B7280;
+  --how-step-title: #14161F;
+  --how-step-body: #5A5D6B;
+  --how-connector-line: rgba(20, 22, 31, 0.12);
+  --how-travel-dot: #4F46E5;
+
   position: relative;
-  background-color: #0d1020;
+  background-color: var(--how-bg);
   padding: 120px 24px;
   overflow: hidden;
   box-sizing: border-box;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  color: #8b92a8;
+  color: var(--how-subtitle);
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+/* DARK THEME */
+.dark .how-it-works-section,
+[data-theme='dark'] .how-it-works-section {
+  --how-bg: #0d1020;
+  --how-heading: #f5f6fa;
+  --how-subtitle: #8b92a8;
+  --how-eyebrow: #818cf8;
+  --how-card-bg: rgba(255, 255, 255, 0.03);
+  --how-card-border: rgba(255, 255, 255, 0.08);
+  --how-badge-bg: #11142a;
+  --how-badge-border: rgba(255, 255, 255, 0.10);
+  --how-badge-color: #f5f6fa;
+  --how-step-label: #9ca3b8;
+  --how-step-title: #f5f6fa;
+  --how-step-body: #8b92a8;
+  --how-connector-line: rgba(255, 255, 255, 0.12);
+  --how-travel-dot: #a5b4fc;
 }
 
 .how-container {
@@ -37,7 +73,8 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #818cf8;
+  color: var(--how-eyebrow);
+  transition: color 200ms ease;
 }
 
 .how-heading {
@@ -46,19 +83,22 @@
   font-weight: 700;
   line-height: 1.1;
   letter-spacing: -0.02em;
-  color: #f5f6fa;
+  color: var(--how-heading);
   margin: 0 0 16px 0;
+  transition: color 200ms ease;
 }
 
 .how-subtitle {
   font-size: 16px;
   line-height: 1.6;
-  color: #8b92a8;
+  color: var(--how-subtitle);
   max-width: 620px;
   margin: 0;
   opacity: 0;
   transform: translateY(16px);
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1), transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+              color 200ms ease;
 }
 
 /* Steps Grid */
@@ -79,8 +119,8 @@
 
 /* Spotlight Card Inside Wrapper */
 .how-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--how-card-bg);
+  border: 1px solid var(--how-card-border);
   border-radius: 16px;
   padding: 32px;
   display: flex;
@@ -93,7 +133,8 @@
   transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
               transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
               filter 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-              border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+              border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 200ms ease;
 }
 
 /* Badge Row */
@@ -107,21 +148,23 @@
   width: 64px;
   height: 64px;
   border-radius: 10px;
-  background-color: #11142a;
-  border: 1px solid rgba(255, 255, 255, 0.10);
+  background-color: var(--how-badge-bg);
+  border: 1px solid var(--how-badge-border);
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
   font-size: 28px;
   font-weight: 700;
-  color: #f5f6fa;
+  color: var(--how-badge-color);
   user-select: none;
   transform: scale(0.6);
   opacity: 0;
   transition: transform 0.65s cubic-bezier(0.34, 1.45, 0.64, 1),
               opacity 0.5s ease,
-              border-color 0.3s ease;
+              border-color 0.3s ease,
+              background-color 200ms ease,
+              color 200ms ease;
 }
 
 /* Step Typography */
@@ -129,13 +172,14 @@
   font-family: 'JetBrains Mono', monospace;
   font-size: 14px;
   font-weight: 500;
-  color: #9ca3b8;
+  color: var(--how-step-label);
   margin-bottom: 8px;
   display: block;
   opacity: 0;
   transform: translateY(12px);
   transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              color 200ms ease;
 }
 
 .how-step-title {
@@ -143,32 +187,34 @@
   font-size: 22px;
   line-height: 1.3;
   font-weight: 700;
-  color: #f5f6fa;
+  color: var(--how-step-title);
   margin: 0 0 12px 0;
   opacity: 0;
   transform: translateY(12px);
   transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              color 200ms ease;
 }
 
 .how-step-body {
   font-family: 'Inter', system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.65;
-  color: #8b92a8;
+  color: var(--how-step-body);
   margin: 0;
   opacity: 0;
   transform: translateY(12px);
   transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+              transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              color 200ms ease;
 }
 
 /* Horizontal Connector Line (Desktop) */
 .how-connector {
   position: absolute;
-  top: 64px; /* 32px padding + 32px badge half-height */
-  left: 108px; /* 32px padding + 64px badge + 12px gap */
-  right: -24px; /* crosses the 24px grid gap */
+  top: 64px;
+  left: 108px;
+  right: -24px;
   height: 1px;
   pointer-events: none;
   z-index: 2;
@@ -184,10 +230,10 @@
   position: relative;
   width: 100%;
   height: 1px;
-  background: rgba(255, 255, 255, 0.12);
+  background: var(--how-connector-line);
   transform-origin: left;
   transform: scaleX(0);
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), background-color 200ms ease;
 }
 
 /* Traveling Dot */
@@ -198,11 +244,12 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #a5b4fc;
+  background: var(--how-travel-dot);
   box-shadow: 0 0 10px rgba(129, 140, 248, 0.8);
   transform: translate(-50%, -50%);
   opacity: 0;
   pointer-events: none;
+  transition: background-color 200ms ease;
 }
 
 .how-it-works-section.is-active .how-travel-dot {
@@ -253,16 +300,8 @@
 }
 
 .how-it-works-section.is-active .how-badge {
-  transform: scale(1);
   opacity: 1;
-}
-
-.how-it-works-section.is-active .how-connector-line {
-  transform: scaleX(1);
-}
-
-.how-it-works-section.is-active .how-connector-vertical-line {
-  transform: scaleY(1);
+  transform: scale(1);
 }
 
 .how-it-works-section.is-active .how-step-label,
@@ -272,72 +311,83 @@
   transform: translateY(0);
 }
 
-/* Hover Interactivity (Desktop fine pointer only) */
+.how-it-works-section.is-active .how-connector-line {
+  transform: scaleX(1);
+}
+
+/* Hover States (Mouse Only) */
 @media (hover: hover) and (pointer: fine) {
-  .how-step-wrapper:hover .how-card {
-    transform: translateY(-4px);
-    border-color: rgba(129, 140, 248, 0.35);
+  .how-card:hover {
+    border-color: rgba(79, 70, 229, 0.4);
+    box-shadow: 0 14px 40px rgba(79, 70, 229, 0.12);
   }
 
-  .how-step-wrapper:hover .how-badge {
-    border-color: #6366f1;
+  .dark .how-card:hover {
+    border-color: rgba(129, 140, 248, 0.4);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+
+  .how-card:hover .how-badge {
+    border-color: #4F46E5;
+  }
+
+  .dark .how-card:hover .how-badge {
+    border-color: #818cf8;
   }
 }
 
-/* Responsive: Tablet & Mobile (< 900px) */
+/* Tablet & Mobile Layout (max-width: 899px) */
 @media (max-width: 899px) {
   .how-it-works-section {
-    padding: 80px 20px;
+    padding: 72px 16px;
+  }
+
+  .how-header {
+    margin-bottom: 40px;
   }
 
   .how-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 32px;
   }
 
-  .how-card {
-    padding: 24px;
-  }
-
-  /* Hide horizontal connectors on mobile */
   .how-connector {
     display: none;
   }
 
-  /* Show vertical connector on mobile */
   .how-connector-vertical {
     display: block;
     position: absolute;
-    left: 56px; /* 24px card padding + 32px badge half */
-    top: 88px; /* 24px padding + 64px badge */
-    bottom: -20px; /* reaches top of next card through 20px gap */
+    top: 96px;
+    bottom: -32px;
+    left: 48px;
     width: 1px;
     pointer-events: none;
     z-index: 2;
   }
 
-  .how-connector-vertical.is-last {
-    display: none;
-  }
-
-  .how-connector-vertical-line {
+  .how-connector-line-v {
     position: relative;
     width: 1px;
     height: 100%;
-    background: rgba(255, 255, 255, 0.12);
+    background: var(--how-connector-line);
     transform-origin: top;
     transform: scaleY(0);
     transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
+  .how-it-works-section.is-active .how-connector-line-v {
+    transform: scaleY(1);
+  }
+
   .how-travel-dot-v {
     position: absolute;
-    top: 0;
     left: 50%;
+    top: 0;
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #a5b4fc;
+    background: var(--how-travel-dot);
     box-shadow: 0 0 10px rgba(129, 140, 248, 0.8);
     transform: translate(-50%, -50%);
     opacity: 0;
@@ -368,18 +418,24 @@
       opacity: 0;
     }
   }
+
+  .how-card {
+    padding: 24px;
+  }
+
+  .how-badge {
+    width: 52px;
+    height: 52px;
+    font-size: 24px;
+  }
 }
 
-/* Reduced Motion Override */
+/* Accessibility: prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   .how-eyebrow-wrap,
   .how-subtitle,
   .how-card,
   .how-badge,
-  .how-connector-line,
-  .how-connector-vertical-line,
-  .how-travel-dot,
-  .how-travel-dot-v,
   .how-step-label,
   .how-step-title,
   .how-step-body {
@@ -387,7 +443,16 @@
     transform: none !important;
     filter: none !important;
     transition: none !important;
-    animation: none !important;
+  }
+
+  .how-connector-line,
+  .how-connector-line-v {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .how-travel-dot,
+  .how-travel-dot-v {
+    display: none !important;
   }
 }
-

@@ -7,6 +7,7 @@ import SpotlightCard from './SpotlightCard';
 import CountUp from './CountUp';
 import Magnet from './Magnet';
 import ClickSpark from './ClickSpark';
+import { useTheme } from '../contexts/ThemeContext';
 import './HowItWorks.css';
 
 const STEPS = [
@@ -33,6 +34,7 @@ const STEPS = [
 export default function HowItWorks() {
   const sectionRef = useRef(null);
   const [inView, setInView] = useState(false);
+  const { theme } = useTheme();
 
   // Trigger intro animation when section is 30% in view (once: true)
   useEffect(() => {
@@ -53,8 +55,10 @@ export default function HowItWorks() {
     return () => observer.disconnect();
   }, []);
 
+  const isDark = theme === 'dark';
+
   return (
-    <ClickSpark sparkColor="#818cf8" sparkCount={8} sparkSize={10} sparkRadius={18}>
+    <ClickSpark sparkColor={isDark ? '#818cf8' : '#4F46E5'} sparkCount={8} sparkSize={10} sparkRadius={18}>
       <section
         id="how-it-works"
         ref={sectionRef}
@@ -73,7 +77,7 @@ export default function HowItWorks() {
               }}
             >
               <span className="how-eyebrow">
-                <ShinyText text="PROCESS" speed={3.8} color="#818cf8" />
+                <ShinyText text="PROCESS" speed={3.8} color={isDark ? '#818cf8' : '#4F46E5'} />
               </span>
             </div>
 
@@ -119,10 +123,10 @@ export default function HowItWorks() {
                   {/* Spotlight Card */}
                   <SpotlightCard
                     className="how-card"
-                    spotlightColor="rgba(99, 102, 241, 0.15)"
+                    spotlightColor={isDark ? "rgba(99, 102, 241, 0.15)" : "rgba(79, 70, 229, 0.12)"}
                     spotlightSize={280}
                     intensity={0.25}
-                    theme="dark"
+                    theme={isDark ? "dark" : "light"}
                     style={{
                       transitionDelay: cardDelay
                     }}

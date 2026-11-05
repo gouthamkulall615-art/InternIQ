@@ -150,7 +150,7 @@
   --l-surface:       #FFFFFF;
   --l-ink:           #14161F;
   --l-line:          #E4E0D8;
-  --l-dark:          #0F111A;
+  --l-dark:          #FAF8F4;
   --l-accent:        #4F46E5;
   --l-cta:           #EEF0FB;   /* pale indigo CTA band */
   --l-block:         #E4E0D8;   /* offset block behind hero panel */
@@ -204,11 +204,11 @@
   z-index: 0;
 }
 
-/* Dark section sits above so contrast is maintained */
+/* Skill benchmark section sits at z-index 2 */
 .landing #skill-benchmark {
   position: relative;
   z-index: 2;
-  background-color: var(--l-dark, #0F111A);
+  transition: background-color 200ms ease, color 200ms ease;
 }
 
 /* Sticky top navigation sits above all sections */
