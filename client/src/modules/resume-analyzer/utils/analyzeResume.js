@@ -35,6 +35,6 @@ export async function analyzeResume(resumeText, fileName) {
       error.response?.data?.message ||
       error.message ||
       'Analysis failed. Please try again.';
-    throw new Error(message);
+    throw new Error(message, { cause: error });
   }
 }

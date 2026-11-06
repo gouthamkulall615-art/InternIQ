@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect, useCallback } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 
 export default function ClickSpark({
   sparkColor = '#E8553D',
@@ -8,7 +8,7 @@ export default function ClickSpark({
   sparkRadius = 18,
   sparkCount = 8,
   duration = 450,
-  easing = 'ease-out',
+  easing: _easing = 'ease-out',
   extraScale = 1.0,
   children,
   className = '',

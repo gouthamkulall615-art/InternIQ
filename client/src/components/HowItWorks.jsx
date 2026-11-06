@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import ShinyText from './ShinyText';
 import BlurText from './BlurText';
 import SpotlightCard from './SpotlightCard';

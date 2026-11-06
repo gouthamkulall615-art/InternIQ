@@ -18,6 +18,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://127.0.0.1:5173',
   'http://localhost:3000',
+  'https://intern-iq-omega.vercel.app',
   clientUrl,
 ].filter(Boolean);
 
@@ -28,6 +29,7 @@ app.use(cors({
     const normalizedOrigin = origin.replace(/\/+$/, '');
     if (
       allowedOrigins.includes(normalizedOrigin) ||
+      normalizedOrigin === 'https://intern-iq-omega.vercel.app' ||
       /^http:\/\/localhost:\d+$/.test(origin) ||
       /^http:\/\/127\.0\.0\.1:\d+$/.test(origin)
     ) {
@@ -39,6 +41,12 @@ app.use(cors({
 }));
 
 app.use(express.json());
+
+// Lightweight health check endpoint for monitoring and cold-start warmup
+// Does not touch DB, requires no auth, responds immediately with 200
+app.get("/api/health", (_req, res) => {
+  res.status(200).json({ status: "ok", uptime: process.uptime() });
+});
 
 // Maintenance mode middleware: return HTTP 503 when maintenance flag is true
 app.use((_req, res, next) => {
@@ -55,10 +63,6 @@ app.use(passport.initialize());
 app.use('/api/auth', authRoutes);
 app.use('/api/resumes', resumeRoutes);
 app.use('/api/analyzer', analyzerRoutes);
-
-app.get("/api/health", (_req, res) => {
-  res.json({ status: "ok", message: "InternIQ API is running" });
-});
 
 const connectDB = async () => {
   try {

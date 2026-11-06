@@ -41,7 +41,7 @@ export default function InstallPrompt() {
     deferredPrompt.prompt();
 
     // Wait for the user's response
-    const { outcome } = await deferredPrompt.userChoice;
+    await deferredPrompt.userChoice;
 
     // The prompt can only be used once — clear it regardless of outcome
     setDeferredPrompt(null);

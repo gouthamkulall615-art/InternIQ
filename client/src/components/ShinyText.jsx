@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import './ShinyText.css';
 
 export default function ShinyText({

@@ -19,7 +19,6 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { extractResumeText } from './utils/parseResume';
 import { analyzeResume } from './utils/analyzeResume';
-import { useAuth } from '../../contexts/AuthContext';
 import { generateReportPDF } from '../../utils/generateReportPDF';
 
 // ─── Score ring colors ──────────────────────────────────────────────
@@ -148,7 +147,6 @@ function ImprovementCard({ item, index }) {
 
 // ─── Main page component ────────────────────────────────────────────
 export default function ResumeAnalyzer() {
-  const { user } = useAuth();
   const navigate = useNavigate();
 
   const [file, setFile] = useState(null);

@@ -1,4 +1,3 @@
-import React from 'react';
 import './ProblemCards.css';
 
 const PROBLEM_CARDS_DATA = [

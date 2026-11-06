@@ -13,6 +13,7 @@ import AuthCallback from './pages/AuthCallback';
 import ProtectedRoute from './components/ProtectedRoute';
 import Landing from './pages/Landing';
 import AsciiBackground from './components/AsciiBackground';
+import { warmUpBackend } from './utils/backendWarmup';
 import { useTheme } from './contexts/ThemeContext';
 import { useAuth } from './contexts/AuthContext';
 
@@ -86,13 +87,12 @@ function Navbar() {
           <nav className="hidden md:flex items-center gap-1">
             {navigation.map((item) => {
               const isActive = !item.external && location.pathname === item.href;
-              const classes = `px-3.5 py-1.5 text-sm font-medium rounded-full transition-all duration-150 flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] ${
-                isActive
+              const classes = `px-3.5 py-1.5 text-sm font-medium rounded-full transition-all duration-150 flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] ${isActive
                   ? 'text-[var(--primary)] bg-[var(--primary-soft)] font-semibold shadow-xs'
                   : item.disabled
                     ? 'text-[var(--text-muted)] opacity-50 cursor-not-allowed'
                     : 'text-[var(--text-muted)] hover:text-[var(--text)] hover:bg-[var(--surface-muted)]'
-              }`;
+                }`;
 
               if (item.external) {
                 return (
@@ -209,9 +209,8 @@ function Navbar() {
 
       {/* Mobile drawer — glassmorphism slide-in from left */}
       <div
-        className={`fixed inset-0 z-50 md:hidden transition-opacity duration-300 ${
-          mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+        className={`fixed inset-0 z-50 md:hidden transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          }`}
       >
         {/* Backdrop overlay */}
         <div
@@ -221,9 +220,8 @@ function Navbar() {
 
         {/* Drawer panel */}
         <div
-          className={`absolute top-0 left-0 h-full w-4/5 max-w-sm bg-[var(--surface)]/95 backdrop-blur-xl border-r border-[var(--border)] shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${
-            mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
+          className={`absolute top-0 left-0 h-full w-4/5 max-w-sm bg-[var(--surface)]/95 backdrop-blur-xl border-r border-[var(--border)] shadow-2xl flex flex-col transition-transform duration-300 ease-in-out ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
         >
           {/* Drawer header */}
           <div className="flex items-center justify-between px-5 h-16 border-b border-[var(--border)]">
@@ -244,13 +242,12 @@ function Navbar() {
             {navigation.map((item) => {
               const isActive = !item.external && location.pathname === item.href;
               const Icon = item.icon;
-              const classes = `flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl transition-colors min-h-[44px] ${
-                isActive
+              const classes = `flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl transition-colors min-h-[44px] ${isActive
                   ? 'text-[var(--primary)] bg-[var(--primary-soft)] font-semibold'
                   : item.disabled
                     ? 'text-[var(--text-muted)] opacity-50 cursor-not-allowed'
                     : 'text-[var(--text)] hover:bg-[var(--surface-muted)]'
-              }`;
+                }`;
 
               if (item.external) {
                 return (
@@ -359,6 +356,10 @@ function Navbar() {
 function App() {
   const location = useLocation();
   const showAsciiBackground = ['/login', '/register'].includes(location.pathname);
+
+  useEffect(() => {
+    warmUpBackend();
+  }, []);
 
   return (
     <div className="relative min-h-screen w-full max-w-full overflow-x-hidden bg-[var(--bg)] text-[var(--text)] transition-colors duration-200">

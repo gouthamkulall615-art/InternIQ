@@ -5,6 +5,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import FlyingButton from '../components/FlyingButton';
 import { User, Mail, Lock, Eye, EyeOff, Loader2, AlertCircle } from 'lucide-react';
 import { FcGoogle } from 'react-icons/fc';
+import { isBackendAwake, warmUpBackend, onBackendReadinessChange } from '../utils/backendWarmup';
 
 export default function Register() {
   const { theme } = useTheme();
@@ -13,11 +14,15 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [searchParams] = useSearchParams();
+  const [error, setError] = useState(() => {
+    const errorParam = searchParams.get('error');
+    return errorParam ? decodeURIComponent(errorParam) : '';
+  });
   const [loading, setLoading] = useState(false);
+  const [backendReady, setBackendReady] = useState(() => isBackendAwake());
   const { register, googleLogin, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const errorParam = searchParams.get('error');
@@ -25,6 +30,51 @@ export default function Register() {
       setError(decodeURIComponent(errorParam));
     }
   }, [searchParams]);
+
+  useEffect(() => {
+    if (backendReady) return;
+
+    let isCancelled = false;
+    const safetyTimer = setTimeout(() => {
+      if (!isCancelled) setBackendReady(true);
+    }, 60000);
+
+    const unsubscribe = onBackendReadinessChange((ready) => {
+      if (!isCancelled && ready) {
+        setBackendReady(true);
+        clearTimeout(safetyTimer);
+      }
+    });
+
+    const checkHealthWithRetries = async (attempt = 1) => {
+      const ok = await warmUpBackend();
+      if (isCancelled) return;
+
+      if (ok) {
+        setBackendReady(true);
+        clearTimeout(safetyTimer);
+      } else {
+        setBackendReady(true);
+        clearTimeout(safetyTimer);
+
+        if (attempt <= 2) {
+          setTimeout(() => {
+            if (!isCancelled && !isBackendAwake()) {
+              checkHealthWithRetries(attempt + 1);
+            }
+          }, 4000);
+        }
+      }
+    };
+
+    checkHealthWithRetries();
+
+    return () => {
+      isCancelled = true;
+      clearTimeout(safetyTimer);
+      unsubscribe();
+    };
+  }, [backendReady]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -79,10 +129,20 @@ export default function Register() {
           <button
             onClick={googleLogin}
             type="button"
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white/90 dark:bg-gray-800/90 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors min-h-[44px]"
+            disabled={!backendReady}
+            className="w-full flex items-center justify-center gap-3 px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white/90 dark:bg-gray-800/90 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors min-h-[44px] disabled:opacity-65 disabled:cursor-not-allowed"
           >
-            <FcGoogle className="h-5 w-5" />
-            Continue with Google
+            {backendReady ? (
+              <>
+                <FcGoogle className="h-5 w-5" />
+                <span>Continue with Google</span>
+              </>
+            ) : (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin text-gray-500 dark:text-gray-400" />
+                <span>Waking up server...</span>
+              </>
+            )}
           </button>
 
           {/* Divider */}

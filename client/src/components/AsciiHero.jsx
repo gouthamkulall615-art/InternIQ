@@ -1,51 +1,11 @@
-import { useEffect, useState } from 'react';
 import GradientASCII from './GradientASCII';
 import Magnet from './Magnet';
 import { useTheme } from '../contexts/ThemeContext';
 import './AsciiHero.css';
 
-const STORAGE_KEY = 'theme';
-
-const getInitialTheme = () => {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved === 'light' || saved === 'dark') return saved;
-  } catch {
-    /* storage can be blocked, fall through to the system preference */
-  }
-  return window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-};
-
 export default function AsciiHero() {
-  let themeContext = null;
-  try {
-    themeContext = useTheme();
-  } catch {
-    /* outside ThemeProvider */
-  }
-
-  const [localTheme, setLocalTheme] = useState(getInitialTheme);
-  const theme = themeContext ? themeContext.theme : localTheme;
+  const { theme, toggleTheme } = useTheme();
   const isLight = theme === 'light';
-
-  const handleToggle = () => {
-    if (themeContext) {
-      themeContext.toggleTheme();
-    } else {
-      setLocalTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
-    }
-  };
-
-  useEffect(() => {
-    if (!themeContext) {
-      document.documentElement.dataset.theme = theme;
-      try {
-        localStorage.setItem(STORAGE_KEY, theme);
-      } catch {
-        /* ignore */
-      }
-    }
-  }, [theme, themeContext]);
 
   return (
     <section className="hero" data-theme={theme}>
@@ -57,7 +17,7 @@ export default function AsciiHero() {
         type="button"
         className="hero__toggle"
         aria-pressed={isLight}
-        onClick={handleToggle}
+        onClick={toggleTheme}
       >
         {isLight ? 'Dark mode' : 'Light mode'}
       </button>

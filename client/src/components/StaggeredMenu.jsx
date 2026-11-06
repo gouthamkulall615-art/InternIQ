@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useLayoutEffect, useRef, useState, useEffect } from 'react';
+import { useCallback, useLayoutEffect, useRef, useState, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { X, Sun, Moon } from 'lucide-react';
 import './StaggeredMenu.css';

@@ -1,10 +1,9 @@
 // ToolsSection.jsx
-import React, {
+import {
   useState,
   useEffect,
   useRef,
   useLayoutEffect,
-  useCallback,
   useMemo
 } from 'react';
 import {
@@ -378,20 +377,20 @@ function GlassCard({
           prefersReducedMotion
             ? { opacity: 1, y: 0, x: 0, filter: 'blur(0px)' }
             : {
-                opacity: 0,
-                y: 40,
-                x: isLeft ? -30 : 30,
-                filter: 'blur(8px)'
-              }
+              opacity: 0,
+              y: 40,
+              x: isLeft ? -30 : 30,
+              filter: 'blur(8px)'
+            }
         }
         animate={
           isInView || prefersReducedMotion
             ? {
-                opacity: 1,
-                y: 0,
-                x: 0,
-                filter: 'blur(0px)'
-              }
+              opacity: 1,
+              y: 0,
+              x: 0,
+              filter: 'blur(0px)'
+            }
             : {}
         }
         transition={{
@@ -725,10 +724,10 @@ function Card2Internals({ inView, delay, isHovered }) {
               prefersReducedMotion
                 ? { scale: 1, opacity: 1 }
                 : {
-                    scale: 1,
-                    opacity: 1,
-                    x: [0, -3, 3, -2, 2, 0]
-                  }
+                  scale: 1,
+                  opacity: 1,
+                  x: [0, -3, 3, -2, 2, 0]
+                }
             }
             transition={{
               scale: { type: 'spring', stiffness: 420, damping: 22, delay: currentRole.have.length * 0.1 + i * 0.1 },
@@ -931,7 +930,7 @@ function Card3Internals({ inView, delay, onTypingStatusChange }) {
           {/* Burst Dots */}
           {copied && !prefersReducedMotion && (
             <>
-              {[0, 60, 120, 180, 240, 300].map((deg, i) => (
+              {[0, 60, 120, 180, 240, 300].map((deg) => (
                 <motion.span
                   key={deg}
                   className="tools-burst-dot"
@@ -1363,8 +1362,8 @@ export default function ToolsSection() {
                       prefersReducedMotion
                         ? { rotate: 45 }
                         : card4Hovered
-                        ? { rotate: [45, 33, 57, 45] }
-                        : { rotate: 45 }
+                          ? { rotate: [45, 33, 57, 45] }
+                          : { rotate: 45 }
                     }
                     transition={
                       card4Hovered
