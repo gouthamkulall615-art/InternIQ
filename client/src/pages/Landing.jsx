@@ -23,6 +23,7 @@ import ToolsSection from '../components/ToolsSection';
 import HowItWorks from '../components/HowItWorks';
 import Magnet from '../components/Magnet';
 import StaggeredMenu from '../components/StaggeredMenu';
+import AsciiBackground from '../components/AsciiBackground';
 import Footer from '../components/Footer';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -126,9 +127,9 @@ export default function Landing() {
   ];
 
   return (
-    <div className="landing font-editorial-sans antialiased min-h-screen selection:bg-[#4F46E5] selection:text-white relative bg-transparent transition-colors">
+    <div className="landing font-editorial-sans antialiased min-h-screen selection:bg-[var(--primary)] selection:text-[var(--on-primary)] relative bg-[var(--bg)] transition-colors w-full max-w-full overflow-x-hidden">
       {/* 1. TOP NAV */}
-      <header className="sticky top-0 z-40 bg-[#f4f1ea]/85 dark:bg-black/40 backdrop-blur-md border-b border-[#14161F]/10 dark:border-white/10 transition-colors">
+      <header className="sticky top-0 z-40 w-full max-w-full bg-[#FAF8F4]/85 dark:bg-[#0A121F]/85 backdrop-blur-md border-b border-[#14161F]/10 dark:border-white/10 transition-colors">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
           {/* Wordmark in Fraunces serif */}
           <div className="flex items-center flex-shrink-0">
@@ -138,7 +139,7 @@ export default function Landing() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 setActiveNavIndex(0);
               }}
-              className="font-heading text-2xl font-semibold tracking-[-0.02em] text-[#0F172A] dark:text-white hover:opacity-90 transition-opacity"
+              className="font-heading text-2xl font-semibold tracking-[-0.02em] text-[#0A121F] dark:text-[#F5EEDC] hover:opacity-90 transition-opacity"
             >
               InternIQ
             </Link>
@@ -160,7 +161,7 @@ export default function Landing() {
               gooeyness={0.5}
               wobble={0.5}
               hoverEffect={true}
-              colors={theme === 'dark' ? ['#818CF8', '#6366F1', '#38BDF8'] : ['#1e3fd8', '#4f7dff', '#8fb4ff']}
+              colors={['#E8553D', '#D4452E', '#F4806B']}
             />
           </div>
 
@@ -183,7 +184,7 @@ export default function Landing() {
             {isAuthenticated ? (
               <Link
                 to="/dashboard"
-                className="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-[#1e3fd8] hover:bg-[#2563eb] rounded-full transition-colors min-h-[44px] shadow-lg shadow-blue-600/30"
+                className="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-[var(--on-primary)] bg-[var(--primary)] hover:bg-[var(--primary-hover)] rounded-full transition-colors min-h-[44px] shadow-sm"
               >
                 Open Dashboard
               </Link>
@@ -197,7 +198,7 @@ export default function Landing() {
                 </Link>
                 <Link
                   to="/register"
-                  className="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-white bg-[#1e3fd8] hover:bg-[#2563eb] rounded-full transition-colors min-h-[44px] shadow-lg shadow-blue-600/30"
+                  className="inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-[var(--on-primary)] bg-[var(--primary)] hover:bg-[var(--primary-hover)] rounded-full transition-colors min-h-[44px] shadow-sm"
                 >
                   Get started
                 </Link>
@@ -224,71 +225,76 @@ export default function Landing() {
             </button>
           </div>
         </div>
-
-        {/* Mobile Navigation Drawer replaced by StaggeredMenu from React Bits */}
-        <StaggeredMenu
-          isOpen={mobileMenuOpen}
-          onMenuClose={() => setMobileMenuOpen(false)}
-          position="left"
-          isFixed={true}
-          hideToggle={true}
-          colors={['#1e3fd8', '#4F46E5', '#818CF8']}
-          accentColor="#1e3fd8"
-          displaySocials={true}
-          displayItemNumbering={true}
-          theme={theme}
-          onToggleTheme={toggleTheme}
-          items={navItems.map((item, idx) => ({
-            label: item.label,
-            link: item.href,
-            active: activeNavIndex === idx,
-            onClick: (e) => {
-              e.preventDefault();
-              setMobileMenuOpen(false);
-              handleNavChange(idx, item);
-            }
-          }))}
-          socialItems={[
-            { label: 'GitHub', link: 'https://github.com' },
-            { label: 'LinkedIn', link: 'https://linkedin.com' },
-            { label: 'PathForge', link: 'https://github.com' }
-          ]}
-          authSection={
-            isAuthenticated ? (
-              <Link
-                to="/dashboard"
-                onClick={() => setMobileMenuOpen(false)}
-                className="w-full inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-white bg-[#1e3fd8] hover:bg-[#2563eb] rounded-xl shadow-lg shadow-blue-600/30 transition-all min-h-[44px]"
-              >
-                Open Dashboard
-              </Link>
-            ) : (
-              <div className="flex flex-col gap-2.5 w-full">
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium text-slate-800 dark:text-white border border-slate-300/80 dark:border-white/15 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 rounded-xl transition-all min-h-[44px]"
-                >
-                  Log in
-                </Link>
-                <Link
-                  to="/register"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-white bg-[#1e3fd8] hover:bg-[#2563eb] rounded-xl shadow-lg shadow-blue-600/30 transition-all min-h-[44px]"
-                >
-                  Get started
-                </Link>
-              </div>
-            )
-          }
-        />
       </header>
 
+      {/* Mobile Navigation Drawer replaced by StaggeredMenu from React Bits */}
+      <StaggeredMenu
+        isOpen={mobileMenuOpen}
+        onMenuClose={() => setMobileMenuOpen(false)}
+        position="left"
+        isFixed={true}
+        hideToggle={true}
+        colors={['#0F1724', '#17233A', '#1E2C46']}
+        accentColor="#E8553D"
+        displaySocials={true}
+        displayItemNumbering={true}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+        items={navItems.map((item, idx) => ({
+          label: item.label,
+          link: item.href,
+          active: activeNavIndex === idx,
+          onClick: (e) => {
+            e.preventDefault();
+            setMobileMenuOpen(false);
+            handleNavChange(idx, item);
+          }
+        }))}
+        socialItems={[
+          { label: 'GitHub', link: 'https://github.com' },
+          { label: 'LinkedIn', link: 'https://linkedin.com' },
+          { label: 'PathForge', link: 'https://github.com' }
+        ]}
+        authSection={
+          isAuthenticated ? (
+            <Link
+              to="/dashboard"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full inline-flex items-center justify-center px-5 py-3 text-sm font-semibold text-[var(--on-primary)] bg-[var(--primary)] hover:bg-[var(--primary-hover)] rounded-xl shadow-sm transition-all min-h-[44px]"
+            >
+              Open Dashboard
+            </Link>
+          ) : (
+            <div className="flex flex-col gap-2.5 w-full">
+              <Link
+                to="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium text-slate-800 dark:text-white border border-slate-300/80 dark:border-white/15 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 rounded-xl transition-all min-h-[44px]"
+              >
+                Log in
+              </Link>
+              <Link
+                to="/register"
+                onClick={() => setMobileMenuOpen(false)}
+                className="w-full inline-flex items-center justify-center px-5 py-2.5 text-sm font-semibold text-[var(--on-primary)] bg-[var(--primary)] hover:bg-[var(--primary-hover)] rounded-xl shadow-sm transition-all min-h-[44px]"
+              >
+                Get started
+              </Link>
+            </div>
+          )
+        }
+      />
+
       {/* 2. HERO SECTION */}
-      <section id="overview" className="scroll-mt-20 relative min-h-[560px] sm:min-h-[640px] flex items-center justify-center overflow-hidden transition-colors">
+      <section id="overview" className="scroll-mt-20 relative min-h-[560px] sm:min-h-[640px] w-full max-w-full flex items-center justify-center overflow-hidden transition-colors bg-[#FAF8F4] dark:bg-[#0A121F]">
+        {/* Background ASCII Horizon restricted ONLY to the Hero section */}
+        <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <AsciiBackground shape="horizon" isFixed={false} />
+        </div>
+
         {/* Centered Hero Content with GhostType - NO CARD */}
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center flex flex-col items-center justify-center">
-          <span className="font-sans text-xs uppercase tracking-widest text-indigo-700 dark:text-[#818CF8] block font-semibold mb-6 px-3.5 py-1 rounded-full bg-indigo-100/90 dark:bg-indigo-950/70 border border-indigo-300/80 dark:border-indigo-500/40 backdrop-blur-md shadow-xs">
+          <span className="eyebrow block mb-6 px-3.5 py-1 rounded-full bg-[#F3EFE6] dark:bg-[#17233A] text-[#5A6578] dark:text-[#8E9BB0] border border-[#E4E0D8] dark:border-[#1E2C46] backdrop-blur-md">
             CAREER PREPARATION WORKSPACE
           </span>
 
@@ -318,7 +324,7 @@ export default function Landing() {
             >
               <Link
                 to={isAuthenticated ? "/resume-analyzer" : "/register"}
-                className="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3 text-sm font-medium text-white bg-[#1e3fd8] hover:bg-[#2563eb] rounded-full transition-all hover:shadow-lg hover:shadow-blue-500/30 min-h-[44px]"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3 text-sm font-medium text-[var(--on-primary)] bg-[var(--primary)] hover:bg-[var(--primary-hover)] rounded-full transition-all shadow-sm min-h-[44px]"
               >
                 Analyze my resume
               </Link>
@@ -332,7 +338,7 @@ export default function Landing() {
             >
               <a
                 href="#how-it-works"
-                className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-slate-800 dark:text-white bg-slate-900/5 hover:bg-slate-900/10 dark:bg-white/10 dark:hover:bg-white/20 border border-slate-900/15 dark:border-white/20 rounded-full backdrop-blur-md transition-all min-h-[44px] shadow-xs"
+                className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-[#0A121F] dark:text-[#F5EEDC] bg-transparent hover:bg-black/5 dark:hover:bg-white/5 border border-[#E4E0D8] dark:border-[#1E2C46] rounded-full transition-all min-h-[44px]"
               >
                 See how it works
               </a>
@@ -351,7 +357,7 @@ export default function Landing() {
 
       {/* 3D SATIN RIBBON MARQUEE */}
       <RibbonMarquee
-        className="bg-[#FAF8F4] dark:bg-[#0B0D17] transition-colors"
+        className="w-full max-w-full bg-[#FAF8F4] dark:bg-[#0A121F] text-[#0A121F] dark:text-[#F5EEDC] transition-colors relative z-10"
         items={[
           "Fix your resume before they see it",
           "Beat the ATS",
@@ -369,26 +375,26 @@ export default function Landing() {
       <HowItWorks />
 
       {/* 6. SKILL GAP BENCHMARK SECTION */}
-      <section id="skill-benchmark" className="scroll-mt-20 py-16 sm:py-20 bg-[#FAF8F4] dark:bg-[#0F111A] text-[#14161F] dark:text-white transition-colors relative z-10 border-t border-[#E4E0D8] dark:border-[#262938]">
+      <section id="skill-benchmark" className="scroll-mt-20 py-24 sm:py-32 w-full max-w-full overflow-hidden bg-[#FAF8F4] dark:bg-[#0A121F] text-[#0A121F] dark:text-[#F5EEDC] transition-colors relative z-10 border-t border-[#E4E0D8] dark:border-[#1E2C46]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
             {/* Left Side: Context */}
             <div className="lg:col-span-5 space-y-6">
-              <span className="font-sans font-medium text-xs uppercase tracking-wider text-[#6B7280] dark:text-[#9CA3AF] block">
+              <span className="font-mono text-xs uppercase tracking-widest text-[#E8553D] block">
                 SKILL GAP BENCHMARK
               </span>
 
-              <h2 className="font-heading text-3xl sm:text-4xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-white leading-tight">
+              <h2 className="font-heading text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-[#0A121F] dark:text-[#F5EEDC] leading-tight">
                 Know exactly what to study before your interview.
               </h2>
 
-              <p className="font-sans text-sm sm:text-base text-[#5A5D6B] dark:text-[#9CA3AF] leading-[1.6]">
+              <p className="font-sans text-sm sm:text-base text-[#5A6578] dark:text-[#8E9BB0] leading-[1.6]">
                 Instead of guessing what hiring managers look for, compare your profile against standardized industry criteria across eight technical and product tracks. No vague advice—only clear matched competencies and missing skills.
               </p>
 
               {/* Interactive Role Switcher */}
               <div className="pt-2 space-y-2">
-                <span className="font-sans text-xs text-[#6B7280] dark:text-[#9CA3AF] block">
+                <span className="font-mono text-xs text-[#5A6578] dark:text-[#8E9BB0] block">
                   Select a role to preview benchmarks:
                 </span>
                 <div className="grid grid-cols-2 gap-2">
@@ -397,11 +403,10 @@ export default function Landing() {
                       key={r.title}
                       type="button"
                       onClick={() => setSelectedRoleIndex(idx)}
-                      className={`text-left text-xs font-sans px-3 py-2.5 rounded-[6px] border transition-colors min-h-[44px] cursor-pointer ${
-                        selectedRoleIndex === idx
-                          ? 'border-[#4F46E5] bg-[#4F46E5]/10 text-[#4F46E5] dark:text-white dark:bg-[#4F46E5]/20 font-semibold'
-                          : 'border-[#E4E0D8] dark:border-[#262938] bg-white dark:bg-[#171926] text-[#5A5D6B] dark:text-[#9CA3AF] hover:text-[#14161F] dark:hover:text-white'
-                      }`}
+                      className={`text-left text-xs font-sans px-3 py-2.5 rounded-[6px] border transition-colors min-h-[44px] cursor-pointer ${selectedRoleIndex === idx
+                          ? 'border-[#E8553D] bg-[#E8553D]/10 text-[#E8553D] dark:text-[#F5EEDC] font-semibold'
+                          : 'border-[#E4E0D8] dark:border-[#1E2C46] bg-white dark:bg-[#17233A] text-[#5A6578] dark:text-[#8E9BB0] hover:text-[#0A121F] dark:hover:text-[#F5EEDC] hover:border-[#CBD5E1] dark:hover:border-[#2A3B5C]'
+                        }`}
                     >
                       {r.title}
                     </button>
@@ -409,10 +414,10 @@ export default function Landing() {
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-[#E4E0D8] dark:border-[#262938]">
+              <div className="pt-4 border-t border-[#E4E0D8] dark:border-[#1E2C46]">
                 <Link
                   to="/skill-gap"
-                  className="inline-flex items-center gap-2 text-sm font-sans font-medium text-[#4F46E5] dark:text-[#818CF8] hover:text-[#4338CA] dark:hover:text-white transition-colors min-h-[44px]"
+                  className="inline-flex items-center gap-2 text-sm font-sans font-medium text-[#E8553D] hover:text-[#D4452E] transition-colors min-h-[44px]"
                 >
                   <span>Open full Skill Gap Analyzer</span>
                   <ArrowUpRight size={16} weight="bold" />
@@ -420,23 +425,23 @@ export default function Landing() {
               </div>
             </div>
 
-            {/* Right Side: Detailed Sample Card */}
-            <div className="lg:col-span-7 bg-white dark:bg-[#171926] border border-[#E4E0D8] dark:border-[#262938] rounded-[12px] p-6 sm:p-8 space-y-6 shadow-sm dark:shadow-none transition-colors">
+            {/* Right Side: Detailed Sample Card (Paper dossier card on ink) */}
+            <div className="lg:col-span-7 bg-white dark:bg-[#0F1724] border border-[#E4E0D8] dark:border-[#1E2C46] rounded-[12px] p-6 sm:p-8 space-y-6 shadow-sm text-[#0A121F] dark:text-[#F5EEDC] transition-colors">
               {/* Card Header */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#E4E0D8] dark:border-[#262938]">
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#E4E0D8] dark:border-[#1E2C46]">
                 <div>
-                  <span className="font-sans text-[11px] font-medium text-[#6B7280] dark:text-[#9CA3AF] uppercase">
+                  <span className="font-mono text-[11px] font-medium text-[#5A6578] dark:text-[#8E9BB0] uppercase tracking-wider">
                     Target Role
                   </span>
-                  <h3 className="font-heading text-xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-white mt-0.5">
+                  <h3 className="font-heading text-xl font-semibold tracking-[-0.02em] text-[#0A121F] dark:text-[#F5EEDC] mt-0.5">
                     {roles[selectedRoleIndex].title}
                   </h3>
                 </div>
                 <div className="text-right">
-                  <span className="font-sans text-xs text-[#6B7280] dark:text-[#9CA3AF] block">
+                  <span className="font-mono text-xs text-[#5A6578] dark:text-[#8E9BB0] block">
                     Readiness Score
                   </span>
-                  <span className="font-mono text-2xl font-bold text-[#4F46E5] dark:text-[#818CF8]">
+                  <span className="font-mono text-2xl font-bold text-[#E8553D]">
                     {roles[selectedRoleIndex].readiness}%
                   </span>
                 </div>
@@ -444,15 +449,15 @@ export default function Landing() {
 
               {/* Readiness Progress Bar */}
               <div className="space-y-1.5">
-                <div className="flex justify-between text-xs font-mono text-[#6B7280] dark:text-[#9CA3AF]">
+                <div className="flex justify-between text-xs font-mono text-[#5A6578] dark:text-[#8E9BB0]">
                   <span>
                     {roles[selectedRoleIndex].matched.length} of {roles[selectedRoleIndex].matched.length + roles[selectedRoleIndex].missing.length} competencies verified
                   </span>
                   <span>{roles[selectedRoleIndex].readiness}%</span>
                 </div>
-                <div className="w-full bg-[#F1F3F9] dark:bg-[#0F111A] h-2 rounded-[2px] border border-[#E4E0D8] dark:border-[#262938] overflow-hidden">
+                <div className="w-full bg-[#F3EFE6] dark:bg-[#17233A] h-2 rounded-[2px] border border-[#E4E0D8] dark:border-[#1E2C46] overflow-hidden">
                   <div
-                    className="bg-[#4F46E5] h-full transition-all duration-300"
+                    className="bg-[#E8553D] h-full transition-all duration-300"
                     style={{ width: `${roles[selectedRoleIndex].readiness}%` }}
                   />
                 </div>
@@ -460,7 +465,7 @@ export default function Landing() {
 
               {/* Matched Skills */}
               <div className="space-y-2">
-                <div className="flex items-center gap-2 text-xs font-sans font-medium text-[#16A34A] dark:text-[#4ADE80]">
+                <div className="flex items-center gap-2 text-xs font-sans font-medium text-[#15803D] dark:text-[#4ADE80]">
                   <Check className="h-4 w-4" strokeWidth={2} />
                   <span>Matched Skills ({roles[selectedRoleIndex].matched.length})</span>
                 </div>
@@ -468,7 +473,7 @@ export default function Landing() {
                   {roles[selectedRoleIndex].matched.map((s) => (
                     <span
                       key={s}
-                      className="font-mono text-xs bg-[#DCFCE7] dark:bg-[#0B2816] text-[#15803D] dark:text-[#4ADE80] border border-[#86EFAC] dark:border-[#1E502B] px-2.5 py-1 rounded-[4px]"
+                      className="font-mono text-xs bg-[#E6F4EA] dark:bg-[#15803D]/20 text-[#15803D] dark:text-[#4ADE80] border border-[#CEEAD6] dark:border-[#15803D]/30 px-2.5 py-1 rounded-[4px]"
                     >
                       {s}
                     </span>
@@ -477,8 +482,8 @@ export default function Landing() {
               </div>
 
               {/* Missing Skills */}
-              <div className="space-y-2 pt-2 border-t border-[#E4E0D8] dark:border-[#262938]">
-                <div className="flex items-center gap-2 text-xs font-sans font-medium text-[#D97706] dark:text-[#FBBF24]">
+              <div className="space-y-2 pt-2 border-t border-[#E4E0D8] dark:border-[#1E2C46]">
+                <div className="flex items-center gap-2 text-xs font-sans font-medium text-[#B45309] dark:text-[#FBBF24]">
                   <CircleAlert className="h-4 w-4" strokeWidth={2} />
                   <span>Missing Skills ({roles[selectedRoleIndex].missing.length})</span>
                 </div>
@@ -486,7 +491,7 @@ export default function Landing() {
                   {roles[selectedRoleIndex].missing.map((s) => (
                     <span
                       key={s}
-                      className="font-mono text-xs bg-[#FEF3C7] dark:bg-[#2D1807] text-[#B45309] dark:text-[#FBBF24] border border-[#FDE68A] dark:border-[#572F0E] px-2.5 py-1 rounded-[4px]"
+                      className="font-mono text-xs bg-[#FEF7E0] dark:bg-[#B45309]/20 text-[#B45309] dark:text-[#FBBF24] border border-[#FEEFC3] dark:border-[#B45309]/30 px-2.5 py-1 rounded-[4px]"
                     >
                       {s}
                     </span>
@@ -495,9 +500,9 @@ export default function Landing() {
               </div>
 
               {/* Note */}
-              <div className="pt-2 text-xs font-sans text-[#6B7280] dark:text-[#9CA3AF] border-t border-[#E4E0D8] dark:border-[#262938] flex items-center justify-between">
+              <div className="pt-2 text-xs font-sans text-[#5A6578] dark:text-[#8E9BB0] border-t border-[#E4E0D8] dark:border-[#1E2C46] flex items-center justify-between">
                 <span>Directly syncs with your uploaded resume</span>
-                <span className="font-mono text-[11px] text-[#4F46E5] dark:text-[#818CF8]">
+                <span className="font-mono text-[11px] font-semibold text-[#E8553D]">
                   {roles[selectedRoleIndex].missing.length} learning targets
                 </span>
               </div>
@@ -507,53 +512,53 @@ export default function Landing() {
       </section>
 
       {/* 7. "COMING NEXT" ROW */}
-      <section className="py-16 sm:py-20 bg-[#FAF8F4] dark:bg-[#0B0D17] transition-colors">
+      <section className="py-24 sm:py-32 w-full max-w-full overflow-hidden bg-[#FAF8F4] dark:bg-[#0A121F] transition-colors border-t border-[#E4E0D8] dark:border-[#1E2C46]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-10 max-w-2xl">
-            <span className="font-sans font-medium text-xs uppercase tracking-wider text-[#6B7280] dark:text-[#818CF8] block">
+            <span className="font-mono font-medium text-xs uppercase tracking-widest text-[#5A6578] dark:text-[#8E9BB0] block">
               IN DEVELOPMENT
             </span>
-            <h2 className="font-heading text-3xl sm:text-4xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9] mt-2">
+            <h2 className="font-heading text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-[#0A121F] dark:text-[#F5EEDC] mt-2">
               Planned additions to the workspace.
             </h2>
-            <p className="font-sans text-sm sm:text-base text-[#5A5D6B] dark:text-[#9AA3BF] mt-2 leading-[1.6]">
+            <p className="font-sans text-sm sm:text-base text-[#5A6578] dark:text-[#8E9BB0] mt-2 leading-[1.6]">
               Features currently under active development.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             {/* Card 1: Application Tracker */}
-            <div className="bg-white dark:bg-[#131626] border border-[#E4E0D8] dark:border-[#1E233A] rounded-[12px] p-6 space-y-4 transition-colors">
+            <div className="bg-white dark:bg-[#0F1724] border border-[#E4E0D8] dark:border-[#1E2C46] rounded-[12px] p-6 space-y-4 transition-colors shadow-xs">
               <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#F1F3F9] dark:bg-[#1C2035] border border-[#E2E6F0] dark:border-[#282F4E] text-[#6B7280] dark:text-[#7E88A8] flex-shrink-0">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#F3EFE6] dark:bg-[#17233A] border border-[#E4E0D8] dark:border-[#1E2C46] text-[#5A6578] dark:text-[#8E9BB0] flex-shrink-0">
                   <Target size={22} weight="duotone" />
                 </div>
-                <span className="font-sans text-[11px] font-medium uppercase tracking-wider text-[#6B7280] dark:text-[#7E88A8] border border-[#E4E0D8] dark:border-[#1E233A] px-2 py-0.5 rounded-[4px]">
+                <span className="font-mono text-[10px] font-medium uppercase tracking-wider text-[#5A6578] dark:text-[#8E9BB0] bg-[#F3EFE6] dark:bg-[#17233A] border border-[#E4E0D8] dark:border-[#1E2C46] px-2 py-0.5 rounded-[4px]">
                   PLANNED
                 </span>
               </div>
-              <h3 className="font-heading text-lg font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9]">
+              <h3 className="font-heading text-lg font-semibold tracking-[-0.02em] text-[#0A121F] dark:text-[#F5EEDC]">
                 Application Tracker
               </h3>
-              <p className="font-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6]">
+              <p className="font-sans text-sm text-[#5A6578] dark:text-[#8E9BB0] leading-[1.6]">
                 A focused board to log internships, submission deadlines, interview rounds, and follow-ups in one place, replacing disjointed spreadsheets.
               </p>
             </div>
 
             {/* Card 2: LinkedIn Optimizer */}
-            <div className="bg-white dark:bg-[#131626] border border-[#E4E0D8] dark:border-[#1E233A] rounded-[12px] p-6 space-y-4 transition-colors">
+            <div className="bg-white dark:bg-[#0F1724] border border-[#E4E0D8] dark:border-[#1E2C46] rounded-[12px] p-6 space-y-4 transition-colors shadow-xs">
               <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#F1F3F9] dark:bg-[#1C2035] border border-[#E2E6F0] dark:border-[#282F4E] text-[#6B7280] dark:text-[#7E88A8] flex-shrink-0">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#F3EFE6] dark:bg-[#17233A] border border-[#E4E0D8] dark:border-[#1E2C46] text-[#5A6578] dark:text-[#8E9BB0] flex-shrink-0">
                   <FileText size={22} weight="duotone" />
                 </div>
-                <span className="font-sans text-[11px] font-medium uppercase tracking-wider text-[#6B7280] dark:text-[#7E88A8] border border-[#E4E0D8] dark:border-[#1E233A] px-2 py-0.5 rounded-[4px]">
+                <span className="font-mono text-[10px] font-medium uppercase tracking-wider text-[#5A6578] dark:text-[#8E9BB0] bg-[#F3EFE6] dark:bg-[#17233A] border border-[#E4E0D8] dark:border-[#1E2C46] px-2 py-0.5 rounded-[4px]">
                   PLANNED
                 </span>
               </div>
-              <h3 className="font-heading text-lg font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9]">
+              <h3 className="font-heading text-lg font-semibold tracking-[-0.02em] text-[#0A121F] dark:text-[#F5EEDC]">
                 LinkedIn Optimizer
               </h3>
-              <p className="font-sans text-sm text-[#5A5D6B] dark:text-[#9AA3BF] leading-[1.6]">
+              <p className="font-sans text-sm text-[#5A6578] dark:text-[#8E9BB0] leading-[1.6]">
                 Audit your public profile headlines, summary sections, and experience entries against active recruiter query parameters.
               </p>
             </div>
@@ -562,18 +567,17 @@ export default function Landing() {
       </section>
 
       {/* 8. FINAL CTA BAND */}
-      <section className="py-16 sm:py-20 bg-[#EEF0FB] dark:bg-[#12162B] border-t border-[#E4E0D8] dark:border-[#1E233A] transition-colors">
+      <section className="py-24 sm:py-32 w-full max-w-full overflow-hidden bg-[#FAF8F4] dark:bg-[#0A121F] text-[#0A121F] dark:text-[#F5EEDC] border-t border-[#E4E0D8] dark:border-[#1E2C46] transition-colors">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-left space-y-4">
-          <span className="font-sans font-medium text-xs uppercase tracking-wider text-[#6B7280] dark:text-[#818CF8] block">
+          <span className="font-mono font-medium text-xs uppercase tracking-widest text-[#E8553D] block">
             GET STARTED
           </span>
-          <h2 className="font-heading text-3xl sm:text-4xl font-semibold tracking-[-0.02em] text-[#14161F] dark:text-[#F1F3F9]">
+          <h2 className="font-heading text-3xl sm:text-4xl font-semibold tracking-[-0.03em] text-[#0A121F] dark:text-[#F5EEDC]">
             Review your resume before your next application.
           </h2>
-          <p className="font-sans text-sm sm:text-base text-[#5A5D6B] dark:text-[#9AA3BF] max-w-xl leading-[1.6]">
+          <p className="font-sans text-sm sm:text-base text-[#5A6578] dark:text-[#8E9BB0] max-w-xl leading-[1.6]">
             Takes less than sixty seconds. Free for all students and early-career job seekers.
           </p>
-          {/* Action Button: ONLY the blue button is rounded-full */}
           <div className="pt-2">
             <Magnet
               padding={60}
@@ -584,7 +588,7 @@ export default function Landing() {
             >
               <Link
                 to={isAuthenticated ? "/resume-analyzer" : "/register"}
-                className="font-sans inline-flex items-center justify-center px-7 py-3.5 text-sm font-medium text-white bg-[#4F46E5] hover:bg-[#4338CA] rounded-full transition-all hover:shadow-md min-h-[44px]"
+                className="font-sans inline-flex items-center justify-center px-7 py-3.5 text-sm font-semibold text-[#101A2B] bg-[#E8553D] hover:bg-[#D4452E] rounded-full transition-all shadow-sm min-h-[44px]"
               >
                 Analyze my resume — it's free
               </Link>

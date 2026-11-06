@@ -573,7 +573,7 @@ const GradientASCII = ({
           atlas = buildAtlas(gl, s.characters, s.fontFamily);
           draw();
         },
-        () => {}
+        () => { }
       );
     };
 

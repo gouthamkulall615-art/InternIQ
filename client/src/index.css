@@ -3,81 +3,106 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  /* Design Tokens - Light Mode */
-  --bg: #F8F9FC;
-  --surface: #FFFFFF;
-  --surface-muted: #F1F3F9;
-  --border: #E6E8F0;
-  --text: #0F172A;
-  --text-muted: #64748B;
-  --primary: #4F46E5;
-  --primary-hover: #4338CA;
-  --accent: #7C3AED;
-  --primary-soft: #EEF0FF;
+  /* Design Tokens - Light Mode ("Paper" surfaces, "Ink" text, single "Vermilion" accent) */
+  --bg: #FAF8F4;              /* Paper 100 */
+  --surface: #FFFFFF;         /* Paper 50 */
+  --surface-muted: #F3EFE6;   /* Paper 200 */
+  --border: #E4E0D8;          /* Paper 300 */
+  --text: #0A121F;            /* Ink 950 */
+  --text-muted: #5A6578;
+  --primary: #E8553D;         /* Vermilion */
+  --primary-hover: #D4452E;
+  --primary-text: #C8412B;    /* Accessible accent text on paper */
+  --on-primary: #101A2B;      /* Dark ink text placed ON vermilion buttons */
+  --accent: #E8553D;
+  --primary-soft: rgba(232, 85, 61, 0.08);
 
-  /* Per-Tool Tints: Light Mode */
-  --tint-resume-bg: #EEF0FF;
-  --tint-resume-icon: #4F46E5;
-  --tint-resume-border: #818CF8;
+  /* Functional Status Colors (Restrained) */
+  --color-success: #15803D;
+  --color-success-bg: rgba(34, 197, 94, 0.10);
+  --color-success-border: rgba(34, 197, 94, 0.30);
+  --color-warning: #B45309;
+  --color-warning-bg: rgba(245, 158, 11, 0.10);
+  --color-warning-border: rgba(245, 158, 11, 0.30);
+  --color-error: #DC2626;
 
-  --tint-cover-bg: #F5F3FF;
-  --tint-cover-icon: #7C3AED;
-  --tint-cover-border: #A78BFA;
+  /* Palette Constants */
+  --ink-950: #0A121F;
+  --ink-900: #0F1724;
+  --ink-800: #17233A;
+  --ink-700: #1E2C46;
 
-  --tint-roadmap-bg: #F0FDFA;
-  --tint-roadmap-icon: #0D9488;
-  --tint-roadmap-border: #2DD4BF;
+  --paper-50: #FFFEFB;
+  --paper-100: #FAF8F4;
+  --paper-200: #F3EFE6;
+  --paper-300: #E4E0D8;
+  --cream: #F5EEDC;
 
-  --tint-skill-bg: #FFFBEB;
-  --tint-skill-icon: #D97706;
-  --tint-skill-border: #FBBF24;
+  /* Per-Tool Tints: Restrained Light Mode */
+  --tint-resume-bg: #F3EFE6;
+  --tint-resume-icon: #0A121F;
+  --tint-resume-border: #E4E0D8;
 
-  --tint-tracker-bg: #F1F5F9;
-  --tint-tracker-icon: #64748B;
-  --tint-tracker-border: #CBD5E1;
+  --tint-cover-bg: #F3EFE6;
+  --tint-cover-icon: #0A121F;
+  --tint-cover-border: #E4E0D8;
 
-  --tint-linkedin-bg: #F1F5F9;
-  --tint-linkedin-icon: #64748B;
-  --tint-linkedin-border: #CBD5E1;
+  --tint-roadmap-bg: #F3EFE6;
+  --tint-roadmap-icon: #0A121F;
+  --tint-roadmap-border: #E4E0D8;
+
+  --tint-skill-bg: #F3EFE6;
+  --tint-skill-icon: #0A121F;
+  --tint-skill-border: #E4E0D8;
+
+  --tint-tracker-bg: #F3EFE6;
+  --tint-tracker-icon: #5A6578;
+  --tint-tracker-border: #E4E0D8;
+
+  --tint-linkedin-bg: #F3EFE6;
+  --tint-linkedin-icon: #5A6578;
+  --tint-linkedin-border: #E4E0D8;
 }
 
 .dark {
-  /* Design Tokens - Dark Mode */
-  --bg: #0B0D17;
-  --surface: #131626;
-  --surface-muted: #1A1E33;
-  --border: #252A45;
-  --text: #E8EAF6;
-  --text-muted: #9AA3BF;
-  --primary: #818CF8;
-  --primary-hover: #6366F1;
-  --accent: #A78BFA;
-  --primary-soft: rgba(129, 140, 248, 0.16);
+  /* Design Tokens - Dark Mode ("Ink" surfaces, "Paper/Cream" text, single "Vermilion" accent) */
+  --bg: #0A121F;              /* Ink 950 */
+  --surface: #0F1724;         /* Ink 900 */
+  --surface-muted: #17233A;   /* Ink 800 */
+  --border: #1E2C46;          /* Ink 700 */
+  --text: #F5EEDC;            /* Cream */
+  --text-muted: #8E9BB0;
+  --primary: #E8553D;         /* Vermilion */
+  --primary-hover: #D4452E;
+  --primary-text: #F4806B;    /* Accessible accent text on ink */
+  --on-primary: #101A2B;      /* Dark ink text placed ON vermilion buttons */
+  --accent: #E8553D;
+  --primary-soft: rgba(232, 85, 61, 0.16);
 
-  /* Per-Tool Tints: Dark Mode */
-  --tint-resume-bg: rgba(129, 140, 248, 0.16);
-  --tint-resume-icon: #818CF8;
-  --tint-resume-border: rgba(129, 140, 248, 0.45);
+  /* Per-Tool Tints: Restrained Dark Mode */
+  --tint-resume-bg: #17233A;
+  --tint-resume-icon: #F5EEDC;
+  --tint-resume-border: #1E2C46;
 
-  --tint-cover-bg: rgba(167, 139, 250, 0.16);
-  --tint-cover-icon: #A78BFA;
-  --tint-cover-border: rgba(167, 139, 250, 0.45);
+  --tint-cover-bg: #17233A;
+  --tint-cover-icon: #F5EEDC;
+  --tint-cover-border: #1E2C46;
 
-  --tint-roadmap-bg: rgba(45, 212, 191, 0.16);
-  --tint-roadmap-icon: #2DD4BF;
-  --tint-roadmap-border: rgba(45, 212, 191, 0.45);
+  --tint-roadmap-bg: #17233A;
+  --tint-roadmap-icon: #F5EEDC;
+  --tint-roadmap-border: #1E2C46;
 
-  --tint-skill-bg: rgba(251, 191, 36, 0.16);
-  --tint-skill-icon: #FBBF24;
-  --tint-skill-border: rgba(251, 191, 36, 0.45);
+  --tint-skill-bg: #17233A;
+  --tint-skill-icon: #F5EEDC;
+  --tint-skill-border: #1E2C46;
 
-  --tint-tracker-bg: rgba(148, 163, 184, 0.12);
-  --tint-tracker-icon: #94A3B8;
-  --tint-tracker-border: rgba(148, 163, 184, 0.3);
+  --tint-tracker-bg: #17233A;
+  --tint-tracker-icon: #8E9BB0;
+  --tint-tracker-border: #1E2C46;
 
-  --tint-linkedin-bg: rgba(148, 163, 184, 0.12);
-  --tint-linkedin-icon: #94A3B8;
-  --tint-linkedin-border: rgba(148, 163, 184, 0.3);
+  --tint-linkedin-bg: #17233A;
+  --tint-linkedin-icon: #8E9BB0;
+  --tint-linkedin-border: #1E2C46;
 }
 
 @theme {
@@ -92,6 +117,8 @@
   --color-text-muted: var(--text-muted);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
+  --color-primary-text: var(--primary-text);
+  --color-on-primary: var(--on-primary);
   --color-accent: var(--accent);
   --color-primary-soft: var(--primary-soft);
 }
@@ -99,6 +126,9 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
   }
   body {
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -106,8 +136,24 @@
     background: var(--bg);
     color: var(--text);
     transition: background-color 200ms ease, color 200ms ease;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
     @apply antialiased min-h-screen selection:bg-[var(--primary)] selection:text-white;
   }
+  #root {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+.pin-spacer {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -143,59 +189,117 @@
   }
 }
 
-/* Scoped Landing Page Design Tokens & Background System */
+/* Scoped Landing Page Design Tokens & Utility Classes */
 .landing {
   --l-paper:         #FAF8F4;
   --l-paper-warm:    #F3EFE6;
   --l-surface:       #FFFFFF;
-  --l-ink:           #14161F;
+  --l-surface-muted: #F3EFE6;
+  --l-ink:           #0A121F;
+  --l-text-muted:    #5A6578;
   --l-line:          #E4E0D8;
-  --l-dark:          #FAF8F4;
-  --l-accent:        #4F46E5;
-  --l-cta:           #EEF0FB;   /* pale indigo CTA band */
-  --l-block:         #E4E0D8;   /* offset block behind hero panel */
+  --l-dark:          #0A121F;
+  --l-primary:       #E8553D;
+  --l-primary-hover: #D4452E;
+  --l-primary-text:  #C8412B;
+  --l-on-primary:    #101A2B;
+  --l-accent:        #E8553D;
+  --l-cta:           #0F1724;
+  --l-block:         #E4E0D8;
 
   /* Scoped aliases for compatibility */
   --landing-bg: var(--l-paper);
   --landing-surface: var(--l-surface);
   --landing-ink: var(--l-ink);
   --landing-border: var(--l-line);
-  --landing-accent: var(--l-accent);
-  --landing-accent-hover: #4338CA;
-  --landing-dark-bg: var(--l-dark);
-  --landing-dark-surface: #171926;
-  --landing-dark-border: #262938;
+  --landing-accent: var(--l-primary);
+  --landing-accent-hover: var(--l-primary-hover);
+  --landing-dark-bg: #0A121F;
+  --landing-dark-surface: #0F1724;
+  --landing-dark-border: #1E2C46;
 
-  background-color: transparent;
+  background-color: var(--l-paper);
   color: var(--l-ink);
   position: relative;
   isolation: isolate;
-  transition: color 200ms ease;
+  transition: background-color 200ms ease, color 200ms ease;
 }
 
 .dark .landing {
-  --l-paper:         #0B0D17;
-  --l-paper-warm:    #0F1220;
-  --l-surface:       #131626;
-  --l-ink:           #F1F3F9;
-  --l-line:          #1E233A;
-  --l-dark:          #07090F;
-  --l-accent:        #6366F1;
-  --l-cta:           #12162B;
-  --l-block:         #1E233A;
+  --l-paper:         #0A121F;
+  --l-paper-warm:    #0F1724;
+  --l-surface:       #0F1724;
+  --l-surface-muted: #17233A;
+  --l-ink:           #F5EEDC;
+  --l-text-muted:    #8E9BB0;
+  --l-line:          #1E2C46;
+  --l-dark:          #070B13;
+  --l-primary:       #E8553D;
+  --l-primary-hover: #D4452E;
+  --l-primary-text:  #F4806B;
+  --l-on-primary:    #101A2B;
+  --l-accent:        #E8553D;
+  --l-cta:           #070B13;
+  --l-block:         #1E2C46;
 
   --landing-bg: var(--l-paper);
   --landing-surface: var(--l-surface);
   --landing-ink: var(--l-ink);
   --landing-border: var(--l-line);
-  --landing-accent: var(--l-accent);
-  --landing-accent-hover: #4F46E5;
-  --landing-dark-bg: var(--l-dark);
-  --landing-dark-surface: #131626;
-  --landing-dark-border: #1E233A;
+  --landing-accent: var(--l-primary);
+  --landing-accent-hover: var(--l-primary-hover);
+  --landing-dark-bg: #070B13;
+  --landing-dark-surface: #0A121F;
+  --landing-dark-border: #1E2C46;
 
-  background-color: transparent;
+  background-color: var(--l-paper);
   color: var(--l-ink);
+}
+
+/* .section-ink utility: Forces dark ink palette regardless of active theme */
+.section-ink {
+  --l-paper:         #0A121F;
+  --l-paper-warm:    #0F1724;
+  --l-surface:       #0F1724;
+  --l-surface-muted: #17233A;
+  --l-ink:           #F5EEDC;
+  --l-text-muted:    #8E9BB0;
+  --l-line:          #1E2C46;
+  --l-primary-text:  #F4806B;
+  background-color: #0A121F !important;
+  color: #F5EEDC !important;
+}
+
+.section-ink.deep {
+  --l-paper:         #070B13;
+  --l-paper-warm:    #0A121F;
+  --l-surface:       #0A121F;
+  --l-surface-muted: #0F1724;
+  --l-ink:           #F5EEDC;
+  --l-text-muted:    #8E9BB0;
+  --l-line:          rgba(245, 238, 220, 0.08);
+  --l-primary-text:  #F4806B;
+  background-color: #070B13 !important;
+  color: #F5EEDC !important;
+}
+
+/* Eyebrow utility class */
+.eyebrow {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+/* Subtle editorial grain background */
+.grain {
+  background-image: radial-gradient(rgba(10, 18, 31, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.dark .grain,
+.section-ink .grain {
+  background-image: radial-gradient(rgba(245, 238, 220, 0.04) 1px, transparent 1px);
 }
 
 /* Base landing sections sit at z-index 0 */

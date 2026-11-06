@@ -375,7 +375,7 @@ export default function Footer() {
                   r="29"
                   fill="none"
                   className="scroll-top-progress"
-                  stroke="var(--footer-ring-progress, #818cf8)"
+                  stroke="var(--footer-ring-progress, #E8553D)"
                   strokeWidth="2"
                   strokeDasharray={CIRCLE_CIRCUMFERENCE}
                   style={{ strokeDashoffset }}

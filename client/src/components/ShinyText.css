@@ -1,13 +1,13 @@
 /* ShinyText.css */
 .shiny-text {
-  color: var(--st-color, #818cf8);
+  color: var(--st-color, #E8553D);
   background: linear-gradient(
     120deg,
-    rgba(129, 140, 248, 0.75) 0%,
-    rgba(129, 140, 248, 0.75) 35%,
-    rgba(255, 255, 255, 0.95) 50%,
-    rgba(129, 140, 248, 0.75) 65%,
-    rgba(129, 140, 248, 0.75) 100%
+    var(--st-color, #E8553D) 0%,
+    var(--st-color, #E8553D) 35%,
+    var(--st-shine, #F5EEDC) 50%,
+    var(--st-color, #E8553D) 65%,
+    var(--st-color, #E8553D) 100%
   );
   background-size: 250% 100%;
   -webkit-background-clip: text;

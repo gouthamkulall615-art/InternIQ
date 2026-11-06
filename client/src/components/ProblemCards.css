@@ -9,23 +9,22 @@
 
   /* LIGHT THEME (Default) */
   --pb-bg: #FAF8F4;
-  --pb-blob-opacity-a: 0.14;
-  --pb-blob-opacity-b: 0.12;
-  --pb-blob-opacity-c: 0.08;
-  --pb-card-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.75));
-  --pb-card-border: 1px solid rgba(20, 22, 31, 0.08);
-  --pb-card-shadow: 0 16px 40px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.03);
-  --pb-center-bg: linear-gradient(145deg, #ffffff, #fafafa);
-  --pb-center-border: 1px solid rgba(79, 70, 229, 0.35);
-  --pb-center-shadow: 0 24px 50px rgba(79, 70, 229, 0.12), 0 0 40px rgba(99, 102, 241, 0.08);
-  --pb-heading: #14161F;
-  --pb-body: #5A5D6B;
-  --pb-badge-bg: #EEF0FF;
-  --pb-badge-border: #C7D2FE;
-  --pb-badge-color: #4F46E5;
-  --pb-label: #6B7280;
+  --pb-card-bg: #FFFFFF;
+  --pb-card-border: 1px solid #E4E0D8;
+  --pb-card-shadow: 0 4px 20px rgba(10, 18, 31, 0.04);
+  --pb-center-bg: #FFFFFF;
+  --pb-center-border: 1px solid #E8553D;
+  --pb-center-shadow: 0 10px 30px rgba(10, 18, 31, 0.08);
+  --pb-heading: #0A121F;
+  --pb-body: #5A6578;
+  --pb-badge-bg: #F3EFE6;
+  --pb-badge-border: #E4E0D8;
+  --pb-badge-color: #0A121F;
+  --pb-label: #5A6578;
 
   position: relative;
+  width: 100%;
+  max-width: 100%;
   background-color: var(--pb-bg);
   padding: 80px 24px;
   overflow: hidden;
@@ -36,63 +35,24 @@
 /* DARK THEME */
 .dark .problem-cards-section,
 [data-theme='dark'] .problem-cards-section {
-  --pb-bg: #0B0D17;
-  --pb-blob-opacity-a: 0.35;
-  --pb-blob-opacity-b: 0.30;
-  --pb-blob-opacity-c: 0.20;
-  --pb-card-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
-  --pb-card-border: 1px solid rgba(255, 255, 255, 0.10);
-  --pb-card-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.12);
-  --pb-center-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
-  --pb-center-border: 1px solid rgba(129, 140, 248, 0.35);
-  --pb-center-shadow: 0 30px 70px rgba(0, 0, 0, 0.55), 0 0 60px rgba(99, 102, 241, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  --pb-heading: #f5f6fa;
-  --pb-body: #8b92a8;
-  --pb-badge-bg: #1a1d3a;
-  --pb-badge-border: #2d3160;
-  --pb-badge-color: #818cf8;
-  --pb-label: #9ca3b8;
+  --pb-bg: #0A121F;
+  --pb-card-bg: #0F1724;
+  --pb-card-border: 1px solid #1E2C46;
+  --pb-card-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  --pb-center-bg: #17233A;
+  --pb-center-border: 1px solid #E8553D;
+  --pb-center-shadow: 0 12px 36px rgba(0, 0, 0, 0.50);
+  --pb-heading: #F5EEDC;
+  --pb-body: #8E9BB0;
+  --pb-badge-bg: #17233A;
+  --pb-badge-border: #1E2C46;
+  --pb-badge-color: #F5EEDC;
+  --pb-label: #8E9BB0;
 }
 
-/* Background glow blobs */
+/* Background glow blobs removed - kept empty for safety */
 .problem-cards-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(60px);
-  -webkit-filter: blur(60px);
-  will-change: transform;
-  transform: translateZ(0);
-  pointer-events: none;
-  z-index: 0;
-  transition: opacity 200ms ease;
-}
-
-.problem-cards-blob--a {
-  width: 380px;
-  height: 380px;
-  background: radial-gradient(circle, #6366f1 0%, rgba(99, 102, 241, 0) 70%);
-  opacity: var(--pb-blob-opacity-a);
-  left: 22%;
-  top: 15%;
-}
-
-.problem-cards-blob--b {
-  width: 340px;
-  height: 340px;
-  background: radial-gradient(circle, #8b5cf6 0%, rgba(139, 92, 246, 0) 70%);
-  opacity: var(--pb-blob-opacity-b);
-  right: 20%;
-  bottom: 10%;
-}
-
-.problem-cards-blob--c {
-  width: 240px;
-  height: 240px;
-  background: radial-gradient(circle, #3b82f6 0%, rgba(59, 130, 246, 0) 70%);
-  opacity: var(--pb-blob-opacity-c);
-  left: 50%;
-  top: 40%;
-  transform: translateX(-50%) translateZ(0);
+  display: none !important;
 }
 
 /* Desktop stage (min-width: 900px default) */
@@ -179,6 +139,12 @@
   transform: translate(-50%, -50%) translateY(-6px) scale(1.06);
 }
 
+.card--center .problem-card__badge {
+  background-color: rgba(232, 85, 61, 0.12);
+  border-color: rgba(232, 85, 61, 0.4);
+  color: #E8553D;
+}
+
 /* Header & Badge */
 .problem-card__header {
   display: flex;
@@ -215,11 +181,11 @@
 
 /* Headings & Body */
 .problem-card__heading {
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  font-size: 26px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 24px;
   line-height: 1.25;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  letter-spacing: -0.03em;
   color: var(--pb-heading);
   margin: 20px 0 12px 0;
   transition: color 200ms ease;

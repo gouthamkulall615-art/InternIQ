@@ -8,7 +8,7 @@ export default function ShinyText({
   disabled = false,
   speed = 4,
   className = '',
-  color = '#818cf8',
+  color = '#E8553D',
   shineColor = '#ffffff'
 }) {
   const animationDuration = `${speed}s`;

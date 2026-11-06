@@ -7,7 +7,7 @@ import './StaggeredMenu.css';
 
 export const StaggeredMenu = ({
   position = 'left',
-  colors = ['#1e3fd8', '#4F46E5', '#818CF8'],
+  colors = ['#0F1724', '#17233A', '#1E2C46'],
   items = [],
   socialItems = [],
   displaySocials = true,
@@ -17,7 +17,7 @@ export const StaggeredMenu = ({
   logoText = 'InternIQ',
   menuButtonColor = '#fff',
   openMenuButtonColor = '#fff',
-  accentColor = '#1e3fd8',
+  accentColor = '#E8553D',
   changeMenuColorOnOpen = true,
   isFixed = false,
   closeOnClickAway = true,
@@ -485,7 +485,7 @@ export const StaggeredMenu = ({
           {/* Panel Topbar */}
           <div className="sm-panel-topbar">
             <div className="sm-panel-brand">
-              Intern<span style={{ color: '#1e3fd8' }}>IQ</span>
+              Intern<span style={{ color: '#E8553D' }}>IQ</span>
             </div>
             <div className="flex items-center gap-2">
               {onToggleTheme && (

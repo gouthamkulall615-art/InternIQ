@@ -1036,10 +1036,10 @@ function Card4Internals({ inView, delay, isChipHovered, setIsChipHovered }) {
         {/* Dashed background track */}
         <path
           d={S_CURVE_PATH}
-          stroke="#818cf8"
+          stroke="#F5EEDC"
           strokeWidth="2"
           strokeDasharray="4 4"
-          opacity="0.2"
+          opacity="0.15"
         />
 
         {/* Animated drawing path */}
@@ -1047,7 +1047,7 @@ function Card4Internals({ inView, delay, isChipHovered, setIsChipHovered }) {
           ref={pathRef}
           d={S_CURVE_PATH}
           className={`tools-path-line ${isChipHovered ? 'bright' : ''}`}
-          stroke="#818cf8"
+          stroke="var(--tools-heading)"
           strokeWidth="2"
           initial={
             prefersReducedMotion
@@ -1062,15 +1062,15 @@ function Card4Internals({ inView, delay, isChipHovered, setIsChipHovered }) {
           transition={{ duration: 1.6, ease: [0.22, 1, 0.36, 1] }}
         />
 
-        {/* 4 Nodes */}
+        {/* 4 Nodes / Milestones in vermilion */}
         {PATH_NODES.map((node) => (
           <g key={node.label}>
             <motion.circle
               cx={node.x}
               cy={node.y}
               r="6"
-              fill="#0a0d17"
-              stroke="#818cf8"
+              fill="var(--tools-bg)"
+              stroke="#E8553D"
               strokeWidth="2"
               initial={prefersReducedMotion ? { scale: 1 } : { scale: 0 }}
               animate={
@@ -1087,7 +1087,7 @@ function Card4Internals({ inView, delay, isChipHovered, setIsChipHovered }) {
               x={node.x}
               y={node.y > 60 ? node.y + 20 : node.y - 12}
               textAnchor="middle"
-              fill="#9ca3b8"
+              fill="var(--tools-subtitle)"
               fontSize="11"
               fontFamily="JetBrains Mono, monospace"
               initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
@@ -1102,14 +1102,14 @@ function Card4Internals({ inView, delay, isChipHovered, setIsChipHovered }) {
           </g>
         ))}
 
-        {/* Traveler dot along the S-curve */}
+        {/* Traveler dot along the S-curve in vermilion */}
         {activeTraveler && !prefersReducedMotion && (
           <motion.circle
             r="4"
-            fill="#c4b5fd"
+            fill="#E8553D"
             style={{
               offsetPath: `path("${S_CURVE_PATH}")`,
-              filter: 'drop-shadow(0 0 6px #818cf8)'
+              filter: 'drop-shadow(0 0 4px rgba(232, 85, 61, 0.4))'
             }}
             animate={{ offsetDistance: ['0%', '100%'] }}
             transition={{
@@ -1206,11 +1206,6 @@ export default function ToolsSection() {
 
   return (
     <section id="tools" ref={sectionRef} className="tools-section">
-      {/* Background glow blobs */}
-      <div className="tools-blob tools-blob--a" aria-hidden="true" />
-      <div className="tools-blob tools-blob--b" aria-hidden="true" />
-      <div className="tools-blob tools-blob--c" aria-hidden="true" />
-
       <div className="tools-container">
         {/* Header */}
         <header ref={headerRef} className="tools-header">

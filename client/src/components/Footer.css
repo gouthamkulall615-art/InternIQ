@@ -6,54 +6,56 @@
      ========================================================================= */
   --footer-bg: #FAF8F4;
   --footer-border: #E4E0D8;
-  --footer-color: #5A5D6B;
-  --footer-glow: radial-gradient(600px 220px at 50% 0%, rgba(99, 102, 241, 0.08), transparent 70%);
-  --footer-grid-color: rgba(20, 22, 31, 0.04);
-  --footer-grid-spotlight-color: rgba(79, 70, 229, 0.12);
-  --footer-tagline-color: #5A5D6B;
+  --footer-color: #5A6578;
+  --footer-glow: none;
+  --footer-grid-color: rgba(10, 18, 31, 0.04);
+  --footer-grid-spotlight-color: rgba(232, 85, 61, 0.12);
+  --footer-tagline-color: #5A6578;
 
   /* Nav Pills */
-  --footer-pill-bg: rgba(255, 255, 255, 0.85);
-  --footer-pill-border: rgba(20, 22, 31, 0.10);
-  --footer-pill-color: #374151;
+  --footer-pill-bg: #FFFFFF;
+  --footer-pill-border: #E4E0D8;
+  --footer-pill-color: #0A121F;
   --footer-pill-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  --footer-pill-hover-bg: #ffffff;
-  --footer-pill-hover-border: rgba(79, 70, 229, 0.45);
-  --footer-pill-hover-color: #4F46E5;
-  --footer-pill-hover-shadow: 0 8px 20px -6px rgba(79, 70, 229, 0.18);
+  --footer-pill-hover-bg: #F3EFE6;
+  --footer-pill-hover-border: #E8553D;
+  --footer-pill-hover-color: #0A121F;
+  --footer-pill-hover-shadow: none;
 
   /* Watermark */
-  --footer-wm-stroke: rgba(20, 22, 31, 0.08);
-  --footer-wm-fill: rgba(20, 22, 31, 0.025);
-  --footer-wm-sweep: rgba(79, 70, 229, 0.35);
-  --footer-wm-spotlight-stroke: rgba(79, 70, 229, 0.45);
-  --footer-wm-spotlight-fill: rgba(79, 70, 229, 0.04);
+  --footer-wm-stroke: rgba(10, 18, 31, 0.06);
+  --footer-wm-fill: rgba(10, 18, 31, 0.02);
+  --footer-wm-sweep: rgba(232, 85, 61, 0.35);
+  --footer-wm-spotlight-stroke: rgba(232, 85, 61, 0.45);
+  --footer-wm-spotlight-fill: rgba(232, 85, 61, 0.04);
 
   /* Bottom Bar */
-  --footer-copyright-color: #6B7280;
+  --footer-copyright-color: #5A6578;
 
   /* Crafted Pill */
-  --footer-crafted-bg: rgba(255, 255, 255, 0.85);
-  --footer-crafted-border: rgba(20, 22, 31, 0.12);
-  --footer-crafted-color: #4B5563;
-  --footer-crafted-name: #111827;
+  --footer-crafted-bg: #FFFFFF;
+  --footer-crafted-border: #E4E0D8;
+  --footer-crafted-color: #5A6578;
+  --footer-crafted-name: #0A121F;
   --footer-crafted-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-  --footer-crafted-hover-border: rgba(79, 70, 229, 0.4);
-  --footer-crafted-hover-bg: #ffffff;
-  --footer-crafted-beam-color: #6366f1;
+  --footer-crafted-hover-border: #E8553D;
+  --footer-crafted-hover-bg: #F3EFE6;
+  --footer-crafted-beam-color: #E8553D;
 
   /* Scroll-To-Top Button */
-  --footer-scroll-btn-bg: rgba(255, 255, 255, 0.90);
-  --footer-scroll-btn-border: rgba(20, 22, 31, 0.12);
-  --footer-scroll-btn-color: #1F2937;
-  --footer-scroll-btn-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  --footer-scroll-btn-hover-border: #6366f1;
-  --footer-scroll-btn-hover-bg: #ffffff;
-  --footer-scroll-btn-hover-color: #4F46E5;
-  --footer-ring-track: rgba(20, 22, 31, 0.08);
-  --footer-ring-progress: #4F46E5;
+  --footer-scroll-btn-bg: #FFFFFF;
+  --footer-scroll-btn-border: #E4E0D8;
+  --footer-scroll-btn-color: #0A121F;
+  --footer-scroll-btn-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --footer-scroll-btn-hover-border: #E8553D;
+  --footer-scroll-btn-hover-bg: #F3EFE6;
+  --footer-scroll-btn-hover-color: #0A121F;
+  --footer-ring-track: rgba(10, 18, 31, 0.08);
+  --footer-ring-progress: #E8553D;
 
   position: relative;
+  width: 100%;
+  max-width: 100%;
   overflow: hidden;
   min-height: 420px;
   padding: 28px 0 44px;
@@ -65,59 +67,62 @@
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
-/* =========================================================================
-   DARK THEME
-   ========================================================================= */
+/* DARK THEME */
 .dark .footer-section,
 [data-theme='dark'] .footer-section {
-  --footer-bg: #07090f;
-  --footer-border: rgba(255, 255, 255, 0.06);
-  --footer-color: #8b92a8;
-  --footer-glow: radial-gradient(600px 220px at 50% 0%, rgba(99, 102, 241, 0.12), transparent 70%);
-  --footer-grid-color: rgba(255, 255, 255, 0.035);
-  --footer-grid-spotlight-color: rgba(129, 140, 248, 0.14);
-  --footer-tagline-color: #8b92a8;
+  --footer-bg: #070B13;
+  --footer-border: rgba(245, 238, 220, 0.08);
+  --footer-color: #8E9BB0;
+  --footer-glow: none;
+  --footer-grid-color: rgba(245, 238, 220, 0.04);
+  --footer-grid-spotlight-color: rgba(232, 85, 61, 0.20);
+  --footer-tagline-color: #8E9BB0;
 
   /* Nav Pills */
-  --footer-pill-bg: rgba(255, 255, 255, 0.03);
-  --footer-pill-border: rgba(255, 255, 255, 0.10);
-  --footer-pill-color: #c9ccd8;
+  --footer-pill-bg: #17233A;
+  --footer-pill-border: rgba(245, 238, 220, 0.12);
+  --footer-pill-color: #F5EEDC;
   --footer-pill-shadow: none;
-  --footer-pill-hover-bg: rgba(99, 102, 241, 0.12);
-  --footer-pill-hover-border: rgba(129, 140, 248, 0.5);
-  --footer-pill-hover-color: #ffffff;
-  --footer-pill-hover-shadow: 0 8px 20px -6px rgba(99, 102, 241, 0.25);
+  --footer-pill-hover-bg: #1E2C46;
+  --footer-pill-hover-border: #E8553D;
+  --footer-pill-hover-color: #FFFFFF;
+  --footer-pill-hover-shadow: none;
 
   /* Watermark */
-  --footer-wm-stroke: rgba(255, 255, 255, 0.09);
-  --footer-wm-fill: rgba(255, 255, 255, 0.025);
-  --footer-wm-sweep: rgba(129, 140, 248, 0.45);
-  --footer-wm-spotlight-stroke: rgba(165, 180, 252, 0.55);
-  --footer-wm-spotlight-fill: rgba(129, 140, 248, 0.06);
+  --footer-wm-stroke: rgba(245, 238, 220, 0.09);
+  --footer-wm-fill: rgba(245, 238, 220, 0.03);
+  --footer-wm-sweep: rgba(232, 85, 61, 0.35);
+  --footer-wm-spotlight-stroke: rgba(232, 85, 61, 0.45);
+  --footer-wm-spotlight-fill: rgba(232, 85, 61, 0.04);
 
   /* Bottom Bar */
-  --footer-copyright-color: #9ca0b0;
+  --footer-copyright-color: #8E9BB0;
 
   /* Crafted Pill */
-  --footer-crafted-bg: rgba(255, 255, 255, 0.02);
-  --footer-crafted-border: rgba(255, 255, 255, 0.12);
-  --footer-crafted-color: #b8bccb;
-  --footer-crafted-name: #ffffff;
+  --footer-crafted-bg: #17233A;
+  --footer-crafted-border: rgba(245, 238, 220, 0.12);
+  --footer-crafted-color: #8E9BB0;
+  --footer-crafted-name: #F5EEDC;
   --footer-crafted-shadow: none;
-  --footer-crafted-hover-border: rgba(129, 140, 248, 0.4);
-  --footer-crafted-hover-bg: rgba(255, 255, 255, 0.04);
-  --footer-crafted-beam-color: #818cf8;
+  --footer-crafted-hover-border: rgba(232, 85, 61, 0.4);
+  --footer-crafted-hover-bg: #1E2C46;
+  --footer-crafted-beam-color: #E8553D;
 
   /* Scroll-To-Top Button */
-  --footer-scroll-btn-bg: rgba(255, 255, 255, 0.03);
-  --footer-scroll-btn-border: rgba(255, 255, 255, 0.14);
-  --footer-scroll-btn-color: #e5e7eb;
+  --footer-scroll-btn-bg: #17233A;
+  --footer-scroll-btn-border: rgba(245, 238, 220, 0.14);
+  --footer-scroll-btn-color: #F5EEDC;
   --footer-scroll-btn-shadow: none;
-  --footer-scroll-btn-hover-border: #a5b4fc;
-  --footer-scroll-btn-hover-bg: rgba(99, 102, 241, 0.12);
-  --footer-scroll-btn-hover-color: #ffffff;
-  --footer-ring-track: rgba(255, 255, 255, 0.08);
-  --footer-ring-progress: #818cf8;
+  --footer-scroll-btn-hover-border: #E8553D;
+  --footer-scroll-btn-hover-bg: #1E2C46;
+  --footer-scroll-btn-hover-color: #FFFFFF;
+  --footer-ring-track: rgba(245, 238, 220, 0.08);
+  --footer-ring-progress: #E8553D;
+}
+
+.crafted-heart {
+  color: #E8553D;
+  font-size: 14px;
 }
 
 /* 1. Indigo Glow at Top Center */
@@ -261,7 +266,7 @@
 }
 
 .footer-pill:focus-visible {
-  outline: 2px solid #818cf8;
+  outline: 2px solid #E8553D;
   outline-offset: 3px;
 }
 
@@ -581,7 +586,7 @@
 }
 
 .scroll-top-btn:focus-visible {
-  outline: 2px solid #818cf8;
+  outline: 2px solid #E8553D;
   outline-offset: 3px;
 }
 

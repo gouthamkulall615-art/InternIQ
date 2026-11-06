@@ -107,7 +107,9 @@ const FRAG = /* glsl */ `
     vec3 col = mix(satin, uInk * (0.55 + 0.45 * diff), ink);
 
     float shine = (spec * 0.9 + broad + band * 0.35) * uShine * (1.0 - ink * 0.65);
-    col += vec3(0.75, 0.8, 1.0) * shine + uColor * fres * 0.25;
+    vec3 warmCream = vec3(0.96, 0.93, 0.86);
+    vec3 vermilion = vec3(0.91, 0.33, 0.24);
+    col += warmCream * shine + mix(uColor, vermilion, 0.30) * fres * 0.25;
 
     // slightly darker selvedge along both edges
     float edge = smoothstep(0.0, 0.04, vUv.y) * smoothstep(1.0, 0.96, vUv.y);
@@ -157,9 +159,9 @@ export default function RibbonMarquee({
     "Get shortlisted",
   ],
   speed = 0.9,                 // world units per second the text travels
-  color = "#4F46E5",           // ribbon colour (InternIQ indigo)
-  ink = "#F4F5FB",             // printed text colour
-  background = "transparent",
+  color = "#17233A",           // ribbon colour (ink navy)
+  ink = "#F5EEDC",             // printed text colour (warm cream)
+  background,
   height = "clamp(280px, 38vw, 460px)",
   fontFamily = "'Bricolage Grotesque', 'Inter', system-ui, sans-serif",
   className = "",
@@ -347,8 +349,8 @@ export default function RibbonMarquee({
       ref={wrap}
       role="img"
       aria-label={label}
-      className={`relative w-full overflow-hidden ${className}`}
-      style={{ height, background, touchAction: "pan-y", cursor: "pointer" }}
+      className={`relative w-full max-w-full overflow-hidden ${className}`}
+      style={{ height, ...(background ? { background } : {}), touchAction: "pan-y", cursor: "pointer" }}
     />
   );
 }

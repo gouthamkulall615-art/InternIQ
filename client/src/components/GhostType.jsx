@@ -122,7 +122,7 @@ export default function GhostType({
       {!isAccepted && !isDeleting && (
         <span
           aria-hidden="true"
-          className="inline-block w-[3.5px] sm:w-[4px] h-[0.88em] bg-[#1e3fd8] dark:bg-[#38BDF8] mx-1 align-baseline rounded-[1px] animate-pulse shadow-[0_0_8px_rgba(30,63,216,0.5)] dark:shadow-[0_0_12px_rgba(56,189,248,0.8)]"
+          className="inline-block w-[3.5px] sm:w-[4px] h-[0.88em] bg-[#E8553D] mx-1 align-baseline rounded-[1px] animate-pulse"
         />
       )}
 
@@ -130,7 +130,7 @@ export default function GhostType({
       <span
         className={`whitespace-pre-wrap font-poppins font-medium transition-colors duration-200 ${
           isAccepted || isDeleting
-            ? 'text-[#0F172A] dark:text-white'
+            ? 'text-[#0A121F] dark:text-[#F5EEDC]'
             : 'text-slate-500 dark:text-slate-400 select-none'
         }`}
       >
@@ -141,7 +141,7 @@ export default function GhostType({
       {(isAccepted || isDeleting) && (
         <span
           aria-hidden="true"
-          className="inline-block w-[3.5px] sm:w-[4px] h-[0.88em] bg-[#1e3fd8] dark:bg-[#38BDF8] ml-1 align-baseline rounded-[1px] animate-pulse shadow-[0_0_8px_rgba(30,63,216,0.5)] dark:shadow-[0_0_12px_rgba(56,189,248,0.8)]"
+          className="inline-block w-[3.5px] sm:w-[4px] h-[0.88em] bg-[#E8553D] ml-1 align-baseline rounded-[1px] animate-pulse"
         />
       )}
 
@@ -151,7 +151,7 @@ export default function GhostType({
           type="button"
           onClick={handleAccept}
           title="Press Tab or click to complete"
-          className="inline-flex items-center justify-center ml-2.5 px-2.5 py-0.5 align-middle text-[11px] font-editorial-mono font-medium tracking-normal rounded-[4px] shadow-xs transition-all cursor-pointer select-none -translate-y-0.5 hover:scale-105 active:scale-95 text-slate-800 dark:text-sky-200 bg-slate-200/90 dark:bg-sky-500/20 border border-slate-300 dark:border-sky-400/30 hover:bg-[#1e3fd8] hover:text-white dark:hover:bg-sky-500 dark:hover:text-white"
+          className="inline-flex items-center justify-center ml-2.5 px-2.5 py-0.5 align-middle text-[11px] font-editorial-mono font-medium tracking-normal rounded-[4px] shadow-xs transition-all cursor-pointer select-none -translate-y-0.5 hover:scale-105 active:scale-95 text-slate-800 dark:text-[#F5EEDC] bg-[#F3EFE6] dark:bg-[#17233A] border border-[#E4E0D8] dark:border-[#1E2C46] hover:bg-[#E8553D] hover:text-[#101A2B] hover:border-[#E8553D]"
         >
           Tab
         </button>

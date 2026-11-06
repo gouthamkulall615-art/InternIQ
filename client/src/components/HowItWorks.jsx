@@ -58,7 +58,7 @@ export default function HowItWorks() {
   const isDark = theme === 'dark';
 
   return (
-    <ClickSpark sparkColor={isDark ? '#818cf8' : '#4F46E5'} sparkCount={8} sparkSize={10} sparkRadius={18}>
+    <ClickSpark sparkColor="#E8553D" sparkCount={8} sparkSize={10} sparkRadius={18}>
       <section
         id="how-it-works"
         ref={sectionRef}
@@ -77,7 +77,7 @@ export default function HowItWorks() {
               }}
             >
               <span className="how-eyebrow">
-                <ShinyText text="PROCESS" speed={3.8} color={isDark ? '#818cf8' : '#4F46E5'} />
+                <ShinyText text="PROCESS" speed={3.8} color="#E8553D" />
               </span>
             </div>
 
@@ -123,7 +123,7 @@ export default function HowItWorks() {
                   {/* Spotlight Card */}
                   <SpotlightCard
                     className="how-card"
-                    spotlightColor={isDark ? "rgba(99, 102, 241, 0.15)" : "rgba(79, 70, 229, 0.12)"}
+                    spotlightColor="rgba(232, 85, 61, 0.08)"
                     spotlightSize={280}
                     intensity={0.25}
                     theme={isDark ? "dark" : "light"}

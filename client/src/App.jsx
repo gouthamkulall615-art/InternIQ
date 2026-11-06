@@ -358,14 +358,14 @@ function Navbar() {
 
 function App() {
   const location = useLocation();
-  const showAsciiBackground = ['/', '/landing', '/login', '/register'].includes(location.pathname);
+  const showAsciiBackground = ['/login', '/register'].includes(location.pathname);
 
   return (
-    <div className="relative min-h-screen text-[var(--text)] transition-colors duration-200">
-      {showAsciiBackground && <AsciiBackground />}
+    <div className="relative min-h-screen w-full max-w-full overflow-x-hidden bg-[var(--bg)] text-[var(--text)] transition-colors duration-200">
+      {showAsciiBackground && <AsciiBackground isFixed={true} />}
       <Navbar />
       <UpdatePrompt />
-      <div className="relative z-10">
+      <div className="relative z-10 w-full max-w-full overflow-x-hidden">
         <Routes>
           {/* Landing page at root / and explicit /landing */}
           <Route path="/" element={<Landing />} />

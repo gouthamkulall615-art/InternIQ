@@ -10,10 +10,11 @@
 
 .staggered-menu-wrapper.fixed-wrapper {
   position: fixed;
+  inset: 0;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   z-index: 9999;
   overflow: hidden;
   pointer-events: none;
@@ -154,7 +155,7 @@
   flex-direction: row-reverse;
 }
 
-.staggered-menu-header > * {
+.staggered-menu-header>* {
   pointer-events: auto;
 }
 
@@ -297,7 +298,7 @@
 
 .sm-panel-item:hover,
 .sm-panel-item.active {
-  color: var(--sm-accent, #1e3fd8);
+  color: var(--sm-accent, #E8553D);
   transform: translateX(6px);
 }
 
@@ -312,7 +313,7 @@
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--sm-accent, #1e3fd8);
+  color: var(--sm-accent, #E8553D);
   letter-spacing: 0;
   pointer-events: none;
   user-select: none;
@@ -346,7 +347,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--sm-accent, #1e3fd8);
+  color: var(--sm-accent, #E8553D);
 }
 
 .sm-socials-list {
@@ -369,33 +370,33 @@
 }
 
 .sm-socials-link:hover {
-  color: var(--sm-accent, #1e3fd8);
+  color: var(--sm-accent, #E8553D);
 }
 
 /* Dark mode styling */
 .dark .staggered-menu-panel,
 [data-theme='dark'] .staggered-menu-panel {
-  background: #080A14;
-  color: #f1f3f9;
-  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  background: #0A121F;
+  color: #F5EEDC;
+  border-right: 1px solid #1E2C46;
   box-shadow: 20px 0 60px rgba(0, 0, 0, 0.7);
 }
 
 .dark .sm-panel-item,
 [data-theme='dark'] .sm-panel-item {
-  color: #f1f3f9;
+  color: #F5EEDC;
 }
 
 .dark .sm-panel-item:hover,
 .dark .sm-panel-item.active,
 [data-theme='dark'] .sm-panel-item:hover,
 [data-theme='dark'] .sm-panel-item.active {
-  color: #818CF8;
+  color: #E8553D;
 }
 
 .dark .sm-panel-list[data-numbering] .sm-panel-item::after,
 [data-theme='dark'] .sm-panel-list[data-numbering] .sm-panel-item::after {
-  color: #818CF8;
+  color: #E8553D;
 }
 
 .dark .sm-panel-topbar,
@@ -430,20 +431,21 @@
 
 .dark .sm-socials-title,
 [data-theme='dark'] .sm-socials-title {
-  color: #818CF8;
+  color: #E8553D;
 }
 
 .dark .sm-socials-link,
 [data-theme='dark'] .sm-socials-link {
-  color: #94a3b8;
+  color: #8E9BB0;
 }
 
 .dark .sm-socials-link:hover,
 [data-theme='dark'] .sm-socials-link:hover {
-  color: #818CF8;
+  color: #E8553D;
 }
 
 @media (max-width: 640px) {
+
   .staggered-menu-panel,
   .sm-prelayers {
     width: 86vw;

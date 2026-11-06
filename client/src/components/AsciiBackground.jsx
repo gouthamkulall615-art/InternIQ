@@ -6,14 +6,15 @@ export default function AsciiBackground({
   shape = 'horizon',
   className = '',
   cellSize = 18,
-  density = 0.8,
-  glyphOpacity = 0.85,
+  density = 0.85,
+  glyphOpacity = 0.9,
   flow = 0.5,
   speed = 1,
   grain,
   glow,
   gradientOpacity,
   colors,
+  isFixed = false,
   ...props
 }) {
   const { theme } = useTheme();
@@ -28,11 +29,13 @@ export default function AsciiBackground({
     }
   }, []);
 
+  const positionClass = isFixed ? 'fixed' : 'absolute';
+
   if (!hasWebGL2) {
     return (
       <div
-        className={`fixed inset-0 z-0 pointer-events-none transition-colors duration-300 ${
-          isLight ? 'bg-[#f4f1ea]' : 'bg-[#030712]'
+        className={`${positionClass} inset-0 w-full h-full z-0 pointer-events-none transition-colors duration-300 ${
+          isLight ? 'bg-[#FAF8F4]' : 'bg-[#0A121F]'
         } ${className}`}
         aria-hidden="true"
       />
@@ -41,8 +44,8 @@ export default function AsciiBackground({
 
   return (
     <div
-      className={`fixed inset-0 z-0 pointer-events-none transition-colors duration-300 ${
-        isLight ? 'bg-[#f4f1ea]' : 'bg-[#030712]'
+      className={`${positionClass} inset-0 w-full h-full z-0 pointer-events-none transition-colors duration-300 ${
+        isLight ? 'bg-[#FAF8F4]' : 'bg-[#0A121F]'
       } ${className}`}
       aria-hidden="true"
     >
@@ -68,4 +71,3 @@ export default function AsciiBackground({
     </div>
   );
 }
-

@@ -31,11 +31,6 @@ const PROBLEM_CARDS_DATA = [
 export default function ProblemCards() {
   return (
     <section className="problem-cards-section">
-      {/* Background glow blobs */}
-      <div className="problem-cards-blob problem-cards-blob--a" aria-hidden="true" />
-      <div className="problem-cards-blob problem-cards-blob--b" aria-hidden="true" />
-      <div className="problem-cards-blob problem-cards-blob--c" aria-hidden="true" />
-
       {/* Stage */}
       <div className="problem-cards-stage">
         {PROBLEM_CARDS_DATA.map((card) => (

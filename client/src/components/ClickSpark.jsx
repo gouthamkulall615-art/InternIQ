@@ -3,7 +3,7 @@
 import React, { useRef, useEffect, useCallback } from 'react';
 
 export default function ClickSpark({
-  sparkColor = '#818cf8',
+  sparkColor = '#E8553D',
   sparkSize = 10,
   sparkRadius = 18,
   sparkCount = 8,

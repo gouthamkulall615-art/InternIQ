@@ -20,13 +20,13 @@
 }
 
 .hero[data-theme='light'] {
-  --bg: #f4f1ea;
-  --ink: #15171c;
-  --ink-soft: #4a4e57;
-  --btn-bg: #1e3fd8;
-  --btn-ink: #ffffff;
+  --bg: #FAF8F4;
+  --ink: #0A121F;
+  --ink-soft: #5A6578;
+  --btn-bg: #E8553D;
+  --btn-ink: #101A2B;
   --line: rgba(21, 23, 28, 0.4);
-  --focus: #1e3fd8;
+  --focus: #E8553D;
 }
 
 .hero__bg {
