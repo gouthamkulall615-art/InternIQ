@@ -84,7 +84,7 @@
 .vh-headline {
   font-family: var(--vh-font-display);
   color: var(--hero-headline, #F4F6FA);
-  font-size: clamp(28px, 6.2vw, 80px);
+  font-size: clamp(34px, 6.2vw, 80px);
   font-weight: normal;
   letter-spacing: -0.04em;
   line-height: 1.12;
@@ -97,7 +97,7 @@
 .vh-headline-line {
   display: block;
   white-space: nowrap;
-  overflow: hidden;
+  overflow: visible;
   opacity: 0;
   transform: translateY(14px);
   color: inherit;
@@ -256,21 +256,46 @@
 
 /* Breakpoints */
 @media (max-width: 720px) {
+  .video-hero-root {
+    padding: clamp(14px, 2.5vh, 24px) clamp(10px, 3vw, 16px);
+  }
+
+  .video-hero-content {
+    padding: 12px 0;
+  }
+
   .vh-headline {
-    letter-spacing: -0.08em;
-    line-height: 1.05;
+    font-size: clamp(34px, 9.2vw, 54px);
+    letter-spacing: -0.05em;
+    line-height: 1.08;
+  }
+
+  .vh-subhead {
+    font-size: clamp(14px, 3.6vw, 16px);
+    line-height: 1.45;
+    margin: 12px auto 20px;
+    padding: 0 6px;
   }
 
   .vh-stats-footer {
     grid-template-columns: repeat(2, 1fr);
-    gap: 18px 24px;
+    gap: 16px 20px;
   }
 }
 
 @media (max-width: 420px) {
   .vh-headline {
-    letter-spacing: -0.09em;
-    line-height: 1.04;
+    font-size: clamp(32px, 8.8vw, 42px);
+    letter-spacing: -0.05em;
+    line-height: 1.08;
+  }
+}
+
+@media (max-width: 350px) {
+  .vh-headline {
+    font-size: clamp(28px, 8.5vw, 32px);
+    letter-spacing: -0.06em;
+    line-height: 1.06;
   }
 }
 

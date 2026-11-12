@@ -128,7 +128,7 @@ export default function Landing() {
     <div className="landing font-editorial-sans antialiased min-h-screen selection:bg-[var(--primary)] selection:text-[var(--on-primary)] relative bg-[var(--bg)] transition-colors w-full max-w-full overflow-x-hidden">
       {/* 1. TOP NAV */}
       <header className="sticky top-0 z-40 w-full max-w-full bg-[#FAF8F4]/85 dark:bg-[#0A121F]/85 backdrop-blur-md border-b border-[#14161F]/10 dark:border-white/10 transition-colors">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8 h-12 sm:h-14 md:h-16 flex items-center justify-between gap-3 sm:gap-4">
           {/* Wordmark in Fraunces serif */}
           <div className="flex items-center flex-shrink-0">
             <Link
@@ -137,7 +137,7 @@ export default function Landing() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 setActiveNavIndex(0);
               }}
-              className="font-heading text-2xl font-semibold tracking-[-0.02em] text-[#0A121F] dark:text-[#F5EEDC] hover:opacity-90 transition-opacity"
+              className="font-heading text-lg sm:text-xl md:text-2xl font-semibold tracking-[-0.02em] text-[#0A121F] dark:text-[#F5EEDC] hover:opacity-90 transition-opacity"
             >
               InternIQ
             </Link>
@@ -205,21 +205,21 @@ export default function Landing() {
           </div>
 
           {/* Mobile Header Buttons (Theme Toggle + Menu) */}
-          <div className="flex md:hidden items-center gap-2">
+          <div className="flex md:hidden items-center gap-1.5">
             <button
               type="button"
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              className="p-2 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white rounded-[4px] border border-slate-300/80 dark:border-white/15 bg-black/5 dark:bg-white/5 min-h-[44px] min-w-[44px] flex items-center justify-center cursor-pointer"
+              className="h-8 w-8 sm:h-9 sm:w-9 p-1.5 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white rounded-lg border border-slate-300/70 dark:border-white/15 bg-black/5 dark:bg-white/5 flex items-center justify-center cursor-pointer transition-colors active:scale-95"
             >
-              {theme === 'dark' ? <Sun className="h-5 w-5 text-amber-400" strokeWidth={1.5} /> : <Moon className="h-5 w-5" strokeWidth={1.5} />}
+              {theme === 'dark' ? <Sun className="h-4 w-4 text-amber-400" strokeWidth={1.75} /> : <Moon className="h-4 w-4" strokeWidth={1.75} />}
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white rounded-[4px] border border-slate-300/80 dark:border-white/15 bg-black/5 dark:bg-white/5 min-h-[44px] min-w-[44px] flex items-center justify-center"
+              className="h-8 w-8 sm:h-9 sm:w-9 p-1.5 text-slate-700 dark:text-slate-300 hover:text-black dark:hover:text-white rounded-lg border border-slate-300/70 dark:border-white/15 bg-black/5 dark:bg-white/5 flex items-center justify-center cursor-pointer transition-colors active:scale-95"
               aria-label="Toggle menu"
             >
-              {mobileMenuOpen ? <X className="h-5 w-5" strokeWidth={1.5} /> : <Menu className="h-5 w-5" strokeWidth={1.5} />}
+              {mobileMenuOpen ? <X className="h-4 w-4" strokeWidth={1.75} /> : <Menu className="h-4 w-4" strokeWidth={1.75} />}
             </button>
           </div>
         </div>

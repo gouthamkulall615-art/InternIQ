@@ -460,3 +460,28 @@
     font-size: 1.5rem;
   }
 }
+
+@media (max-width: 480px) {
+  .staggered-menu-panel,
+  .sm-prelayers {
+    width: 84vw;
+    max-width: 320px;
+  }
+
+  .staggered-menu-panel {
+    padding: 1.25rem 1rem 1rem 1rem;
+  }
+
+  .sm-panel-topbar {
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.65rem;
+  }
+
+  .sm-panel-brand {
+    font-size: 1.15rem;
+  }
+
+  .sm-panel-item {
+    font-size: 1.35rem;
+  }
+}
