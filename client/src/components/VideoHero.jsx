@@ -111,7 +111,7 @@ export default function VideoHero({ onCta }) {
 
         {/* Subhead */}
         <p className="vh-subhead vh-anim" style={{ '--d': '0.28s' }}>
-          Scan your resume, find your skill gaps and generate tailored cover letters,<br />all in one AI-powered career prep platform.
+          Scan your resume, find your skill gaps and generate tailored cover letters, all in one AI-powered career prep platform.
         </p>
 
         {/* CTA Button */}
