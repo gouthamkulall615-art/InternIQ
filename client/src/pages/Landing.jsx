@@ -49,14 +49,20 @@ export default function Landing() {
     if (clickTimeoutRef.current) clearTimeout(clickTimeoutRef.current);
     clickTimeoutRef.current = setTimeout(() => {
       isClickScrollingRef.current = false;
-    }, 1000);
+    }, 1200);
 
-    if (item.href === '#overview' || item.href === '#') {
+    if (item.href === '#overview' || item.href === '#' || index === 0) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (item.href?.startsWith('#')) {
       const el = document.querySelector(item.href);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+        const headerOffset = 70;
+        const elementPosition = el.getBoundingClientRect().top + window.scrollY;
+        const offsetPosition = elementPosition - headerOffset;
+        window.scrollTo({
+          top: Math.max(0, offsetPosition),
+          behavior: 'smooth'
+        });
       }
     }
   };
@@ -69,14 +75,34 @@ export default function Landing() {
       if (isClickScrollingRef.current) return;
       if (!ticking) {
         window.requestAnimationFrame(() => {
-          const scrollPosition = window.scrollY + 160;
+          const scrollY = window.scrollY;
 
+          // 1. When near top of the page, always lock to Overview (0)
+          if (scrollY < 120) {
+            setActiveNavIndex(0);
+            ticking = false;
+            return;
+          }
+
+          // 2. When reached bottom of the page, activate the last section
+          const scrollBottom = scrollY + window.innerHeight;
+          const docHeight = document.documentElement.scrollHeight;
+          if (scrollBottom >= docHeight - 60) {
+            setActiveNavIndex(sectionIds.length - 1);
+            ticking = false;
+            return;
+          }
+
+          // 3. Compute absolute document top for each section
+          const scrollPosition = scrollY + 200;
           let currentSectionIndex = 0;
+
           for (let i = sectionIds.length - 1; i >= 0; i--) {
             const el = document.getElementById(sectionIds[i]);
             if (el) {
-              const top = el.offsetTop;
-              if (scrollPosition >= top) {
+              const rect = el.getBoundingClientRect();
+              const sectionTop = rect.top + scrollY;
+              if (scrollPosition >= sectionTop) {
                 currentSectionIndex = i;
                 break;
               }
