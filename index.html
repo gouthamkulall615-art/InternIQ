@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Intelligence Designed To Evolve</title>
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Primary Display: BubbledotICG-FinePos via OnlineWebFonts CDN -->
+  <link
+    href="https://db.onlinewebfonts.com/c/8cb707a9b8a73f8a7403336b861c3074?family=BubbledotICG-FinePos"
+    rel="stylesheet"
+  />
+
+  <!-- Font Awesome 6.5.2 from cdnjs -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <!-- Local Styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Full-viewport background video -->
+  <div class="bg">
+    <video class="bg-video" autoplay muted loop playsinline>
+      <source
+        src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260809_012548_ef22562c-c0ae-4816-ad9d-f8922af4e6a7.mp4"
+        type="video/mp4"
+      />
+    </video>
+  </div>
+
+  <!-- Mobile Menu Overlay & Sheet -->
+  <div class="mobile-overlay" id="mobile-overlay" hidden></div>
+  <div class="mobile-sheet" id="mobile-sheet" hidden>
+    <nav class="mobile-nav">
+      <a href="#home" class="mobile-nav-link active">Home</a>
+      <a href="#product" class="mobile-nav-link">Product</a>
+      <a href="#case-studies" class="mobile-nav-link">Case Studies</a>
+      <a href="#contact" class="mobile-nav-link">Contact</a>
+      <a href="#signin" class="mobile-sign-in-btn">Sign in</a>
+    </nav>
+  </div>
+
+  <!-- Main Viewport Page Container -->
+  <div class="page">
+    <!-- 1) Header -->
+    <header class="header">
+      <a href="#" class="logo-btn" aria-label="Home">
+        <img src="assets/logo.webp" alt="" width="52" height="52" class="logo-img" />
+      </a>
+
+      <nav class="nav-pill" aria-label="Main Navigation">
+        <a href="#home" class="nav-link active">Home</a>
+        <a href="#product" class="nav-link">Product</a>
+        <a href="#case-studies" class="nav-link">Case Studies</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </nav>
+
+      <a href="#signin" class="sign-in-pill">Sign in</a>
+
+      <!-- Mobile Hamburger Button -->
+      <button
+        class="burger-btn"
+        id="burger-btn"
+        aria-label="Toggle navigation"
+        aria-expanded="false"
+        aria-controls="mobile-sheet"
+      >
+        <span class="burger-bar"></span>
+        <span class="burger-bar"></span>
+        <span class="burger-bar"></span>
+      </button>
+    </header>
+
+    <!-- 2) Hero Section -->
+    <main class="hero">
+      <!-- Exact Two-Line Headline -->
+      <h1 class="headline anim">
+        <span class="headline-line line-1">Prep Smarter.</span>
+        <span class="headline-line line-2">Get Shortlisted.</span>
+      </h1>
+
+      <!-- Subhead -->
+      <p class="subhead anim" style="--d: 0.28s;">
+        Scan your resume, find your skill gaps and generate tailored cover letters,<br />all in one AI-powered career prep platform.
+      </p>
+
+      <!-- CTA Button -->
+      <div class="cta-wrapper anim" style="--d: 0.4s;">
+        <a href="#get-started" class="cta-btn">Get Started</a>
+      </div>
+    </main>
+
+    <!-- 3) Stats Footer -->
+    <footer class="stats-footer">
+      <div class="stat-item anim" style="--d: 0.5s;">
+        <div class="stat-top">
+          <span class="stat-glyph">&lt;</span>
+          <span class="stat-value">10-point</span>
+        </div>
+        <span class="stat-label">ATS Resume Scoring</span>
+      </div>
+
+      <div class="stat-item anim" style="--d: 0.58s;" data-target="8" data-suffix="" data-decimals="0">
+        <div class="stat-top">
+          <span class="stat-glyph">%</span>
+          <span class="stat-value">0</span>
+        </div>
+        <span class="stat-label">Target Roles Covered</span>
+      </div>
+
+      <div class="stat-item anim" style="--d: 0.66s;" data-target="3" data-suffix="" data-decimals="0">
+        <div class="stat-top">
+          <span class="stat-glyph">*</span>
+          <span class="stat-value">0</span>
+        </div>
+        <span class="stat-label">AI Tools, One Workspace</span>
+      </div>
+
+      <div class="stat-item anim" style="--d: 0.74s;">
+        <div class="stat-top">
+          <span class="stat-glyph">#</span>
+          <span class="stat-value">250-400</span>
+        </div>
+        <span class="stat-label">Word Tailored Cover Letters</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

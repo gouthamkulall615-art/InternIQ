@@ -13,7 +13,6 @@ import {
   FileText,
   ArrowUpRight,
 } from '@phosphor-icons/react';
-import GhostType from '../components/GhostType';
 import GooeyNav from '../components/GooeyNav';
 import CrowdStory from '../components/CrowdStory';
 import RibbonMarquee from '../components/RibbonMarquee';
@@ -22,7 +21,7 @@ import ToolsSection from '../components/ToolsSection';
 import HowItWorks from '../components/HowItWorks';
 import Magnet from '../components/Magnet';
 import StaggeredMenu from '../components/StaggeredMenu';
-import AsciiBackground from '../components/AsciiBackground';
+import VideoHero from '../components/VideoHero';
 import Footer from '../components/Footer';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -285,71 +284,7 @@ export default function Landing() {
       />
 
       {/* 2. HERO SECTION */}
-      <section id="overview" className="scroll-mt-20 relative min-h-[560px] sm:min-h-[640px] w-full max-w-full flex items-center justify-center overflow-hidden transition-colors bg-[#FAF8F4] dark:bg-[#0A121F]">
-        {/* Background ASCII Horizon restricted ONLY to the Hero section */}
-        <div className="absolute inset-0 w-full h-full z-0 overflow-hidden pointer-events-none" aria-hidden="true">
-          <AsciiBackground shape="horizon" isFixed={false} />
-        </div>
-
-        {/* Centered Hero Content with GhostType - NO CARD */}
-        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center flex flex-col items-center justify-center">
-          <span className="eyebrow block mb-6 px-3.5 py-1 rounded-full bg-[#F3EFE6] dark:bg-[#17233A] text-[#5A6578] dark:text-[#8E9BB0] border border-[#E4E0D8] dark:border-[#1E2C46] backdrop-blur-md">
-            CAREER PREPARATION WORKSPACE
-          </span>
-
-          <div className="w-full flex justify-center text-[#0F172A] dark:text-white">
-            <GhostType
-              text="Fix your resume"
-              completions={[
-                " before they see it.",
-                " before you apply.",
-                " before it's rejected.",
-              ]}
-            />
-          </div>
-
-          <p className="font-sans text-base sm:text-lg text-slate-700 dark:text-slate-200 leading-[1.6] max-w-2xl mt-4 font-normal">
-            A straightforward ATS scanner, skill gap evaluator, and cover letter writer. Free for students and early-career job applicants.
-          </p>
-
-          {/* Action Buttons */}
-          <div className="pt-7 flex flex-col sm:flex-row items-center justify-center gap-3.5 font-sans w-full sm:w-auto">
-            <Magnet
-              padding={60}
-              magnetStrength={2.5}
-              tilt={8}
-              scale={1.04}
-              maxOffset={18}
-            >
-              <Link
-                to={isAuthenticated ? "/resume-analyzer" : "/register"}
-                className="w-full sm:w-auto inline-flex items-center justify-center px-7 py-3 text-sm font-medium text-[var(--on-primary)] bg-[var(--primary)] hover:bg-[var(--primary-hover)] rounded-full transition-all shadow-sm min-h-[44px]"
-              >
-                Analyze my resume
-              </Link>
-            </Magnet>
-            <Magnet
-              padding={60}
-              magnetStrength={2.5}
-              tilt={8}
-              scale={1.04}
-              maxOffset={18}
-            >
-              <a
-                href="#how-it-works"
-                className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-3 text-sm font-medium text-[#0A121F] dark:text-[#F5EEDC] bg-transparent hover:bg-black/5 dark:hover:bg-white/5 border border-[#E4E0D8] dark:border-[#1E2C46] rounded-full transition-all min-h-[44px]"
-              >
-                See how it works
-              </a>
-            </Magnet>
-          </div>
-
-          {/* Small Note */}
-          <p className="font-sans text-xs text-slate-600 dark:text-slate-400 pt-3">
-            Free. PDF, DOCX or TXT up to 5MB.
-          </p>
-        </div>
-      </section>
+      <VideoHero onCta={() => navigate(isAuthenticated ? '/resume-analyzer' : '/register')} />
 
       {/* CROWD STORY (Scroll-driven storytelling) */}
       <CrowdStory onCta={() => navigate(isAuthenticated ? '/resume-analyzer' : '/register')} />
